@@ -1,3 +1,7 @@
 .idea
 venv
+fonts
 *.pyc
+docs*.js
+jquery*.js
+bootstrap*.*

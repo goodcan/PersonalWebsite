@@ -1,0 +1,86 @@
+
+body {
+    margin-top: 50px;
+}
+
+.my-container {
+    padding: 0;
+    margin: 0;
+}
+
+.mycarousel {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+}
+
+.image-reel {
+    position: absolute;
+}
+
+.image-reel img {
+    float: left;
+}
+
+.paging {
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    display: none;
+}
+
+.paging a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 1px 5px 0px 5px;
+}
+
+.paging a:hover {
+    background-color: #ffffff;
+    color: #000;
+    font-weight: bold;
+}
+
+.paging a.active {
+    background-color: #ffffff;
+    color: #000;
+    font-weight: bold;
+}
+
+.control {
+    position: relative;
+    top: 165px;
+}
+
+.control .left-control, .right-control {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 20px;
+    padding: 25px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.control .left-control {
+    left: 15px;
+}
+
+.control .left-control:hover {
+    font-weight: bold;;
+    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+}
+
+.control .right-control {
+    right: 15px;
+}
+
+.control .right-control:hover {
+    font-weight: bold;;
+    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+}

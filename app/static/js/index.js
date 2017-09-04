@@ -108,7 +108,8 @@ $(window).resize(function () {
     imageWidth = $('.mycarousel').width();
     imageHeight = $('.mycarousel').height();
     imageReelWidth = imageWidth * imageSum;
+    $nowActive = $('.paging a.active').next();
+    $('.image-reel').css({'width': imageReelWidth, 'left': -imageWidth * $nowActive.attr('rel')});
     $('.image-reel img').css({'width': imageWidth, 'height': imageHeight});
-    $('.image-reel').css({'width': imageReelWidth, 'left': -imageWidth * $active.attr('rel')});
     rotateSwitch();
 });

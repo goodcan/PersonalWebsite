@@ -11,7 +11,7 @@ body {
 
 .main {
     min-height: 100%;
-    padding-bottom: 200px;
+    padding-bottom: 215px;
 }
 
 .my-navbar-bottom {
@@ -24,4 +24,14 @@ body {
 .my-navbar-bottom .container {
     padding-top: 15px;
     color: #ffffff;
+}
+
+.sign {
+    font-weight: bold;
+    font-size: 25px;
+    font-family: "Microsoft YaHei UI";
+}
+
+.my-modal-footer {
+    text-align: center;
 }

@@ -60,7 +60,7 @@ function rotateSwitch() {
     play = setInterval(function () {
         $active = $('.paging a.active').next();
         rotate();
-    }, 2000);
+    }, 5000);
 }
 
 rotateSwitch();
@@ -108,7 +108,7 @@ $(window).resize(function () {
     imageWidth = $('.mycarousel').width();
     imageHeight = $('.mycarousel').height();
     imageReelWidth = imageWidth * imageSum;
-    $nowActive = $('.paging a.active').next();
+    $nowActive = $('.paging a.active');
     $('.image-reel').css({'width': imageReelWidth, 'left': -imageWidth * $nowActive.attr('rel')});
     $('.image-reel img').css({'width': imageWidth, 'height': imageHeight});
     rotateSwitch();

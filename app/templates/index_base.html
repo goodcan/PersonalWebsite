@@ -36,7 +36,26 @@
     </div>
 </nav>
 
-{% block new_content %}{% endblock %}
+<div class="main">
+    {% block new_content %}{% endblock %}
+</div>
+
+
+<div class="my-navbar-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+                <h4>bottom_content1</h4>
+                <p>...</p>
+            </div>
+            <div class="col-md-3">
+                <h4>bottom_content2</h4>
+                <p>...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/docs.min.js') }}"></script>

@@ -1,4 +1,27 @@
+
+body {
+    height: 100%;
+    margin-top: 50px;
+}
+
 .my-brand {
     padding: 0;
     margin: 0 15px;
+}
+
+.main {
+    min-height: 100%;
+    padding-bottom: 200px;
+}
+
+.my-navbar-bottom {
+    position: relative;
+    margin-top: -200px;
+    height: 200px;
+    background-color: #222;
+}
+
+.my-navbar-bottom .container {
+    padding-top: 15px;
+    color: #ffffff;
 }

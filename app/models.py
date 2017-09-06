@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from . import db
 from flask_login import UserMixin
+from . import db
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'

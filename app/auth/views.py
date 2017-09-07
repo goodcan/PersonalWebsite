@@ -4,7 +4,7 @@
 from flask import request, flash, redirect, abort, render_template, url_for
 from flask_login import login_user, logout_user ,login_required
 from . import auth
-from login_config import login_manager
+from .. import login_manager
 from ..models import User
 
 #加载用户，传入的数据必须是Unicode

@@ -26,6 +26,29 @@ function checkPwd(p1, p2) {
     }
 };
 
+
+
+$('#login_in').click(function () {
+    $.ajax({
+        url: '/auth/login/',
+        type: 'POST',
+        //contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+            'data':{
+                'username': $('#usernameL').val(),
+                'password': $('#passwordL').val(),
+                'remmber_me': $("#remmber_me").is(':checked')
+            }
+        }),
+        dataType: 'json',
+    }).done(function (data, textStatus) {
+        console.log(data);
+    }).fail(function (xhr, err) {
+        alert('请求失败，原因可能是：' + err + '！');
+    });
+});
+
+
 $('#btn-register').click(function () {
     $p1 = $('#passwordR1');
     $p2 = $('#passwordR2');

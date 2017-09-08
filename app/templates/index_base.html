@@ -53,9 +53,11 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
+{#                    {{ form.hiddem_tag() }}#}
                     <div class="form-group">
                         <label class="col-md-2 control-label">账号:</label>
                         <div class="col-md-10">
+{#                            {{ form.username(class="form-control") }}#}
                             <input id="usernameL" type="text" class="form-control" placeholder="请输入用户名">
                         </div>
                     </div>

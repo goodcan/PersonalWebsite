@@ -3,11 +3,10 @@
 
 from flask import jsonify, request, flash, redirect, abort, render_template, url_for
 from flask_login import login_user, logout_user, login_required
-from wtforms.validators import Required, Length, DataRequired
-from wtforms import StringField, Form
 from . import auth
 from .. import login_manager
 from ..models import User
+from forms import LoginForm
 import json
 
 #加载用户，传入的数据必须是Unicode
@@ -25,7 +24,9 @@ class ValidateLogin(object):
 
         print '*' * 40
         print user_data['username']
-        print Length(1, 2, user_data['username'])
+        print '*' * 40
+        form = LoginForm(remeber_me=user_data['username'])
+        print form.validate()
 
         user = User.query.filter_by(username=user_data['username']).first()
 
@@ -41,8 +42,14 @@ def login():
     if request.method == 'POST':
         # data = request.get_json()
 
-        vaildata_data = ValidateLogin()
-        vaildata_data.validate_on_submit()
+        # vaildata_data = ValidateLogin()
+        # vaildata_data.validate_on_submit()
+        data = json.loads(request.get_data(), encoding='utf-8')
+        user_data = data['data']
+        print type(user_data['username'])
+        print user_data['username'], user_data['password']
+        form = LoginForm(password=user_data['username'],password2=user_data['password'])
+        print form.validate()
 
         re = {'response': True}
 

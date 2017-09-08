@@ -37,8 +37,10 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="login-button" href="#">登录</a></li>
-                <li><a class="register-button" href="#">注册</a></li>
+                <li><a id="login-user" href="#">登录</a></li>
+                <li><a id="register-user" href="#">注册</a></li>
+                <li><a id="context-user" href="#" style="display: none"></a></li>
+                <li><a id="logout-user" href="#" style="display: none">注销</a></li>
             </ul>
         </div>
     </div>
@@ -53,12 +55,13 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-{#                    {{ form.hiddem_tag() }}#}
                     <div class="form-group">
                         <label class="col-md-2 control-label">账号:</label>
                         <div class="col-md-10">
-{#                            {{ form.username(class="form-control") }}#}
                             <input id="usernameL" type="text" class="form-control" placeholder="请输入用户名">
+                            <span class=""></span>
+                            <span class="help-block" style="display: none"></span>
+                            <span id="inputSuccess2Status" class="sr-only">(success)</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -110,9 +113,6 @@
                         <label class="col-md-2 control-label">设置密码:</label>
                         <div class="col-md-10">
                             <input id="passwordR1" type="password" class="form-control" placeholder="设置密码">
-                            <span class=""></span>
-                            <label class="control-label" style="display: none">Input with success</label>
-                            <span id="inputSuccess2Status" class="sr-only">(success)</span>
                         </div>
                     </div>
                     <div class="form-group">

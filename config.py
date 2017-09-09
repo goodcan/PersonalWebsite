@@ -5,6 +5,8 @@ import os
 
 class Config:
     # 对session添加一个盐
+    WTF_CSRF_ENABLED = True
+    # WTF_CSRF_CHECK_DEFAULT =False
     SECRET_KEY = os.urandom(24)
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 

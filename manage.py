@@ -18,5 +18,13 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 #添加迁移的命令到manager中
 manager.add_command('db', MigrateCommand)
 
+# 自定义命令
+@manager.command
+def test():
+    """Run unit test"""
+    import unittest
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
+
 if __name__ == '__main__':
     manager.run()

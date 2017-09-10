@@ -1,32 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import jsonify, request, flash, redirect, abort, render_template, url_for
+from flask import jsonify, request, redirect, abort, render_template, url_for
 from flask_login import login_user, logout_user, login_required
-from . import auth
-from .. import login_manager
-from ..models import User
 from forms import LoginForm, RegisterForm
+from . import auth
+from .. import login_manager, db, csrf
+from ..models import User
 import json
-from .. import csrf, db
-
-
-# 加载用户，传入的数据必须是Unicode
-@login_manager.user_loader
-def load_user(user_id):
-    user = User()
-    return user
 
 
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        title = 'login'
+        return render_template('auth/register&login.html', title=title)
 
     if request.method == 'POST':
         data = json.loads(request.get_data(), encoding='utf-8')
 
         print data
+
         user_data = data['data']
         username = user_data['username']
         password = user_data['password']
@@ -34,13 +28,20 @@ def login():
         if login_form.validate():
             user = User.query.filter_by(username=username).first()
             if user:
-                if user.password == password:
+                if user.verify_password(password):
                     re = {'status': True,
                           'data': {
                               'username': username
                           }}
                     print user
-                    return jsonify(re)
+                    if 'from' in data:
+                        re['data']['redirect'] = url_for('main.index')
+                        print re['data']['redirect']
+                        login_user(user)
+                        return jsonify(re)
+                    else:
+                        login_user(user)
+                        return jsonify(re)
                 else:
                     re = {'status': False,
                           'data': {
@@ -65,7 +66,9 @@ def login():
 @auth.route('/register/', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
-        return render_template('register.html')
+        title = 'register'
+        return render_template('auth/register&login.html', title=title)
+
     if request.method == 'POST':
         data = json.loads(request.get_data(), encoding='utf-8')
 
@@ -89,11 +92,15 @@ def register():
                 'password1': [0, u'密码设置正确'],
                 'password2': [0, u'']
             }}
+
+            # 验证用户名是否注册
             if user_name:
                 re['status'] = False
                 re['data']['username'] = [2, u'该用户名已经注册']
             else:
                 re['data']['username'] = [0, u'用户名设置正确']
+
+            # 验证手机号是否了注册
             if user_tel:
                 re['status'] = False
                 re['data']['telephone'] = [2, u'该用手机号码已经注册']
@@ -104,8 +111,8 @@ def register():
                 user = User(
                     username=username,
                     telephone=telephone,
-                    password=password1
                 )
+                user.password = password1
                 db.session.add(user)
                 db.session.commit()
                 return jsonify(re)
@@ -117,3 +124,10 @@ def register():
                 print key + ':' + value[0]
                 re['data'][key] = [2, value[0]]
             return jsonify(re)
+
+@auth.route("/logout/")
+@login_required
+def logout():
+    logout_user()
+    re = {'status': True}
+    return jsonify(re)

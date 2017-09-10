@@ -1,6 +1,7 @@
 /**
- * Created by admin on 2017/9/5.
+ * Created by admin on 2017/9/9.
  */
+
 
 //表单状态数组
 var FORM_STATUS = [
@@ -30,27 +31,43 @@ function show_tag_errors(tag, errors) {
     tag.next().next().show().html(errors[1]);
 }
 
-$('#login-user').click(function () {
-    $('#my-login-Modal').modal('show');
+function clear_prev_form() {
+    // 注销后跳转到登录
+    $('#login-form .form-control').val('');
+    $('#register-form .form-control').val('');
+    $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
+    $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
+    $('.clear-help').hide().html('');
+}
+
+if ($('.title-active').text() == '登录') {
+    $('#login-form').show();
+    $('#register-form').hide();
+}
+else if ($('.title-active').text() == '注册') {
+    $('#login-form').hide();
+    $('#register-form').show();
+}
+
+$('.login-title').click(function () {
+    $(this).addClass('title-active');
+    $(this).siblings().removeClass('title-active');
+    $('#login-form').show();
+    $('#register-form').hide();
+    clear_prev_form();
 });
 
-$('#register-user').click(function () {
-    $('#my-register-Modal').modal('show');
+$('.register-title').click(function () {
+    $(this).addClass('title-active');
+    $(this).siblings().removeClass('title-active');
+    $('#login-form').hide();
+    $('#register-form').show();
+    clear_prev_form();
 });
-
-$('.my-navbar-dropdown').hover(
-    function () {
-        $('#my-navbar-dropdown').slideDown();
-    },
-    function () {
-        $('#my-navbar-dropdown').slideUp();
-    }
-)
 
 $('#btn-login').click(function () {
     // 生成csrf令牌
     var csrftoken = $('meta[name=csrf-token]').attr('content');
-    console.log(csrftoken);
 
     // 发起ajax请求
     $.ajax({
@@ -63,45 +80,44 @@ $('#btn-login').click(function () {
             }
         },
         data: JSON.stringify({
+            'from': 'login_page',
             'data': {
                 'username': $('#usernameL').val(),
                 'password': $('#passwordL').val(),
                 'remember_me': $("#remember_me").is(':checked')
             },
         }),
-        dataType: 'json',
+        dataType: 'json'
     }).done(function (data, textStatus) {
-        console.log(data);
-        if (data['status'] == true) {
-            $('#login-user').hide();
-            $('#register-user').hide();
-            $('#context-user').html(data['data']['username']).show();
-            $('#logout-user').show();
-            $('#my-login-Modal').modal('hide');
-        }
-        else {
-            errors = data['data'];
-            if ('username' in errors) {
-                $usernameL = $('#usernameL');
-                user_errors = errors['username']
-                show_tag_errors($usernameL, user_errors)
-            }
-            else {
-                $usernameL = $('#usernameL');
-                clear_one_tag($usernameL);
-            }
+            console.log(data);
 
-            if ('password' in errors) {
-                $passwordL = $('#passwordL');
-                pwd_errors = errors['password']
-                show_tag_errors($passwordL, pwd_errors)
+            if (data['status'] == true) {
+                location.href = data['data']['redirect'];
             }
             else {
-                $passwordL = $('#passwordL');
-                clear_one_tag($passwordL);
+                errors = data['data'];
+                if ('username' in errors) {
+                    $usernameL = $('#usernameL');
+                    user_errors = errors['username']
+                    show_tag_errors($usernameL, user_errors)
+                }
+                else {
+                    $usernameL = $('#usernameL');
+                    clear_one_tag($usernameL);
+                }
+
+                if ('password' in errors) {
+                    $passwordL = $('#passwordL');
+                    pwd_errors = errors['password']
+                    show_tag_errors($passwordL, pwd_errors)
+                }
+                else {
+                    $passwordL = $('#passwordL');
+                    clear_one_tag($passwordL);
+                }
             }
         }
-    }).fail(function (xhr, err) {
+    ).fail(function (xhr, data) {
         alert('请求失败！');
     });
 });
@@ -132,8 +148,11 @@ $('#btn-register').click(function () {
     }).done(function (data, textStatus) {
         console.log(data);
         if (data['status'] == true) {
-            $('#my-register-Modal').modal('hide');
-            $('#my-login-Modal').modal('show');
+            $('.login-title').addClass('title-active');
+            $('.login-title').siblings().removeClass('title-active');
+            $('#login-form').show();
+            $('#register-form').hide();
+            clear_prev_form();
         }
         else {
             errors = data['data'];
@@ -180,27 +199,4 @@ $('#btn-register').click(function () {
     }).fail(function (xhr, err) {
         alert('请求失败！');
     });
-});
-
-// 当弹框关闭后清楚所有输入框的内容和状态
-$('#my-login-Modal, #my-register-Modal').on('hidden.bs.modal', function (e) {
-    $('#my-login-Modal .form-control').val('');
-    $('#my-register-Modal .form-control').val('');
-    $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
-    $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
-    $('.clear-help').hide().html('');
-    // 消除注册界面跳转到登入界面后body左移
-    $('body').css({'padding-right': 0});
-});
-
-// 注销后跳转到登录
-$('#logout-user').click(function () {
-    $.get('/auth/logout/');
-    $('#login-user').show();
-    $('#register-user').show();
-    $('#context-user').html('').hide();
-    $('#logout-user').hide();
-    $('#my-login-Modal').modal('show');
-    $('#usernameL').val('');
-    $('#passwordL').val('');
 });

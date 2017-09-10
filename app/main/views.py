@@ -1,9 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import render_template
+from flask import render_template, request, redirect, g
+from flask_login import login_required
 from . import main
+from .. import csrf
+import json
 
-@main.route('/')
+# @csrf.exempt
+@main.route('/index/')
+@login_required
 def index():
-    return render_template('index.html')
+    print g.user
+    data = g.user
+    return render_template('index.html', data=data)

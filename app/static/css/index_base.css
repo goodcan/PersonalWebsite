@@ -45,5 +45,7 @@ body {
 
 .clear-help {
     display: none;
-    font-size: 2px;
+
+    /*不能调得太小，会导致真机上无法显示*/
+    font-size: 12px;
 }

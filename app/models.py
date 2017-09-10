@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     telephone = db.Column(db.String(11), nullable=False)
+    email = db.Column(db.String(64), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
     # 给User类添加属性

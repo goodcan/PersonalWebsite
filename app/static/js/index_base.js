@@ -20,7 +20,7 @@ var GLYPHICON_STATUS = [
 function clear_one_tag(tag) {
     tag.parent().removeClass().addClass(FORM_STATUS[3]);
     tag.next().removeClass().addClass(GLYPHICON_STATUS[3]);
-    tag.next().next().hide().html('');
+    tag.next().next().html(' ');
 }
 
 // 显示服务器返回的验证结果
@@ -124,6 +124,7 @@ $('#btn-register').click(function () {
             'data': {
                 'username': $('#usernameR').val(),
                 'telephone': $('#telephoneR').val(),
+                'email': $('#emailR').val(),
                 'password1': $('#passwordR1').val(),
                 'password2': $('#passwordR2').val(),
             },
@@ -157,6 +158,16 @@ $('#btn-register').click(function () {
                 clear_one_tag($telephoneR);
             }
 
+            if ('email' in errors) {
+                $emailR = $('#emailR');
+                err = errors['email']
+                show_tag_errors($emailR, err)
+            }
+            else {
+                $emailR = $('#emailR');
+                clear_one_tag($emailR);
+            }
+
             if ('password1' in errors) {
                 $passwordR1 = $('#passwordR1');
                 pwd_errors = errors['password1']
@@ -188,7 +199,7 @@ $('#my-login-Modal, #my-register-Modal').on('hidden.bs.modal', function (e) {
     $('#my-register-Modal .form-control').val('');
     $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
     $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
-    $('.clear-help').hide().html('');
+    $('.clear-help').html(' ');
     // 消除注册界面跳转到登入界面后body左移
     $('body').css({'padding-right': 0});
 });

@@ -8,10 +8,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>欢迎，新朋友！</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/register&login.css') }}">
 </head>
 <body>
+
 <div class="container login-container">
+    <div class="development-title text-center">
+        <span>开发人员登入测试</span>
+    </div>
     <div class="text-center R-L-title">
         {% if title == 'login' %}
             <span class="register-title">注册</span><span class="login-title title-active">登录</span>
@@ -54,6 +58,12 @@
             <label class="control-label text-right">手机号码</label>
             <div class="form-group">
                 <input id="telephoneR" type="text" class="form-control" placeholder="绑定手机号码">
+                <span class="clear-glyphicon"></span>
+                <span class="help-block clear-help"></span>
+            </div>
+            <label class="control-label text-right">电子邮箱</label>
+            <div class="form-group">
+                <input id="emailR" type="text" class="form-control" placeholder="绑定电子邮箱">
                 <span class="clear-glyphicon"></span>
                 <span class="help-block clear-help"></span>
             </div>

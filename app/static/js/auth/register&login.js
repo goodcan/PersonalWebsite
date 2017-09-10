@@ -21,7 +21,7 @@ var GLYPHICON_STATUS = [
 function clear_one_tag(tag) {
     tag.parent().removeClass().addClass(FORM_STATUS[3]);
     tag.next().removeClass().addClass(GLYPHICON_STATUS[3]);
-    tag.next().next().hide().html('');
+    tag.next().next().html(' ');
 }
 
 // 显示服务器返回的验证结果
@@ -31,13 +31,13 @@ function show_tag_errors(tag, errors) {
     tag.next().next().show().html(errors[1]);
 }
 
+// 清理前一个表单
 function clear_prev_form() {
-    // 注销后跳转到登录
     $('#login-form .form-control').val('');
     $('#register-form .form-control').val('');
     $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
     $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
-    $('.clear-help').hide().html('');
+    $('.clear-help').html(' ');
 }
 
 if ($('.title-active').text() == '登录') {
@@ -140,6 +140,7 @@ $('#btn-register').click(function () {
             'data': {
                 'username': $('#usernameR').val(),
                 'telephone': $('#telephoneR').val(),
+                'email': $('#emailR').val(),
                 'password1': $('#passwordR1').val(),
                 'password2': $('#passwordR2').val(),
             },
@@ -158,8 +159,8 @@ $('#btn-register').click(function () {
             errors = data['data'];
             if ('username' in errors) {
                 $usernameR = $('#usernameR');
-                user_errors = errors['username']
-                show_tag_errors($usernameR, user_errors)
+                err = errors['username']
+                show_tag_errors($usernameR, err)
             }
             else {
                 $usernameR = $('#usernameR');
@@ -168,18 +169,28 @@ $('#btn-register').click(function () {
 
             if ('telephone' in errors) {
                 $telephoneR = $('#telephoneR');
-                pwd_errors = errors['telephone']
-                show_tag_errors($telephoneR, pwd_errors)
+                err = errors['telephone']
+                show_tag_errors($telephoneR, err)
             }
             else {
                 $telephoneR = $('#telephoneR');
                 clear_one_tag($telephoneR);
             }
 
+            if ('email' in errors) {
+                $emailR = $('#emailR');
+                err = errors['email']
+                show_tag_errors($emailR, err)
+            }
+            else {
+                $emailR = $('#emailR');
+                clear_one_tag($emailR);
+            }
+
             if ('password1' in errors) {
                 $passwordR1 = $('#passwordR1');
-                pwd_errors = errors['password1']
-                show_tag_errors($passwordR1, pwd_errors)
+                err = errors['password1']
+                show_tag_errors($passwordR1, err)
             }
             else {
                 $passwordR1 = $('#passwordR1');
@@ -188,8 +199,8 @@ $('#btn-register').click(function () {
 
             if ('password2' in errors) {
                 $passwordR2 = $('#passwordR2');
-                pwd_errors = errors['password2']
-                show_tag_errors($passwordR2, pwd_errors)
+                err = errors['password2']
+                show_tag_errors($passwordR2, err)
             }
             else {
                 $passwordR2 = $('#passwordR2');

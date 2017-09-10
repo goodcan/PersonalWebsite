@@ -37,10 +37,12 @@ def login():
                     if 'from' in data:
                         re['data']['redirect'] = url_for('main.index')
                         print re['data']['redirect']
-                        login_user(user)
+                        remember_me = user_data['remember_me']
+                        login_user(user, remember=remember_me)
                         return jsonify(re)
                     else:
-                        login_user(user)
+                        remember_me = user_data['remember_me']
+                        login_user(user, remember=remember_me)
                         return jsonify(re)
                 else:
                     re = {'status': False,
@@ -77,21 +79,27 @@ def register():
         register_data = data['data']
         username = register_data['username']
         telephone = register_data['telephone']
+        email = register_data['email']
         password1 = register_data['password1']
         password2 = register_data['password2']
 
         register_form = RegisterForm(username=username,
                                      telephone=telephone,
+                                     email=email,
                                      password1=password1,
                                      password2=password2)
         if register_form.validate():
             user_name = User.query.filter_by(username=username).first()
             user_tel = User.query.filter_by(telephone=telephone).first()
+            user_email = User.query.filter_by(email=email).first()
 
             re = {'status': True, 'data': {
                 'password1': [0, u'密码设置正确'],
                 'password2': [0, u'']
             }}
+            # re['data']['username'] = [0, u'用户名设置正确']
+            # re['data']['telephone'] = [0, u'手机号码设置正确']
+            # re['data']['email'] = [0, u'子邮箱设置正确']
 
             # 验证用户名是否注册
             if user_name:
@@ -103,9 +111,16 @@ def register():
             # 验证手机号是否了注册
             if user_tel:
                 re['status'] = False
-                re['data']['telephone'] = [2, u'该用手机号码已经注册']
+                re['data']['telephone'] = [2, u'该手机号码已经注册']
             else:
                 re['data']['telephone'] = [0, u'手机号码设置正确']
+
+            # 验证电子邮箱是否了注册
+            if user_email:
+                re['status'] = False
+                re['data']['email'] = [2, u'该子邮箱已经注册']
+            else:
+                re['data']['email'] = [0, u'子邮箱设置正确']
 
             if re['status']:
                 user = User(

@@ -32,8 +32,15 @@ body {
     font-family: "Microsoft YaHei UI";
 }
 
-.my-modal-dialog {
+#my-login-Modal .my-modal-dialog {
     top: 25%;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#my-register-Modal .my-modal-dialog {
+    top: 15%;
     width: 350px;
     margin-left: auto;
     margin-right: auto;

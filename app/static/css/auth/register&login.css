@@ -1,4 +1,11 @@
 
+.development-title {
+    position: relative;
+    font-size: 25px;
+    margin: 15px auto;
+    color: #337ab7;
+}
+
 .login-container {
     display: block;
     margin: 10% auto 0 auto;
@@ -10,7 +17,7 @@
 }
 
 .R-L-title {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .register-title, .login-title {

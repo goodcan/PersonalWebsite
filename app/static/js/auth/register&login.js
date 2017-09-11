@@ -71,7 +71,7 @@ $('#btn-login').click(function () {
 
     // 发起ajax请求
     $.ajax({
-        url: '/auth/login/',
+        url: window.location.href,
         type: 'POST',
         contentType: "application/json; charset=UTF-8",
         beforeSend: function (xhr, settings) {
@@ -80,7 +80,6 @@ $('#btn-login').click(function () {
             }
         },
         data: JSON.stringify({
-            'from': 'login_page',
             'data': {
                 'username': $('#usernameL').val(),
                 'password': $('#passwordL').val(),

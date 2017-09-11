@@ -10,5 +10,5 @@ from . import main
 @main.route('/index/')
 @login_required
 def index():
-    data = g.user
+    data = current_user.username
     return render_template('index.html', data=data)

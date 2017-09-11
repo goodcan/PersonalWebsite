@@ -37,6 +37,6 @@ class User(UserMixin, db.Model):
 # 加载用户的回调函数,接收以Unicode字符串形式的用户标识
 @login_manager.user_loader
 def load_user(user_id):
+    print user_id
     user = User.query.get(int(user_id))
-    g.user = user.username
     return user

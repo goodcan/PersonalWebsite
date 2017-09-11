@@ -3,13 +3,22 @@
 
 import os
 
+
 class Config:
     # 对session添加一个盐
-    WTF_CSRF_ENABLED = True
-    # WTF_CSRF_CHECK_DEFAULT =False
     SECRET_KEY = os.urandom(24)
+    # 开启csrf保护
+    WTF_CSRF_ENABLED = True
+
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -26,6 +35,7 @@ class DevelopmentConfig(Config):
         DIALECT, DRIVER, USERNAME, PASSWORD, HOST, PORT, DATABASE
     )
 
+
 class TestingConfig(Config):
     TESTING = True
 
@@ -40,6 +50,7 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = "{}+{}://{}:{}@{}:{}/{}?charset=utf8".format(
         DIALECT, DRIVER, USERNAME, PASSWORD, HOST, PORT, DATABASE
     )
+
 
 config = {
     'development': DevelopmentConfig,

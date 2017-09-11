@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import jsonify, request, redirect, abort, render_template, url_for
+from flask import jsonify, request, redirect, abort, render_template, url_for, g
 from flask_login import login_user, logout_user, login_required
 from forms import LoginForm, RegisterForm
 from . import auth
@@ -25,43 +25,26 @@ def login():
         username = user_data['username']
         password = user_data['password']
         login_form = LoginForm(username=username, password=password)
+        g.re = {'status': True, 'data': {}}
+        g.user = User.query.filter_by(username=username).first()
         if login_form.validate():
-            user = User.query.filter_by(username=username).first()
-            if user:
-                if user.verify_password(password):
-                    re = {'status': True,
-                          'data': {
-                              'username': username
-                          }}
-                    print user
-                    if 'from' in data:
-                        re['data']['redirect'] = url_for('main.index')
-                        print re['data']['redirect']
-                        remember_me = user_data['remember_me']
-                        login_user(user, remember=remember_me)
-                        return jsonify(re)
-                    else:
-                        remember_me = user_data['remember_me']
-                        login_user(user, remember=remember_me)
-                        return jsonify(re)
-                else:
-                    re = {'status': False,
-                          'data': {
-                              'username': [0, u'账号正确'],
-                              'password': [2, u'密码错误']
-                          }}
-                    return jsonify(re)
+            print g.user
+            next = request.args.get('next')
+            if next:
+                print next
+                g.re['data']['redirect'] = next
             else:
-                re = {'status': False,
-                      'data': {
-                          'username': [2, u'账号不存在']
-                      }}
-                return jsonify(re)
+                print "goto index"
+                g.re['data']['redirect'] = url_for('main.index')
+            remember_me = user_data['remember_me']
+            login_user(g.user, remember=remember_me)
+            return jsonify(g.re)
         else:
-            re = {'status': False, 'data': {}}
+            re = g.re
+            re['status'] = False
             for key, value in login_form.errors.items():
-                print key + ':' + value[0]
-                re['data'][key] = [1, value[0]]
+                print key + ':' + str(value[0])
+                re['data'][key] = value[0]
             return jsonify(re)
 
 
@@ -72,6 +55,8 @@ def register():
         return render_template('auth/register&login.html', title=title)
 
     if request.method == 'POST':
+        g.re = {'status': True, 'data': {}}
+
         data = json.loads(request.get_data(), encoding='utf-8')
 
         print data
@@ -89,55 +74,24 @@ def register():
                                      password1=password1,
                                      password2=password2)
         if register_form.validate():
-            user_name = User.query.filter_by(username=username).first()
-            user_tel = User.query.filter_by(telephone=telephone).first()
-            user_email = User.query.filter_by(email=email).first()
-
-            re = {'status': True, 'data': {
-                'password1': [0, u'密码设置正确'],
-                'password2': [0, u'']
-            }}
-            # re['data']['username'] = [0, u'用户名设置正确']
-            # re['data']['telephone'] = [0, u'手机号码设置正确']
-            # re['data']['email'] = [0, u'子邮箱设置正确']
-
-            # 验证用户名是否注册
-            if user_name:
-                re['status'] = False
-                re['data']['username'] = [2, u'该用户名已经注册']
-            else:
-                re['data']['username'] = [0, u'用户名设置正确']
-
-            # 验证手机号是否了注册
-            if user_tel:
-                re['status'] = False
-                re['data']['telephone'] = [2, u'该手机号码已经注册']
-            else:
-                re['data']['telephone'] = [0, u'手机号码设置正确']
-
-            # 验证电子邮箱是否了注册
-            if user_email:
-                re['status'] = False
-                re['data']['email'] = [2, u'该子邮箱已经注册']
-            else:
-                re['data']['email'] = [0, u'子邮箱设置正确']
-
-            if re['status']:
+            if g.re['status']:
                 user = User(
                     username=username,
                     telephone=telephone,
+                    email=email,
+                    password=password1
                 )
-                user.password = password1
                 db.session.add(user)
                 db.session.commit()
-                return jsonify(re)
+                return jsonify(g.re)
             else:
-                return jsonify(re)
+                return jsonify(g.re)
         else:
-            re = {'status': False, 'data': {}}
+            re = g.re
+            re['status'] = False
             for key, value in register_form.errors.items():
-                print key + ':' + value[0]
-                re['data'][key] = [2, value[0]]
+                print key + ':' + str(value[0])
+                re['data'][key] = value[0]
             return jsonify(re)
 
 @auth.route("/logout/")

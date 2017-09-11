@@ -1,22 +1,50 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import g
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import g, current_app
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
-
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
 class User(UserMixin, db.Model):
+    """
+    默认属性和方法：
+    is_authenticated:当用户通过验证时,也即提供有效证明时返回True,（只有通过验证的用户会满足login_required的条件）
+    is_active:如果这是一个活动用户且通过验证,账户也已激活,未被停用,也不符合任何你的应用拒绝一个账号的条件,返回True.
+              不活动的账号可能不会登入（当然,是在没被强制的情况下）。
+    is_anonymous:如果是一个匿名用户,返回True.（真实用户应返回False）
+    get_id():返回一个能唯一识别用户的,并能用于从user_loader回调中加载用户的unicode.
+             注意必须是一个unicode,如果ID原本是一个int或其它类型,你需要把它转换为unicode
+    """
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(50), nullable=False)
     telephone = db.Column(db.String(11), nullable=False)
     email = db.Column(db.String(64), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    confirmed = db.Column(db.Boolean, default=False)
+
+    # 生成一个带时间限制的JSON WEB签名
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'confirm': self.id})
+
+    # 验证令牌
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
 
     # 给User类添加属性
     @property
@@ -30,9 +58,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('gb18030'))
+
 
 # 加载用户的回调函数,接收以Unicode字符串形式的用户标识
 @login_manager.user_loader

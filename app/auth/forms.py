@@ -55,7 +55,8 @@ class LoginForm(Form):
 
     def validate_username(self, filed):
         if g.user:
-            g.re['data']['username'] = [0, '账号正确']
+            g.re['data']['username'] = [0, u'账号正确']
+            g.re['data']['login_user'] = filed.data
         else:
             raise ValidationError([2, u'账号不存在'])
 
@@ -63,6 +64,7 @@ class LoginForm(Form):
         if g.user:
             if not g.user.verify_password(filed.data):
                 raise ValidationError([2, u'密码错误'])
+
 
 class RegisterForm(Form):
     username = StringField(validators=[
@@ -82,7 +84,6 @@ class RegisterForm(Form):
     password2 = PasswordField(validators=[
         DataRequired(message=[2, u'密码不能为空']),
         MyLength(6, 12, message=[2, u'请输入6-12长度的字符'])])
-
 
     def validate_username(self, filed):
         if User.query.filter_by(username=filed.data).first():

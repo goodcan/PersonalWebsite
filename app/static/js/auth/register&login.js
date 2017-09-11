@@ -210,3 +210,17 @@ $('#btn-register').click(function () {
         alert('请求失败！');
     });
 });
+
+// 监听键盘
+$('body').keydown(function () {
+    // enter的键值为13
+    if (event.keyCode == '13') {
+        if ($('#login-form').is(':hidden')) {
+            $('#btn-register').click();
+        }
+
+        if ($('#register-form').is(':hidden')) {
+            $('#btn-login').click();
+        }
+    }
+});

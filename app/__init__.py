@@ -4,8 +4,10 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from config import config
 from flask_wtf.csrf import CSRFProtect
+from flask_mail import Mail
+from config import config
+
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
@@ -13,6 +15,7 @@ login_manager = LoginManager()
 # 'strong' 开启会话保护，会记录客户端IP地址和浏览器的用户代理信息
 login_manager.session_protection = 'strong'
 login_manager.login_view = "auth.login"
+mail = Mail()
 
 
 def create_app(config_name):
@@ -23,6 +26,7 @@ def create_app(config_name):
     # db.create_all()
 
     csrf.init_app(app)
+    mail.init_app(app)
 
     login_manager.init_app(app)
 

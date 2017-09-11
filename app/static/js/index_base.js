@@ -75,7 +75,7 @@ $('#btn-login').click(function () {
         if (data['status'] == true) {
             $('#login-user').hide();
             $('#register-user').hide();
-            $('#context-user').html(data['data']['username']).show();
+            $('#context-user').html(data['data']['login_user']).show();
             $('#logout-user').show();
             $('#my-login-Modal').modal('hide');
         }
@@ -191,6 +191,20 @@ $('#btn-register').click(function () {
     }).fail(function (xhr, err) {
         alert('请求失败！');
     });
+});
+
+// 监听键盘
+$('body').keydown(function () {
+    // enter的键值为13
+    if (event.keyCode == '13') {
+        if ($('#login-form').is(':hidden')) {
+            $('#btn-register').click();
+        }
+
+        if ($('#register-form').is(':hidden')) {
+            $('#btn-login').click();
+        }
+    }
 });
 
 // 当弹框关闭后清楚所有输入框的内容和状态

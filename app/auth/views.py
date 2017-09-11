@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import jsonify, request, redirect, abort, render_template, url_for, g
-from flask_login import login_user, logout_user, login_required
+from flask import jsonify, request, redirect, render_template, url_for, g
+from flask_login import login_user, logout_user, login_required, current_user
 from forms import LoginForm, RegisterForm
 from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
+from ..email import send_email
 import json
 
 
@@ -34,7 +35,7 @@ def login():
                 print next
                 g.re['data']['redirect'] = next
             else:
-                print "goto index"
+                print "next page is none"
                 g.re['data']['redirect'] = url_for('main.index')
             remember_me = user_data['remember_me']
             login_user(g.user, remember=remember_me)
@@ -83,6 +84,9 @@ def register():
                 )
                 db.session.add(user)
                 db.session.commit()
+                token = user.generate_confirmation_token()
+                send_email(user.email, '请验证你的账户', 'auth/email/confirm',
+                           user=user, token=token)
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -100,3 +104,14 @@ def logout():
     logout_user()
     re = {'status': True}
     return jsonify(re)
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        pass
+    else:
+        pass
+    return redirect(url_for('main.index'))

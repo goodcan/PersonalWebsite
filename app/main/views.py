@@ -11,4 +11,4 @@ from . import main
 @login_required
 def index():
     data = current_user.username
-    return render_template('index.html', data=data)
+    return render_template('main/index.html', data=data)

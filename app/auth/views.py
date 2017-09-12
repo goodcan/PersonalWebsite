@@ -84,9 +84,9 @@ def register():
                 )
                 db.session.add(user)
                 db.session.commit()
-                token = user.generate_confirmation_token()
-                send_email(user.email, '请验证你的账户', 'auth/email/confirm',
-                           user=user, token=token)
+                # token = user.generate_confirmation_token()
+                # send_email(user.email, '请验证你的账户', 'auth/email/confirm',
+                #            user=user, token=token)
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)

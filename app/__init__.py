@@ -11,11 +11,12 @@ from config import config
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
+mail = Mail()
 login_manager = LoginManager()
 # 'strong' 开启会话保护，会记录客户端IP地址和浏览器的用户代理信息
 login_manager.session_protection = 'strong'
 login_manager.login_view = "auth.login"
-mail = Mail()
+
 
 
 def create_app(config_name):
@@ -23,11 +24,8 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
 
     db.init_app(app)
-    # db.create_all()
-
     csrf.init_app(app)
     mail.init_app(app)
-
     login_manager.init_app(app)
 
     from main import main as main_blueprint

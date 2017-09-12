@@ -6,23 +6,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
-{% block new_content %}
 
+{% block new_content %}
     <div class="show-carousel-container">
         <div class="container">
             <div class="container-fluid my-carousel-container">
                 <div class="mycarousel">
                     <div class="window">
                         <div class="image-reel">
-                            <a href="#"><img src="{{ url_for('static', filename='image/1.jpg') }}" alt=""></a>
-                            <a href="#"><img src="{{ url_for('static', filename='image/2.jpg') }}" alt=""></a>
-                            <a href="#"><img src="{{ url_for('static', filename='image/3.jpg') }}" alt=""></a>
+                            {% for each_img in data.carousel_imgs %}
+                                <a href="#"><img src="{{ url_for('static', filename='image/' + each_img + '.jpg') }}"
+                                                 alt=""></a>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="paging">
-                        <a href="" rel="1">1</a>
-                        <a href="" rel="2">2</a>
-                        <a href="" rel="3">3</a>
+                        {% for each_img in data.carousel_imgs  %}
+                            <a href="" rel={{ each_img }}>{{ each_img }}</a>
+                        {% endfor %}
                     </div>
                     <div class="control">
                         <span class="left-control glyphicon glyphicon-chevron-left"></span>

@@ -40,7 +40,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% if data == 'login' %}
+                {% if data.username == 'login' %}
                     <li><a id="login-user" href="#">登录</a></li>
                     <li><a id="register-user" href="#">注册</a></li>
                     <li><a id="context-user" href="#" style="display: none"></a></li>
@@ -48,7 +48,7 @@
                 {% else %}
                     <li><a id="login-user" href="#" style="display: none">登录</a></li>
                     <li><a id="register-user" href="#" style="display: none">注册</a></li>
-                    <li><a id="context-user" href="#">{{ data }}</a></li>
+                    <li><a id="context-user" href="#">{{ data.username }}</a></li>
                     <li><a id="logout-user" href="#">注销</a></li>
                 {% endif %}
             </ul>

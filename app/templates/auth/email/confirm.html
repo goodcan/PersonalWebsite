@@ -7,17 +7,14 @@
 </head>
 <body>
 <div class="container">
-    <p>Dear {{ user.username }},</p>
-    <p>Welcome to <b>my personal website</b>!</p>
-    <p>To confirm your account please <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">click
-        here</a>.
+    <p>亲爱的 <b>{{ user.username }}</b>,</p>
+    <p>欢迎来到我的个人网站!</p>
+    <p>请点击这里<a href="{{ url_for('auth.confirm', token=token, _external=True) }}">确认您的帐户</a>。
     </p>
-    <p>Alternatively, you can paste the following link in your browser's address bar:</p>
+    <p>或者，您可以在浏览器的地址栏中粘贴以下链接：</p>
     <p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
-    <p>Sincerely,</p>
-    <p>The Cancan Team</p>
     <p>
-        <small>Note: replies to this email address are not monitored.</small>
+        <small>注: 对该邮件地址的回复没有被监控。</small>
     </p>
 </div>
 

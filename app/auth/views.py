@@ -148,7 +148,7 @@ def confirm(token):
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
         print 'confirm success'
-        return redirect(url_for('main.index'))
+        return render_template('auth/email/confirm_success.html')
     else:
         print 'confirm error'
-        return redirect(url_for('main.index'))
+        return redirect(url_for('auth.unconfirmed'))

@@ -44,7 +44,9 @@ class User(UserMixin, db.Model):
             return False
         if data.get('confirm') != self.id:
             return False
-        self.confirmed = True
+        else:
+            self.confirmed = True
+            return True
 
     # 给User类添加属性
     @property

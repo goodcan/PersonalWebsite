@@ -31,17 +31,18 @@ def before_request():
 def unconfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.index'))
-    return render_template('auth/unconfirmed.html')
+    return render_template('auth/email/unconfirmed.html')
 
 
-@auth.route('/resend_confirm/')
+@auth.route('/resend_confirmation/')
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
     send_email(current_user.email, u'请验证你的账户', 'auth/email/confirm',
                token=token,  user=current_user)
     logout_user()
-    return redirect(url_for('main.index'))
+    re = {'message': u'请查收验证邮件并及时完成验证！'}
+    return jsonify(re)
 
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -141,12 +142,13 @@ def logout():
     return jsonify(re)
 
 
-@auth.route('/confirm/<token>')
-@login_required
-def confirm(token):
-    if current_user.confirmed:
+@auth.route('/confirm/<token>/<user_id>/')
+# @login_required
+def confirm(token, user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user.confirmed:
         return redirect(url_for('main.index'))
-    if current_user.confirm(token):
+    if user.confirm(token):
         print 'confirm success'
         return render_template('auth/email/confirm_success.html')
     else:

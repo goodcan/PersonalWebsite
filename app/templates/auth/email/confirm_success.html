@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>验证成功！</title>
-</head>
-<body>
-<H1>邮箱验证成功！</H1>
-<p>点击这里<a href="{{ url_for('auth.login') }}">登录</a>。</p>
-</body>
-</html>
+{% extends 'auth/email/email_base.html' %}
+
+{% block title %}验证成功！{% endblock %}
+
+{% block contendt %}
+<div class="container text-center">
+    <div class="col-md-4 col-md-offset-4">
+        <h3>邮箱验证成功！</h3>
+        <a href="{{ url_for('auth.login') }}" class="btn-block btn btn-primary">登录</a>
+    </div>
+</div>
+{% endblock %}
+

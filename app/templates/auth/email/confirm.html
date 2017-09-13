@@ -9,10 +9,10 @@
 <div class="container">
     <p>亲爱的 <b>{{ user.username }}</b>,</p>
     <p>欢迎来到我的个人网站!</p>
-    <p>请点击这里<a href="{{ url_for('auth.confirm', token=token, _external=True) }}">确认您的帐户</a>。
+    <p>请点击这里<a href="{{ url_for('auth.confirm', token=token, user_id=user.id, _external=True) }}">确认您的帐户</a>。
     </p>
     <p>或者，您可以在浏览器的地址栏中粘贴以下链接：</p>
-    <p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+    <p>{{ url_for('auth.confirm', token=token, user_id=user.id, _external=True) }}</p>
     <p>
         <small>注: 对该邮件地址的回复没有被监控。</small>
     </p>

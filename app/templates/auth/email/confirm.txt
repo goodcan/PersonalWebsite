@@ -4,6 +4,6 @@
 
 为了确认您的帐户，请点击以下链接：
 
-{{ url_for('auth.confirm', token=token, _external=True) }}
+{{ url_for('auth.confirm', token=token, user_id=user.id, _external=True) }}
 
 注: 对该邮件地址的回复没有被监控。

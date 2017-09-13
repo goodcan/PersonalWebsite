@@ -13,10 +13,15 @@ import json
 
 @auth.before_app_request
 def before_request():
+    try:
+        endpoint = request.endpoint
+        endpoint_title = endpoint[:5]
+    except:
+        endpoint_title = None
     if current_user.is_authenticated \
             and not current_user.confirmed \
-            and request.endpoint[:5] != 'auth.' \
-            and request.endpoint != 'static':
+            and endpoint_title != 'auth.' \
+            and endpoint != 'static':
         # print current_user.is_authenticated
         # print request.endpoint
         return redirect(url_for('auth.unconfirmed'))
@@ -26,16 +31,16 @@ def before_request():
 def unconfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.index'))
-    logout_user()
     return render_template('auth/unconfirmed.html')
 
 
-@auth.route('/confirm/')
+@auth.route('/resend_confirm/')
 @login_required
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
     send_email(current_user.email, u'请验证你的账户', 'auth/email/confirm',
                token=token,  user=current_user)
+    logout_user()
     return redirect(url_for('main.index'))
 
 @auth.route('/login/', methods=['GET', 'POST'])
@@ -53,9 +58,10 @@ def login():
         username = user_data['username']
         password = user_data['password']
         login_form = LoginForm(username=username, password=password)
-        g.re = {'status': True, 'data': {}}
         g.user = User.query.filter_by(username=username).first()
+        g.re = {'status': True, 'data': {}}
         if login_form.validate():
+            g.re['data']['confirmed'] = g.user.confirmed
             print g.user
             next = request.args.get('next')
             if next:
@@ -114,6 +120,7 @@ def register():
                 token = user.generate_confirmation_token()
                 send_email(user.email, u'请验证你的账户', 'auth/email/confirm',
                            user=user, token=token)
+                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)

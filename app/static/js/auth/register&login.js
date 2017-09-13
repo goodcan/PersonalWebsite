@@ -2,7 +2,6 @@
  * Created by admin on 2017/9/9.
  */
 
-
 //表单状态数组
 var FORM_STATUS = [
     'form has-success has-feedback clear-form-group',
@@ -153,6 +152,9 @@ $('#btn-register').click(function () {
             $('#login-form').show();
             $('#register-form').hide();
             clear_prev_form();
+            // alert(data['data']['confirm'])
+            $('#my-message-Modal').modal('show');
+            $('#message-content').html(data['data']['confirm']);
         }
         else {
             errors = data['data'];

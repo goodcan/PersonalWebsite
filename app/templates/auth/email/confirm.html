@@ -6,16 +6,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
 <body>
-<p>Dear {{ user.username }},</p>
-<p>Welcome to <b>my personal website</b>!</p>
-<p>To confirm your account please <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">click here</a>.
-</p>
-<p>Alternatively, you can paste the following link in your browser's address bar:</p>
-<p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
-<p>Sincerely,</p>
-<p>The Cancan Team</p>
-<p>
-    <small>Note: replies to this email address are not monitored.</small>
-</p>
+<div class="container">
+    <p>Dear {{ user.username }},</p>
+    <p>Welcome to <b>my personal website</b>!</p>
+    <p>To confirm your account please <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">click
+        here</a>.
+    </p>
+    <p>Alternatively, you can paste the following link in your browser's address bar:</p>
+    <p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+    <p>Sincerely,</p>
+    <p>The Cancan Team</p>
+    <p>
+        <small>Note: replies to this email address are not monitored.</small>
+    </p>
+</div>
+
 </body>
 </html>

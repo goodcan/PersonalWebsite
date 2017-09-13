@@ -34,3 +34,10 @@
     color: #337ab7;
     border-bottom: 2px solid #337ab7;
 }
+
+#my-message-Modal .my-modal-dialog{
+    top: 25%;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}

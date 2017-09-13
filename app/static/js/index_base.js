@@ -73,11 +73,16 @@ $('#btn-login').click(function () {
     }).done(function (data, textStatus) {
         console.log(data);
         if (data['status'] == true) {
-            $('#login-user').hide();
-            $('#register-user').hide();
-            $('#context-user').html(data['data']['login_user']).show();
-            $('#logout-user').show();
-            $('#my-login-Modal').modal('hide');
+            if (data['data']['confirmed']) {
+                $('#login-user').hide();
+                $('#register-user').hide();
+                $('#context-user').html(data['data']['login_user']).show();
+                $('#logout-user').show();
+                $('#my-login-Modal').modal('hide');
+            }
+            else {
+                window.location.href = 'auth/unconfirmed'
+            }
         }
         else {
             errors = data['data'];
@@ -134,7 +139,9 @@ $('#btn-register').click(function () {
         console.log(data);
         if (data['status'] == true) {
             $('#my-register-Modal').modal('hide');
-            $('#my-login-Modal').modal('show');
+            // $('#my-login-Modal').modal('show');
+            $('#my-message-Modal').modal('show');
+            $('#message-content').html(data['data']['confirm']);
         }
         else {
             errors = data['data'];

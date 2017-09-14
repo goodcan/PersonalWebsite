@@ -3,7 +3,7 @@
 
 from flask import jsonify, request, redirect, render_template, url_for, g, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from forms import LoginForm, RegisterForm
+from forms import UsernameLoginForm, TelephoneLoginForm, RegisterForm
 from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
@@ -58,8 +58,14 @@ def login():
         user_data = data['data']
         username = user_data['username']
         password = user_data['password']
-        login_form = LoginForm(username=username, password=password)
-        g.user = User.query.filter_by(username=username).first()
+        try:
+            telephone = int(username)
+            print telephone
+            login_form = TelephoneLoginForm(telephone=username, password=password)
+            g.user = User.query.filter_by(telephone=username).first()
+        except:
+            login_form = UsernameLoginForm(username=username, password=password)
+            g.user = User.query.filter_by(username=username).first()
         g.re = {'status': True, 'data': {}}
         if login_form.validate():
             g.re['data']['confirmed'] = g.user.confirmed

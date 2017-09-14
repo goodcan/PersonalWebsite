@@ -3,7 +3,7 @@
 
 from flask import g
 from wtforms import Form, StringField, PasswordField, BooleanField, ValidationError
-from wtforms.validators import Length, DataRequired, EqualTo, Email
+from wtforms.validators import Length, DataRequired, EqualTo, Email, Regexp
 from ..models import User
 
 
@@ -44,14 +44,15 @@ class MyEqualTo(EqualTo):
             g.re['data']['password2'] = [0, u'']
 
 
-class LoginForm(Form):
+class UsernameLoginForm(Form):
     username = StringField(validators=[
-        DataRequired(message=[1, u'用户名不能为空']),
-        MyLength(2, 12, message=[1, u'请输入6-12长度的字符'])])
+        DataRequired(message=[1, u'账号不能为空']),
+        MyLength(2, 12, message=[1, u'请输入6-12长度的字符或手机号码']),
+        Regexp(u'^[A-Za-z\u4E00-\u9FA5]+[A-Za-z0-9\u4E00-\u9FA5_.]*$',
+               0, [1, u'输入账号不合法'])])
     password = PasswordField(validators=[
         DataRequired(message=[1, u'密码不能为空']),
         MyLength(6, 12, message=[1, u'请输入6-12长度的字符'])])
-    remember_me = BooleanField([1, u'保持登入'])
 
     def validate_username(self, filed):
         if g.user:
@@ -66,10 +67,33 @@ class LoginForm(Form):
                 raise ValidationError([2, u'密码错误'])
 
 
+class TelephoneLoginForm(Form):
+    telephone = StringField(validators=[
+        DataRequired(message=[1, u'账号不能为空']),
+        MyLength(11, 11, message=[1, u'手机号码格式不对'])])
+    password = PasswordField(validators=[
+        DataRequired(message=[1, u'密码不能为空']),
+        MyLength(6, 12, message=[1, u'请输入6-12长度的字符'])])
+
+    def validate_telephone(self, filed):
+        if g.user:
+            g.re['data']['telephone'] = [0, u'账号正确']
+            g.re['data']['login_user'] = g.user.username
+        else:
+            raise ValidationError([2, u'账号不存在'])
+
+    def validate_password(self, filed):
+        if g.user:
+            if not g.user.verify_password(filed.data):
+                raise ValidationError([2, u'密码错误'])
+
+
 class RegisterForm(Form):
     username = StringField(validators=[
         DataRequired(message=[2, u'用户名不能为空']),
-        MyLength(2, 12, message=[2, u'请输入6-12长度的字符'])])
+        MyLength(2, 12, message=[2, u'请输入6-12长度的字符']),
+        Regexp(u'^[A-Za-z\u4E00-\u9FA5]+[A-Za-z0-9\u4E00-\u9FA5_.]*$',
+               0, [2, u'用户名不能以数字开头'])])
     telephone = StringField(validators=[
         DataRequired(message=[2, u'手机号码不能为空']),
         MyLength(11, 11, message=[2, u'手机号码格式不对'])])

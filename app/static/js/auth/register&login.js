@@ -94,9 +94,15 @@ $('#btn-login').click(function () {
             }
             else {
                 errors = data['data'];
-                if ('username' in errors) {
+                if ('username' in errors || 'telephone' in errors) {
                     $usernameL = $('#usernameL');
-                    user_errors = errors['username']
+                    if (errors['username'] != null) {
+                        user_errors = errors['username']
+                    }
+                    else
+                    {
+                        user_errors = errors['telephone']
+                    }
                     show_tag_errors($usernameL, user_errors)
                 }
                 else {

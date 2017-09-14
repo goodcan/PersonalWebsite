@@ -30,6 +30,18 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
 
+    # 给User类添加属性
+    @property
+    def password(self):
+        return AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
     # 生成一个带时间限制的JSON WEB签名
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
@@ -48,17 +60,22 @@ class User(UserMixin, db.Model):
             self.confirmed = True
             return True
 
-    # 给User类添加属性
-    @property
-    def password(self):
-        return AttributeError('password is not a readable attribute')
+    # 生成重置密码的令牌
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'reset': self.id})
 
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    def reset_password(self, token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data['reset'] != self.id:
+            return False
+        else:
+            self.password = new_password
+            return True
 
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('gb18030'))

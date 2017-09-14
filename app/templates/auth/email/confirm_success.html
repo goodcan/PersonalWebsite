@@ -5,9 +5,8 @@
 {% block contendt %}
 <div class="container text-center">
     <div class="col-md-4 col-md-offset-4">
-        <h3>邮箱验证成功！</h3>
+        <h3>{{ title }}</h3>
         <a href="{{ url_for('auth.login') }}" class="btn-block btn btn-primary">登录</a>
     </div>
 </div>
 {% endblock %}
-

@@ -126,3 +126,23 @@ class RegisterForm(Form):
             raise ValidationError([2, u'该子邮箱已经注册'])
         else:
             g.re['data']['email'] = [0, u'子邮箱设置正确']
+
+
+class ResetPasswordForm(Form):
+    email = StringField(validators=[
+        DataRequired(message=[2, u'电子邮箱不能为空']),
+        MyLength(1, 64, message=[2, u'电子邮箱格式不对']),
+        Email(message=[2, u'电子邮箱格式不对'])])
+    password1 = PasswordField(validators=[
+        DataRequired(message=[2, u'密码不能为空']),
+        MyLength(6, 12, message=[2, u'请输入6-12长度的字符串']),
+        MyEqualTo('password2', message=[2, u'密码不一致'])])
+    password2 = PasswordField(validators=[
+        DataRequired(message=[2, u'密码不能为空']),
+        MyLength(6, 12, message=[2, u'请输入6-12长度的字符串'])])
+
+    def validate_email(self, filed):
+        if User.query.filter_by(email=filed.data).first():
+            raise ValidationError([2, u'该子邮箱已经注册'])
+        else:
+            g.re['data']['email'] = [0, u'子邮箱设置正确']

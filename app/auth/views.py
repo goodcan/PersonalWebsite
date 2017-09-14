@@ -3,7 +3,7 @@
 
 from flask import jsonify, request, redirect, render_template, url_for, g, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from forms import UsernameLoginForm, TelephoneLoginForm, RegisterForm
+from forms import UsernameLoginForm, TelephoneLoginForm, RegisterForm, ResetPasswordForm
 from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
@@ -27,24 +27,6 @@ def before_request():
         return redirect(url_for('auth.unconfirmed'))
 
 
-@auth.route('/unconfirmed/')
-def unconfirmed():
-    if current_user.is_anonymous or current_user.confirmed:
-        return redirect(url_for('main.index'))
-    return render_template('auth/email/unconfirmed.html')
-
-
-@auth.route('/resend_confirmation/')
-@login_required
-def resend_confirmation():
-    token = current_user.generate_confirmation_token()
-    send_email(current_user.email, u'请验证你的账户', 'auth/email/confirm',
-               token=token, user=current_user)
-    logout_user()
-    re = {'message': u'请查收验证邮件并及时完成验证！'}
-    return jsonify(re)
-
-
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -64,13 +46,13 @@ def login():
         try:
             telephone = int(username)
             print telephone
-            login_form = TelephoneLoginForm(telephone=username, password=password)
+            form = TelephoneLoginForm(telephone=username, password=password)
             g.user = User.query.filter_by(telephone=username).first()
         except:
-            login_form = UsernameLoginForm(username=username, password=password)
+            form = UsernameLoginForm(username=username, password=password)
             g.user = User.query.filter_by(username=username).first()
         g.re = {'status': True, 'data': {}}
-        if login_form.validate():
+        if form.validate():
             g.re['data']['confirmed'] = g.user.confirmed
             print g.user
 
@@ -88,7 +70,7 @@ def login():
         else:
             re = g.re
             re['status'] = False
-            for key, value in login_form.errors.items():
+            for key, value in form.errors.items():
                 print key + ':' + str(value[0])
                 re['data'][key] = value[0]
             return jsonify(re)
@@ -114,12 +96,12 @@ def register():
         password1 = register_data['password1']
         password2 = register_data['password2']
 
-        register_form = RegisterForm(username=username,
-                                     telephone=telephone,
-                                     email=email,
-                                     password1=password1,
-                                     password2=password2)
-        if register_form.validate():
+        form = RegisterForm(username=username,
+                            telephone=telephone,
+                            email=email,
+                            password1=password1,
+                            password2=password2)
+        if form.validate():
             if g.re['status']:
                 user = User(
                     username=username,
@@ -139,7 +121,7 @@ def register():
         else:
             re = g.re
             re['status'] = False
-            for key, value in register_form.errors.items():
+            for key, value in form.errors.items():
                 print key + ':' + str(value[0])
                 re['data'][key] = value[0]
             return jsonify(re)
@@ -148,6 +130,7 @@ def register():
 @auth.route("/logout/")
 @login_required
 def logout():
+    """登出当前用户"""
     logout_user()
     re = {'status': True}
     return jsonify(re)
@@ -157,16 +140,103 @@ def logout():
 # @login_required
 def confirm(token, user_id):
     user = User.query.filter_by(id=user_id).first()
-    if user.confirmed:
-        return redirect(url_for('main.index'))
-    if user.confirm(token):
-        print 'confirm success'
-        return render_template('auth/email/confirm_to_login.html')
+    if user:
+        if user.confirmed:
+            return redirect(url_for('main.index'))
+        if user.confirm(token):
+            print 'confirm success'
+            data['title'] = u'邮箱验证成功'
+            return render_template('auth/email/confirm_success.html', data=data)
+        else:
+            print 'confirm error'
+            return redirect(url_for('auth.unconfirmed'))
     else:
         print 'confirm error'
         return redirect(url_for('auth.unconfirmed'))
 
 
-@auth.route('/reset_password/')
-def reset_password():
-    return render_template('auth/reset_password.html')
+@auth.route('/unconfirmed/')
+def unconfirmed():
+    """
+    返回验证失败的页面
+    """
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for('main.index'))
+    return render_template('auth/email/unconfirmed.html')
+
+
+@auth.route('/resend_confirmation/')
+@login_required
+def resend_confirmation():
+    """
+    重新发送账户验证邮件
+    """
+    token = current_user.generate_confirmation_token()
+    send_email(current_user.email, u'请验证你的账户', 'auth/email/confirm',
+               token=token, user=current_user)
+    logout_user()
+    re = {'message': u'请查收验证邮件并及时完成验证！'}
+    return jsonify(re)
+
+
+@auth.route('/reset_password_request/', methods=['GET', 'POST'])
+def reset_password_request():
+    """
+    验证输入并发送修改密码的邮箱验证
+    """
+    if not current_user.is_anonymous():
+        return redirect(url_for('main.index'))
+    if request.method == 'GET':
+        return render_template('auth/reset_password.html')
+    if request.method == 'POST':
+        g.re = {'status': True, 'data': {}}
+
+        data = json.loads(request.get_data(), encoding='utf-8')
+
+        print data
+
+        register_data = data['data']
+        email = register_data['email']
+        password1 = register_data['password1']
+        password2 = register_data['password2']
+
+        form = ResetPasswordForm(email=email,
+                                 password1=password1,
+                                 password2=password2)
+        if form.validate():
+            if g.re['status']:
+                token = user.generate_reset_token()
+                send_email(user.email, u'请验证你的账户并完成密码修改', 'auth/email/resetpwd_confirm',
+                           user=user, token=token, new_password=password1)
+                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
+                return jsonify(g.re)
+            else:
+                return jsonify(g.re)
+        else:
+            re = g.re
+            re['status'] = False
+            for key, value in form.errors.items():
+                print key + ':' + str(value[0])
+                re['data'][key] = value[0]
+            return jsonify(re)
+
+
+@auth.route('/reset_password/<token>/<user_email>/<new_password>')
+def reset_password(token, user_id, new_passowrd):
+    """
+    邮箱验证并完成密码修改
+    """
+    user = User.query.filter_by(id=user_id).first()
+    if not current_user.is_anonymous():
+        return redirect(url_for('main.index'))
+    if user:
+        if user.reset_password(token, new_passowrd):
+            print 'confirm success'
+            data['title'] = u'密码修改成功'
+            return render_template('auth/email/confirm_success.html', data=data)
+        else:
+            print 'confirm error'
+            return redirect(url_for('auth.unconfirmed'))
+    else:
+        print 'confirm error'
+        return redirect(url_for('auth.unconfirmed'))

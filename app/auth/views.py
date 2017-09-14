@@ -39,10 +39,11 @@ def unconfirmed():
 def resend_confirmation():
     token = current_user.generate_confirmation_token()
     send_email(current_user.email, u'请验证你的账户', 'auth/email/confirm',
-               token=token,  user=current_user)
+               token=token, user=current_user)
     logout_user()
     re = {'message': u'请查收验证邮件并及时完成验证！'}
     return jsonify(re)
+
 
 @auth.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -58,6 +59,8 @@ def login():
         user_data = data['data']
         username = user_data['username']
         password = user_data['password']
+
+        # 检测用户是以什么方式登入
         try:
             telephone = int(username)
             print telephone
@@ -70,6 +73,8 @@ def login():
         if login_form.validate():
             g.re['data']['confirmed'] = g.user.confirmed
             print g.user
+
+            # 获取用户前一个请求地址
             next = request.args.get('next')
             if next:
                 print next
@@ -156,7 +161,12 @@ def confirm(token, user_id):
         return redirect(url_for('main.index'))
     if user.confirm(token):
         print 'confirm success'
-        return render_template('auth/email/confirm_success.html')
+        return render_template('auth/email/confirm_to_login.html')
     else:
         print 'confirm error'
         return redirect(url_for('auth.unconfirmed'))
+
+
+@auth.route('/reset_password/')
+def reset_password():
+    return render_template('auth/reset_password.html')

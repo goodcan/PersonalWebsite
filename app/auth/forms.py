@@ -142,7 +142,7 @@ class ResetPasswordForm(Form):
         MyLength(6, 12, message=[2, u'请输入6-12长度的字符串'])])
 
     def validate_email(self, filed):
-        if User.query.filter_by(email=filed.data).first():
-            raise ValidationError([2, u'该子邮箱已经注册'])
+        if not User.query.filter_by(email=filed.data).first():
+            raise ValidationError([2, u'电子邮箱未注册'])
         else:
-            g.re['data']['email'] = [0, u'子邮箱设置正确']
+            g.re['data']['email'] = [0, u'电子邮箱正确']

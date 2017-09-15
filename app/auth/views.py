@@ -145,8 +145,8 @@ def confirm(token, user_id):
             return redirect(url_for('main.index'))
         if user.confirm(token):
             print 'confirm success'
-            data['title'] = u'邮箱验证成功'
-            return render_template('auth/email/confirm_success.html', data=data)
+            message_title = u'邮箱验证成功'
+            return render_template('auth/email/confirm_success.html', message_title=message_title)
         else:
             print 'confirm error'
             return redirect(url_for('auth.unconfirmed'))
@@ -184,7 +184,7 @@ def reset_password_request():
     """
     验证输入并发送修改密码的邮箱验证
     """
-    if not current_user.is_anonymous():
+    if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     if request.method == 'GET':
         return render_template('auth/reset_password.html')
@@ -195,16 +195,17 @@ def reset_password_request():
 
         print data
 
-        register_data = data['data']
-        email = register_data['email']
-        password1 = register_data['password1']
-        password2 = register_data['password2']
+        resetpwd_data = data['data']
+        email = resetpwd_data['email']
+        password1 = resetpwd_data['passwordRS1']
+        password2 = resetpwd_data['passwordRS2']
 
         form = ResetPasswordForm(email=email,
                                  password1=password1,
                                  password2=password2)
         if form.validate():
             if g.re['status']:
+                user = User.query.filter_by(email=email).first()
                 token = user.generate_reset_token()
                 send_email(user.email, u'请验证你的账户并完成密码修改', 'auth/email/resetpwd_confirm',
                            user=user, token=token, new_password=password1)
@@ -221,19 +222,17 @@ def reset_password_request():
             return jsonify(re)
 
 
-@auth.route('/reset_password/<token>/<user_email>/<new_password>')
-def reset_password(token, user_id, new_passowrd):
+@auth.route('/reset_password/<token>/<user_id>/<new_password>/')
+def reset_password(token, user_id, new_password):
     """
     邮箱验证并完成密码修改
     """
     user = User.query.filter_by(id=user_id).first()
-    if not current_user.is_anonymous():
-        return redirect(url_for('main.index'))
     if user:
-        if user.reset_password(token, new_passowrd):
+        if user.reset_password(token, new_password):
             print 'confirm success'
-            data['title'] = u'密码修改成功'
-            return render_template('auth/email/confirm_success.html', data=data)
+            message_title = u'密码修改成功'
+            return render_template('auth/email/confirm_success.html', message_title=message_title)
         else:
             print 'confirm error'
             return redirect(url_for('auth.unconfirmed'))

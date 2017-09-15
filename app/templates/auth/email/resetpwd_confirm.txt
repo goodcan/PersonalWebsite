@@ -1,0 +1,7 @@
+亲爱的 <b>{{ user.username }}，
+
+确认您的帐户并修改密码，请点击以下链接：
+
+{{ url_for('auth.reset_password', token=token, user_id=user.id, new_password=new_password, _external=True) }}
+
+注: 对该邮件地址的回复没有被监控。

@@ -6,3 +6,4 @@ docs*.js
 jquery*.js
 bootstrap*.*
 migrations
+*.ini

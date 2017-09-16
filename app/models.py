@@ -61,11 +61,12 @@ class User(UserMixin, db.Model):
             return True
 
     # 生成重置密码的令牌
-    def generate_reset_token(self, expiration=3600):
+    def generate_resetpwd_token(self, new_password, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'reset': self.id})
+        return s.dumps({'reset': self.id,
+                        'new_password': new_password})
 
-    def reset_password(self, token, new_password):
+    def reset_password(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -74,7 +75,7 @@ class User(UserMixin, db.Model):
         if data['reset'] != self.id:
             return False
         else:
-            self.password = new_password
+            self.password = data['new_password']
             return True
 
     def __repr__(self):

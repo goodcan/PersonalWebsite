@@ -206,9 +206,9 @@ def reset_password_request():
         if form.validate():
             if g.re['status']:
                 user = User.query.filter_by(email=email).first()
-                token = user.generate_reset_token()
+                token = user.generate_resetpwd_token(password1)
                 send_email(user.email, u'请验证你的账户并完成密码修改', 'auth/email/resetpwd_confirm',
-                           user=user, token=token, new_password=password1)
+                           user=user, token=token)
                 g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
             else:
@@ -222,14 +222,14 @@ def reset_password_request():
             return jsonify(re)
 
 
-@auth.route('/reset_password/<token>/<user_id>/<new_password>/')
-def reset_password(token, user_id, new_password):
+@auth.route('/reset_password/<token>/<user_id>/')
+def reset_password(token, user_id):
     """
     邮箱验证并完成密码修改
     """
     user = User.query.filter_by(id=user_id).first()
     if user:
-        if user.reset_password(token, new_password):
+        if user.reset_password(token):
             print 'confirm success'
             message_title = u'密码修改成功'
             return render_template('auth/email/confirm_success.html', message_title=message_title)

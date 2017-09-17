@@ -7,3 +7,4 @@ jquery*.js
 bootstrap*.*
 migrations
 *.ini
+logs

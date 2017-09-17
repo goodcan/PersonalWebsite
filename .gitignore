@@ -1,10 +1,10 @@
 .idea
 venv
 fonts
+*.log
 *.pyc
 docs*.js
 jquery*.js
 bootstrap*.*
 migrations
 *.ini
-logs

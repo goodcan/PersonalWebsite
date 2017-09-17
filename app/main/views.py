@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from . import main
 
 # @csrf.exempt
-@main.route('/index/')
+@main.route('/')
 @login_required
 def index():
     data = {}

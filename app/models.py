@@ -127,5 +127,4 @@ class Role(db.Model):
             role.permissions = roles[r][0]
             role.default = roles[r][1]
             db.session.add(role)
-
-        pass
+        db.session.commit()

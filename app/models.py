@@ -11,6 +11,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
@@ -18,7 +19,7 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
 
-    users = db.relationship('User', backref='role', lazy='dynamic')
+    # users = db.relationship('User', backref='role', lazy='dynamic')
 
     @staticmethod
     def insert_roles():
@@ -61,14 +62,16 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default=False)
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    users = db.relationship('Role', backref='users')
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        if self.role is None:
-            if self.email == current_app.config['FLASK_ADMIN']:
-                self.role = Role.query.filter_by(permissions=0xff).first()
-            else:
-                self.role = Role.query.filter_by(default=True).first()
+        if self.email == current_app.config['FLASK_ADMIN']:
+            self.role = Role.query.filter_by(permissions=0xff).first()
+            self.role_id = self.role.id
+        else:
+            self.role = Role.query.filter_by(default=True).first()
+            self.role_id = self.role.id
 
     def can(self, permissions):
         return self.role is not None and \
@@ -145,13 +148,16 @@ class Permission:
     MODERATE_COMMENTS = 0x08
     ADMINISTER = 0x80
 
+
 class AnonymousUser(AnonymousUserMixin):
     """匿名用户登入"""
+
     def can(self, permissions):
         return False
 
     def is_administrator(self):
         return False
+
 
 # 自定义匿名用户
 login_manager.anonymous_user = AnonymousUser

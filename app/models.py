@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import g, current_app
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
@@ -32,6 +32,22 @@ class User(UserMixin, db.Model):
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role_users = db.relationship('Role', backref=db.backref('users'))
+
+
+    def __init__(self):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == current_app.config['FLASK_ADMIN']:
+                self.role = Role.query.filter_by(permissions=0xff).first()
+            else:
+                self.role = Role.query.filter_by(default=True).first()
+
+    def can(self, permissions):
+        return self.role is not None and \
+               (self.role.permissions & permissions) == permissions
+
+    def is_administrator(self):
+        return self.can(Permission.ADMINISTER)
 
     # 给User类添加属性
     @property
@@ -128,3 +144,14 @@ class Role(db.Model):
             role.default = roles[r][1]
             db.session.add(role)
         db.session.commit()
+
+class AnonymousUser(AnonymousUserMixin):
+    """匿名用户登入"""
+    def can(self, permissions):
+        return False
+
+    def is_administrator(self):
+        return False
+
+# 自定义匿名用户
+login_manager.anonymous_user = AnonymousUser

@@ -30,6 +30,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
 
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    role_users = db.relationship('Role', backref=db.backref('users'))
+
     # 给User类添加属性
     @property
     def password(self):
@@ -104,4 +107,3 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')

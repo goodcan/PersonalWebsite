@@ -4,6 +4,7 @@
 from flask import jsonify, request, redirect, render_template, url_for, g, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from forms import UsernameLoginForm, TelephoneLoginForm, RegisterForm, ResetPasswordForm
+from datetime import datetime
 from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
@@ -18,13 +19,15 @@ def before_request():
         endpoint_title = endpoint[:5]
     except:
         endpoint_title = None
-    if current_user.is_authenticated \
-            and not current_user.confirmed \
-            and endpoint_title != 'auth.' \
-            and endpoint != 'static':
-        # print current_user.is_authenticated
-        # print request.endpoint
-        return redirect(url_for('auth.unconfirmed'))
+
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed \
+                and endpoint_title != 'auth.' \
+                and endpoint != 'static':
+            # print current_user.is_authenticated
+            # print request.endpoint
+            return redirect(url_for('auth.unconfirmed'))
 
 
 @auth.route('/login/', methods=['GET', 'POST'])
@@ -107,7 +110,8 @@ def register():
                     username=username,
                     telephone=telephone,
                     email=email,
-                    password=password1
+                    password=password1,
+                    member_since=datetime.now()
                 )
                 db.session.add(user)
                 db.session.commit()

@@ -6,6 +6,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
+from datetime import datetime
 import sys
 
 reload(sys)
@@ -60,6 +61,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    member_since = db.Column(db.DateTime, default=datetime.now)
+    last_seen = db.Column(db.DateTime, default=datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     users = db.relationship('Role', backref='users')
 
@@ -73,16 +79,21 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(default=True).first()
                 self.role_id = self.role.id
 
+    def ping(self):
+        self.last_seen = datetime.now()
+
     def can(self, permissions):
+        """验证用户权限"""
         return self.role is not None and \
                (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
+        """判断用户是否是管理员"""
         return self.can(Permission.ADMINISTER)
 
-    # 给User类添加属性
     @property
     def password(self):
+        """给User类添加属性"""
         return AttributeError('password is not a readable attribute')
 
     @password.setter
@@ -92,13 +103,13 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    # 生成一个带时间限制的JSON WEB签名
     def generate_confirmation_token(self, expiration=3600):
+        """生成一个带时间限制的JSON WEB签名"""
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'confirm': self.id})
 
-    # 验证令牌
     def confirm(self, token):
+        """验证令牌"""
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -110,13 +121,14 @@ class User(UserMixin, db.Model):
             self.confirmed = True
             return True
 
-    # 生成重置密码的令牌
     def generate_resetpwd_token(self, new_password, expiration=3600):
+        """生成重置密码的令牌"""
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'reset': self.id,
                         'new_password': new_password})
 
     def reset_password(self, token):
+        """验证修改密码令牌"""
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -132,9 +144,11 @@ class User(UserMixin, db.Model):
         return '[user: {}]'.format(self.username.encode('gb18030'))
 
 
-# 加载用户的回调函数,接收以Unicode字符串形式的用户标识
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    加载用户的回调函数,接收以Unicode字符串形式的用户标识
+    """
     print 'current_user: ' + user_id
     user = User.query.get(int(user_id))
     return user

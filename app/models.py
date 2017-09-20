@@ -19,6 +19,8 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
 
+    user_role = db.relationship('User', backref='role')
+
     @staticmethod
     def insert_roles():
         roles = {
@@ -58,7 +60,6 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
-    role = None
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     users = db.relationship('Role', backref='users')
 

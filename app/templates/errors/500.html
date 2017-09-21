@@ -1,11 +1,17 @@
-{% extends 'errors/error_base.html' %}
+{% extends 'index_base.html' %}
 
 {% block title %}
     404-page
 {% endblock %}
 
-{% block contendt %}
+{% block new_content %}
     <div class="container">
         <h1 class="page-header">连接服务器失败！</h1>
     </div>
+{% endblock %}
+
+{% block new_js %}
+    <script>
+        $('#my-navbar-collapse li').removeClass('active');
+    </script>
 {% endblock %}

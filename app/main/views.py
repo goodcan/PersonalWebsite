@@ -11,15 +11,19 @@ from . import main
 @main.route('/')
 @login_required
 def index():
-    data = {}
-    data['username'] = current_user.username
-    data['carousel_imgs'] = ['1', '2', '3']
-    return render_template('index.html', data=data)
+    context = {
+        'user':current_user,
+        'carousel_imgs': ['1', '2', '3']
+    }
+    return render_template('index.html', **context)
 
 @main.route('/user/<username>/')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first()
+    context = {
+        'user':user
+    }
     if user is None:
         abort(404)
-    render_template('user.html', user=user)
+    return render_template('user.html', **context)

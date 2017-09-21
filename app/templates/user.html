@@ -8,10 +8,17 @@
 
 {% endblock %}
 
+{% block user_navbar %}
+    <li><a id="context-user" href="#">{{ user.username }}</a></li>
+    <li><a id="logout-user" href="#">注销</a></li>
+{% endblock %}
+
 {% block new_content %}
 
 {% endblock %}
 
 {% block new_js %}
-
+    <script>
+    $('#my-navbar-collapse li').removeClass('active');
+    </script>
 {% endblock %}

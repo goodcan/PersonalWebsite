@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
+{% block user_navbar %}
+    {% if user.username == 'login' %}
+        <li><a id="login-user" href="#">登录</a></li>
+        <li><a id="register-user" href="#">注册</a></li>
+        <li><a id="context-user" href="#" style="display: none"></a></li>
+        <li><a id="logout-user" href="#" style="display: none">注销</a></li>
+    {% else %}
+        <li><a id="login-user" href="#" style="display: none">登录</a></li>
+        <li><a id="register-user" href="#" style="display: none">注册</a></li>
+        <li><a id="context-user" href="{{ url_for('main.user', username=user.username) }}">{{ user.username }}</a></li>
+        <li><a id="logout-user" href="#">注销</a></li>
+    {% endif %}
+{% endblock %}
 
 {% block new_content %}
     <div class="show-carousel-container">
@@ -14,14 +27,14 @@
                 <div class="mycarousel">
                     <div class="window">
                         <div class="image-reel">
-                            {% for each_img in data.carousel_imgs %}
+                            {% for each_img in carousel_imgs %}
                                 <a href="#"><img src="{{ url_for('static', filename='image/' + each_img + '.jpg') }}"
                                                  alt=""></a>
                             {% endfor %}
                         </div>
                     </div>
                     <div class="paging">
-                        {% for each_img in data.carousel_imgs  %}
+                        {% for each_img in carousel_imgs %}
                             <a href="" rel={{ each_img }}>{{ each_img }}</a>
                         {% endfor %}
                     </div>

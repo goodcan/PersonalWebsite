@@ -28,7 +28,7 @@
         </div>
         <div class="collapse navbar-collapse" id="my-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">首页</a></li>
+                <li class="active"><a href="{{ url_for('main.index') }}">首页</a></li>
                 <li><a href="#">站长简历</a></li>
                 <li class="dropdown my-navbar-dropdown">
                     <a href="#" class="dropdown-toggle">站长项目 <span class="caret"></span></a>
@@ -40,17 +40,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% if data.username == 'login' %}
-                    <li><a id="login-user" href="#">登录</a></li>
-                    <li><a id="register-user" href="#">注册</a></li>
-                    <li><a id="context-user" href="#" style="display: none"></a></li>
-                    <li><a id="logout-user" href="#" style="display: none">注销</a></li>
-                {% else %}
-                    <li><a id="login-user" href="#" style="display: none">登录</a></li>
-                    <li><a id="register-user" href="#" style="display: none">注册</a></li>
-                    <li><a id="context-user" href="#">{{ data.username }}</a></li>
-                    <li><a id="logout-user" href="#">注销</a></li>
-                {% endif %}
+                {% block user_navbar %}{% endblock %}
             </ul>
         </div>
     </div>
@@ -168,6 +158,7 @@
 
 <div class="main">
     {% block new_content %}{% endblock %}
+    <div class="push"></div>{#将页脚往下推#}
 </div>
 
 

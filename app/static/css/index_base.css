@@ -1,7 +1,15 @@
 
+html {
+    height: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 body {
     height: 100%;
     margin-top: 50px;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .my-brand {
@@ -11,13 +19,19 @@ body {
 
 .main {
     min-height: 100%;
-    padding-bottom: 215px;
+    height: auto !important;
+    height: 100%; /*兼容IE6*/
+    margin-bottom: 215px;
+}
+
+.push {
+    height: 200px;
+    clear: both;
 }
 
 .my-navbar-bottom {
-    position: relative;
-    margin-top: -200px;
     height: 200px;
+    clear: both;
     background-color: #222;
 }
 
@@ -46,7 +60,7 @@ body {
     margin-right: auto;
 }
 
-#my-message-Modal .my-modal-dialog{
+#my-message-Modal .my-modal-dialog {
     top: 25%;
     width: 350px;
     margin-left: auto;

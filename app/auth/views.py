@@ -68,6 +68,7 @@ def login():
                 print "next page is none"
                 g.re['data']['redirect'] = url_for('main.index')
             remember_me = user_data['remember_me']
+            g.user.ping()
             login_user(g.user, remember=remember_me)
             return jsonify(g.re)
         else:

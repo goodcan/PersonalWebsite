@@ -21,11 +21,10 @@ body {
     min-height: 100%;
     height: auto !important;
     height: 100%; /*兼容IE6*/
-    margin-bottom: 215px;
 }
 
 .push {
-    height: 200px;
+    height: 100px;
     clear: both;
 }
 

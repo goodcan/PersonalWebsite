@@ -49,7 +49,9 @@ $('#btn-login').click(function () {
             if (data['data']['confirmed']) {
                 $('#login-user').hide();
                 $('#register-user').hide();
-                $('#context-user').html(data['data']['login_user']).show();
+                $('#context-user')
+                    .attr('href', '/user/' + data['data']['login_user'] + '/')
+                    .html(data['data']['login_user']).show();
                 $('#logout-user').show();
                 $('#my-login-Modal').modal('hide');
             }

@@ -2,3 +2,32 @@
 #profile-container {
     margin-top: 50px;
 }
+
+#user-portrait {
+    /*margin: auto;*/
+    /*margin-bottom: 15px;*/
+    margin: 0 15px;
+}
+
+#user-profile {
+    margin: 15px;
+}
+
+#user-profile .list-group{
+    font-size: 10px;
+    margin: 0;
+}
+
+#user-profile .panel-body{
+    padding: 0;
+    bottom: 0;
+}
+
+#user-profile .panel-heading {
+    font-size: 15px;
+}
+
+#user-profile .panel-heading:hover {
+    font-weight: bold;
+    cursor: pointer;
+}

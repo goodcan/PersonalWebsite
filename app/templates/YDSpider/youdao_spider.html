@@ -78,5 +78,11 @@
                 alert('请求失败！');
             });
         });
+
+        $('body').keydown(function () {
+           if (event.keyCode == '13') {
+               $('#btn-translation').click();
+           }
+        });
     </script>
 {% endblock %}

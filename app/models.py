@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import g, current_app
+from flask import g, current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
 from datetime import datetime
+from hashlib import md5
 import sys
 
 reload(sys)
@@ -166,6 +167,36 @@ class User(UserMixin, db.Model):
                 self.role_id = self.role.id
 
             return True
+
+    def generate_portrait_url(self, size=100, default='identicon', rating='g'):
+        """
+        生成生成头像的url
+        size范围：1 - 512px
+        default参数：gravatar官方图形
+                    404 直接返回404错误状态
+                    mm 神秘人(一个灰白头像)
+                    identicon 抽象几何图形
+                    monsterid 小怪物
+                    wavatar 用不同面孔和背景组合生成的头像
+                    retro 八位像素复古头像
+        rating头像等级：g 适合任何年龄的访客查看，一般都用这个
+                       pg 可能有争议的头像，只适合13岁以上读者查看
+                       r 成人级，只适合17岁以上成人查看
+                       x 最高等级，不适合大多数人查看
+        """
+
+        # 判断请求是否安全
+        if request.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'http://www.gravatar.com/avatar'
+
+        email_hash = md5(self.email.encode('utf-8')).hexdigest()
+
+        # 头像服务器/avatar/邮箱的md5值?s=头像尺寸&d=默认头像&r=头像等级
+        # 如果需要强制显示默认头像，在最后加上参数&f=y
+        return '{url}/{email_hash}?s={size}&d={default}&r={rating}'.format(
+            url=url, email_hash=email_hash, size=size, default=default, rating=rating)
 
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('gb18030'))

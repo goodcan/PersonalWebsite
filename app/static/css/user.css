@@ -3,14 +3,15 @@
     margin-top: 50px;
 }
 
-#user-portrait {
-    /*margin: auto;*/
-    /*margin-bottom: 15px;*/
-    margin: 0 15px;
+#user-portrait img{
+    /*margin: 0 15px;*/
+    border-radius: 50%;
+    border: 5px solid #ffffff;
+    box-shadow: 0 3px 10px #5e5e5e;
 }
 
 #user-profile {
-    margin: 15px;
+    margin-top: 15px;
 }
 
 #user-profile .list-group {

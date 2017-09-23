@@ -22,10 +22,10 @@ $('.panel-heading').click(function () {
     $('.panel-body').not($(this).next()).slideUp();
 });
 
-$('#setting .list-group-item').click(function () {
+$('#setting-btn-list .list-group-item').click(function () {
     clear_messages();
     $click_tag = $(this);
-    $('#setting .list-group-item').removeClass('active');
+    $('#setting-btn-list .list-group-item').removeClass('active');
     $click_tag.addClass('active');
     $('.setting-content').hide();
     $('#' + $click_tag.attr('id') + '-content').show();

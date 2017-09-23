@@ -7,26 +7,26 @@ $('.paging a').last().attr('rel', '0').hide();
 
 var imageWidth = $('.mycarousel').width();
 var imageHeight = $('.mycarousel').height();
-$atFirst = $('.image-reel a').first();
-$atLast = $('.image-reel a').last();
-$('.image-reel').prepend($atLast.prop('outerHTML')).append($atFirst.prop('outerHTML'));
+$atFirst = $('.images-reel a').first();
+$atLast = $('.images-reel a').last();
+$('.images-reel').prepend($atLast.prop('outerHTML')).append($atFirst.prop('outerHTML'));
 
-//计算一共有几张图片，即计算在.image-reel中几个img
-var imageSum = $('.image-reel img').length;
+//计算一共有几张图片，即计算在.images-reel中几个img
+var imageSum = $('.images-reel img').length;
 //计算总宽度
 var imageReelWidth = imageWidth * imageSum;
-$('.image-reel').css({'width': imageReelWidth, 'left': -imageWidth});
-$('.image-reel img').css({'width': imageWidth, 'height': imageHeight});
+$('.images-reel').css({'width': imageReelWidth, 'left': -imageWidth});
+$('.images-reel img').css({'width': imageWidth, 'height': imageHeight});
 
 
 function rotate() {
     var triggerID = $active.attr('rel') - 1;
 
     if (triggerID == -1) {
-        $('.image-reel').animate({
+        $('.images-reel').animate({
             left: -imageReelWidth + imageWidth
         }, 500, function () {
-            $('.image-reel').css({'left': -imageWidth});
+            $('.images-reel').css({'left': -imageWidth});
         });
 
         $('.paging a').removeClass('active');
@@ -34,10 +34,10 @@ function rotate() {
     }
     else {
         if (triggerID == -2) {
-            $('.image-reel').animate({
+            $('.images-reel').animate({
                 left: 0
             }, 500, function () {
-                $('.image-reel').css({'left': -imageWidth * (imageSum - 2)});
+                $('.images-reel').css({'left': -imageWidth * (imageSum - 2)});
             });
 
             $('.paging a').removeClass('active');
@@ -46,7 +46,7 @@ function rotate() {
         else {
             var image_reelPosition = (triggerID + 1) * imageWidth;
             //启动动画
-            $('.image-reel').animate({
+            $('.images-reel').animate({
                 left: -image_reelPosition
             }, 500);
 
@@ -80,7 +80,7 @@ $('.paging a').click(function () {
 });
 
 //鼠标进入后停止动画，滑出后继续动画
-$('.image-reel a').hover(
+$('.images-reel a').hover(
     function () {
         clearInterval(play);
     },
@@ -109,7 +109,7 @@ $(window).resize(function () {
     imageHeight = $('.mycarousel').height();
     imageReelWidth = imageWidth * imageSum;
     $nowActive = $('.paging a.active');
-    $('.image-reel').css({'width': imageReelWidth, 'left': -imageWidth * $nowActive.attr('rel')});
-    $('.image-reel img').css({'width': imageWidth, 'height': imageHeight});
+    $('.images-reel').css({'width': imageReelWidth, 'left': -imageWidth * $nowActive.attr('rel')});
+    $('.images-reel img').css({'width': imageWidth, 'height': imageHeight});
     rotateSwitch();
 });

@@ -8,6 +8,7 @@
     border-radius: 50%;
     border: 5px solid #ffffff;
     box-shadow: 0 3px 10px #5e5e5e;
+    overflow: hidden;
 }
 
 #user-profile {

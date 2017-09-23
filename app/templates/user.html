@@ -18,7 +18,7 @@
         <div class="row" id="profile-container">
             <div class="col-sm-3">
                 <div id="user-portrait">
-                    <img src="{{ user.generate_portrait_url(size=100) }}" alt="">
+                    <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}" alt="">
                 </div>
                 <div class="text-center" id="user-profile">
                     <div class="panel-group">

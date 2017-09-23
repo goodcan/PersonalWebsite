@@ -8,11 +8,12 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
 from datetime import datetime
 from hashlib import md5
-import sys
+import sys, os, requests
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+BASE_PWD = os.path.abspath(os.path.dirname('__file__'))
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -76,9 +77,11 @@ class User(UserMixin, db.Model):
             if self.email == current_app.config['FLASK_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
                 self.role_id = self.role.id
+                self.save_user_portrait()
             else:
                 self.role = Role.query.filter_by(default=True).first()
                 self.role_id = self.role.id
+                self.save_user_portrait()
 
     def ping(self):
         self.last_seen = datetime.now()
@@ -162,9 +165,11 @@ class User(UserMixin, db.Model):
             if self.email == current_app.config['FLASK_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
                 self.role_id = self.role.id
+                self.save_user_portrait()
             else:
                 self.role = Role.query.filter_by(default=True).first()
                 self.role_id = self.role.id
+                self.save_user_portrait()
 
             return True
 
@@ -191,12 +196,33 @@ class User(UserMixin, db.Model):
         else:
             url = 'http://www.gravatar.com/avatar'
 
+        # url = 'https://secure.gravatar.com/avatar'
         email_hash = md5(self.email.encode('utf-8')).hexdigest()
 
         # 头像服务器/avatar/邮箱的md5值?s=头像尺寸&d=默认头像&r=头像等级
         # 如果需要强制显示默认头像，在最后加上参数&f=y
         return '{url}/{email_hash}?s={size}&d={default}&r={rating}'.format(
             url=url, email_hash=email_hash, size=size, default=default, rating=rating)
+
+    def save_user_portrait(self):
+        headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) \
+            Chrome/61.0.3153.0 Safari/537.36'}
+
+        # 从python中的上下文管理器导入
+        from contextlib import closing
+
+        # stream 开启文件流方式
+        with closing(requests.get(self.generate_portrait_url(size=250), headers=headers, stream=True)) as response:
+
+            f = BASE_PWD + '/app/static/images/user_portrait/{}.png'.format(self.username.encode('gb18030'))
+            if os.path.exists(f):
+                os.remove(f)
+
+            with open(f, 'wb') as fw:
+                # 每128个内容写一次
+                for chunk in response.iter_content(128):
+                    fw.write(chunk)
+
 
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('gb18030'))

@@ -9,7 +9,7 @@ from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
 from ..email import send_email
-import json
+from json import loads
 
 
 @auth.before_app_request
@@ -37,7 +37,7 @@ def login():
         return render_template('auth/register&login.html', title=title)
 
     if request.method == 'POST':
-        data = json.loads(request.get_data(), encoding='utf-8')
+        data = loads(request.get_data(), encoding='utf-8')
 
         print data
 
@@ -89,7 +89,7 @@ def register():
     if request.method == 'POST':
         g.re = {'status': True, 'data': {}}
 
-        data = json.loads(request.get_data(), encoding='utf-8')
+        data = loads(request.get_data(), encoding='utf-8')
 
         print data
 
@@ -198,7 +198,7 @@ def reset_password_request():
     if request.method == 'POST':
         g.re = {'status': True, 'data': {}}
 
-        data = json.loads(request.get_data(), encoding='utf-8')
+        data = loads(request.get_data(), encoding='utf-8')
 
         print data
 
@@ -260,7 +260,7 @@ def reset_email_request():
     if request.method == 'POST':
         g.re = {'status': True, 'data': {}}
 
-        data = json.loads(request.get_data(), encoding='utf-8')
+        data = loads(request.get_data(), encoding='utf-8')
 
         print data
 

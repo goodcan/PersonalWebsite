@@ -26,19 +26,29 @@ function show_tag_errors(tag, errors) {
     tag.next().next().show().html(errors[1]);
 }
 
-// 清楚所有表单的内容
-function clear_messages() {
-    $('.form-control').val('');
+// 只清除提示信息
+function clear_prompting() {
     $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
     $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
     $('.clear-help').html(' ');
+}
+
+// 清楚所有表单的内容
+function clear_messages() {
+    $('.form-control').val('');
+    clear_prompting();
 }
 
 // 清理前一个表单
 function clear_prev_form() {
     $('#login-form .form-control').val('');
     $('#register-form .form-control').val('');
-    $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
-    $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
-    $('.clear-help').html(' ');
+    clear_prompting();
+}
+
+// 弹框提示信息
+function show_message(data) {
+    $('#my-message-Modal').modal('show');
+    $('#my-modal-title').html(data['data']['message-title']);
+    $('#message-content').html(data['data']['message-content']);
 }

@@ -119,7 +119,8 @@ def register():
                 token = user.generate_confirmation_token()
                 send_email(user.email, u'请验证你的账户', 'auth/email/confirm',
                            user=user, token=token)
-                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
+                g.re['data']['message-title'] = u'邮箱验证！'
+                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -215,7 +216,8 @@ def reset_password_request():
                 token = user.generate_resetpwd_token(password1)
                 send_email(user.email, u'请验证您的账户并完成密码修改', 'auth/email/resetpwd_confirm',
                            user=user, token=token)
-                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
+                g.re['data']['message-title'] = u'邮箱验证'
+                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -274,7 +276,8 @@ def reset_email_request():
                 token = user.generate_resetemail_token(newEmail)
                 send_email(newEmail, u'请验证您的新邮箱', 'auth/email/resetemail_confirm',
                            user=user, token=token)
-                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
+                g.re['data']['message-title'] = u'邮箱验证'
+                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)

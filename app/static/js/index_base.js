@@ -119,9 +119,7 @@ $('#btn-register').click(function () {
         console.log(data);
         if (data['status'] == true) {
             $('#my-register-Modal').modal('hide');
-            // $('#my-login-Modal').modal('show');
-            $('#my-message-Modal').modal('show');
-            $('#message-content').html(data['data']['confirm']);
+            show_message(data);
         }
         else {
             errors = data['data'];

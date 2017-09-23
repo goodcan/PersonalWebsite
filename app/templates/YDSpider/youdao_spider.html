@@ -1,0 +1,82 @@
+{% extends 'index_base.html' %}
+
+{% block title %}
+    我的翻译器
+{% endblock %}
+
+{% block new_css %}
+    <style>
+        .trans-container {
+            position: relative;
+            top: 40px;
+            font-size: 14px;
+        }
+
+        .my-trans-text {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block new_content %}
+    <div class="container trans-container">
+        <div class="col-md-6">
+            <form method="post">
+                <div id="question" class="form-group">
+                    <textarea id="user-Q" class="my-trans-text" rows="10" placeholder="请输入需要翻译的内容"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="btn-translation" class="btn btn-primary btn-block">立即翻译</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <textarea id="server-A" class="my-trans-text" rows="10" readonly></textarea>
+        </div>
+    </div>
+{% endblock %}
+
+{% block new_js %}
+    <script>
+        // 清除首页active和修改注销的跳转路径
+        $('#my-navbar-collapse li').removeClass('active');
+        $('#logout-user').click(function () {
+            window.location.href = "/auth/login/";
+        });
+
+        $('#btn-translation').click(function () {
+
+            var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+            $.ajax({
+                url: '{{ url_for('trans.youdao_spider') }}',
+                type: 'POST',
+                contentType: "application/json; charset=UTF-8",
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                },
+                data: JSON.stringify({
+                    'data': {
+                        'question': $('#user-Q').val()
+                    }
+                }),
+                dataType: 'json',
+            }).done(function (data, textStatus) {
+                console.log(data);
+                if (data['status'] == true) {
+                    clear_prompting();
+                    $('#server-A').val(data['data']['answer']);
+                }
+                else {
+                    errors = data['data'];
+                    $('#server-A').val('');
+                    show_message(data);
+                }
+            }).fail(function (xhr, err) {
+                alert('请求失败！');
+            });
+        });
+    </script>
+{% endblock %}

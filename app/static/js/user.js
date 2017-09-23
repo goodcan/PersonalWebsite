@@ -56,8 +56,7 @@ $('#btn-resetpwd').click(function () {
 
         if (data['status'] == true) {
             clear_messages();
-            $('#my-message-Modal').modal('show');
-            $('#message-content').html(data['data']['confirm']);
+            show_message(data);
         }
         else {
             errors = data['data'];
@@ -120,8 +119,7 @@ $('#btn-resetemail').click(function () {
 
         if (data['status'] == true) {
             clear_messages();
-            $('#my-message-Modal').modal('show');
-            $('#message-content').html(data['data']['confirm']);
+            show_message(data);
         }
         else {
             errors = data['data'];

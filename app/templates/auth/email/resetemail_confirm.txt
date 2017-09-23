@@ -1,0 +1,7 @@
+亲爱的 <b>{{ user.username }}，
+
+确认您的新邮箱完成邮箱修改，请点击以下链接：
+
+{{ url_for('auth.reset_email', token=token, user_id=user.id, _external=True) }}
+
+注: 对该邮件地址的回复没有被监控。

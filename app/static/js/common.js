@@ -26,6 +26,14 @@ function show_tag_errors(tag, errors) {
     tag.next().next().show().html(errors[1]);
 }
 
+// 清楚所有表单的内容
+function clear_messages() {
+    $('.form-control').val('');
+    $('.clear-form-group').removeClass().addClass(FORM_STATUS[3]);
+    $('.clear-glyphicon').removeClass().addClass(GLYPHICON_STATUS[3]);
+    $('.clear-help').html(' ');
+}
+
 // 清理前一个表单
 function clear_prev_form() {
     $('#login-form .form-control').val('');

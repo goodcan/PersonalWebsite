@@ -21,3 +21,148 @@ $('.panel-heading').click(function () {
     $(this).next().slideDown();
     $('.panel-body').not($(this).next()).slideUp();
 });
+
+$('#setting .list-group-item').click(function () {
+    clear_messages();
+    $click_tag = $(this);
+    $('#setting .list-group-item').removeClass('active');
+    $click_tag.addClass('active');
+    $('.setting-content').hide();
+    $('#' + $click_tag.attr('id') + '-content').show();
+});
+
+$('#btn-resetpwd').click(function () {
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+    $.ajax({
+        url: '/auth/reset_password_request/',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        },
+        data: JSON.stringify({
+            'data': {
+                'email': $('#emailRS').val(),
+                'passwordRS1': $('#passwordRS1').val(),
+                'passwordRS2': $('#passwordRS2').val()
+            }
+        }),
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+
+        if (data['status'] == true) {
+            clear_messages();
+            $('#my-message-Modal').modal('show');
+            $('#message-content').html(data['data']['confirm']);
+        }
+        else {
+            errors = data['data'];
+            if ('email' in errors) {
+                $email = $('#emailRS');
+                email_errors = errors['email']
+                show_tag_errors($email, email_errors)
+            }
+            else {
+                $email = $('#email');
+                clear_one_tag($email);
+            }
+
+            if ('password1' in errors) {
+                $passwordRS1 = $('#passwordRS1');
+                pwd1_errors = errors['password1']
+                show_tag_errors($passwordRS1, pwd1_errors)
+            }
+            else {
+                $passwordRS1 = $('#passwordRS1');
+                clear_one_tag($passwordRS1);
+            }
+
+            if ('password2' in errors) {
+                $passwordRS2 = $('#passwordRS2');
+                pwd2_errors = errors['password2']
+                show_tag_errors($passwordRS2, pwd2_errors)
+            }
+            else {
+                $passwordRS2 = $('#passwordRS2');
+                clear_one_tag($passwordRS2);
+            }
+        }
+    }).fail(function () {
+        alert('请求失败！');
+    });
+});
+
+$('#btn-resetemail').click(function () {
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+    $.ajax({
+        url: '/auth/reset_email_request/',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        },
+        data: JSON.stringify({
+            'data': {
+                'oldEmailRS': $('#old-emailRS').val(),
+                'newEmailRS': $('#new-emailRS').val()
+            }
+        }),
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+
+        if (data['status'] == true) {
+            clear_messages();
+            $('#my-message-Modal').modal('show');
+            $('#message-content').html(data['data']['confirm']);
+        }
+        else {
+            errors = data['data'];
+            if ('oldEmail' in errors) {
+                oldEmail = $('#old-emailRS');
+                err = errors['oldEmail']
+                show_tag_errors(oldEmail, err)
+            }
+            else {
+                oldEmail = $('#old-emailRS');
+                clear_one_tag(oldEmail);
+            }
+
+            if ('newEmail' in errors) {
+                $newEmail = $('#new-emailRS');
+                err = errors['newEmail']
+                show_tag_errors($newEmail, err)
+            }
+            else {
+                $newEmail = $('#new-emailRS');
+                clear_one_tag($newEmail);
+            }
+        }
+    }).fail(function () {
+        alert('请求失败！');
+    });
+});
+
+// 监听键盘
+$('body').keydown(function () {
+    // enter的键值为13
+    if (event.keyCode == '13') {
+        if ($('#setting-1-content').is(':visible')) {
+            $('#btn-resetpwd').click();
+        }
+        if ($('#setting-2-content').is(':visible')) {
+            $('#btn-resetemail').click();
+        }
+    }
+});
+
+$('.btn-cancel').click(function () {
+    clear_messages();
+});

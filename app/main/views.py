@@ -9,12 +9,16 @@ from . import main
 
 # @csrf.exempt
 @main.route('/')
-@login_required
+# @login_required
 def index():
-    context = {
-        'user':current_user,
-        'carousel_imgs': ['1', '2', '3']
-    }
+    context = {}
+    if current_user.is_anonymous:
+        context['user'] = {}
+        context['user']['username'] = None
+        print '*' * 40
+    else:
+        context['user'] = current_user
+    context['carousel_imgs'] = ['1', '2', '3']
     return render_template('index.html', **context)
 
 @main.route('/user/<username>/')

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block user_navbar %}
-    {% if user.username == 'login' %}
+    {% if user.username == None %}
         <li><a id="login-user" href="#">登录</a></li>
         <li><a id="register-user" href="#">注册</a></li>
         <li><a id="context-user" href="#" style="display: none"></a></li>

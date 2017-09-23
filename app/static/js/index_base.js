@@ -184,12 +184,12 @@ $('#btn-register').click(function () {
 $('body').keydown(function () {
     // enter的键值为13
     if (event.keyCode == '13') {
-        if ($('#login-form').is(':hidden')) {
-            $('#btn-register').click();
+        if ($('#login-form').is(':visible')) {
+            $('#btn-login').click();
         }
 
-        if ($('#register-form').is(':hidden')) {
-            $('#btn-login').click();
+        if ($('#register-form').is(':visible')) {
+            $('#btn-register').click();
         }
     }
 });

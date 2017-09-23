@@ -3,7 +3,7 @@
 
 from flask import jsonify, request, redirect, render_template, url_for, g, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from forms import UsernameLoginForm, TelephoneLoginForm, RegisterForm, ResetPasswordForm
+from forms import ResetEmailForm, UsernameLoginForm, TelephoneLoginForm, RegisterForm, ResetPasswordForm
 from datetime import datetime
 from . import auth
 from .. import login_manager, db, csrf
@@ -189,8 +189,9 @@ def reset_password_request():
     """
     验证输入并发送修改密码的邮箱验证
     """
-    if not current_user.is_anonymous:
-        return redirect(url_for('main.index'))
+    # if not current_user.is_anonymous:
+    #     print current_user.is_anonymous
+    #     return redirect(url_for('main.index'))
     if request.method == 'GET':
         return render_template('auth/reset_password.html')
     if request.method == 'POST':
@@ -212,7 +213,7 @@ def reset_password_request():
             if g.re['status']:
                 user = User.query.filter_by(email=email).first()
                 token = user.generate_resetpwd_token(password1)
-                send_email(user.email, u'请验证你的账户并完成密码修改', 'auth/email/resetpwd_confirm',
+                send_email(user.email, u'请验证您的账户并完成密码修改', 'auth/email/resetpwd_confirm',
                            user=user, token=token)
                 g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
                 return jsonify(g.re)
@@ -237,6 +238,64 @@ def reset_password(token, user_id):
         if user.reset_password(token):
             print 'confirm success'
             message_title = u'密码修改成功'
+            return render_template('auth/email/confirm_success.html', message_title=message_title)
+        else:
+            print 'confirm error'
+            return redirect(url_for('auth.unconfirmed'))
+    else:
+        print 'confirm error'
+        return redirect(url_for('auth.unconfirmed'))
+
+@auth.route('/reset_email_request/', methods=['POST'])
+def reset_email_request():
+    """
+    验证输入并发送修改邮箱的邮箱验证
+    """
+    # if not current_user.is_anonymous:
+    #     print current_user.is_anonymous
+    #     return redirect(url_for('main.index'))
+
+    if request.method == 'POST':
+        g.re = {'status': True, 'data': {}}
+
+        data = json.loads(request.get_data(), encoding='utf-8')
+
+        print data
+
+        resetpwd_data = data['data']
+        oldEmail = resetpwd_data['oldEmailRS']
+        newEmail = resetpwd_data['newEmailRS']
+
+        form = ResetEmailForm(oldEmail=oldEmail,
+                              newEmail=newEmail)
+        if form.validate():
+            if g.re['status']:
+                user = User.query.filter_by(email=oldEmail).first()
+                token = user.generate_resetemail_token(newEmail)
+                send_email(newEmail, u'请验证您的新邮箱', 'auth/email/resetemail_confirm',
+                           user=user, token=token)
+                g.re['data']['confirm'] = u'请查收验证邮件并及时完成验证！'
+                return jsonify(g.re)
+            else:
+                return jsonify(g.re)
+        else:
+            re = g.re
+            re['status'] = False
+            for key, value in form.errors.items():
+                print key + ':' + str(value[0])
+                re['data'][key] = value[0]
+            return jsonify(re)
+
+@auth.route('/reset_email/<token>/<user_id>/')
+def reset_email(token, user_id):
+    """
+    邮箱验证并完成邮箱修改
+    """
+    user = User.query.filter_by(id=user_id).first()
+    if user:
+        if user.reset_email(token):
+            print 'confirm success'
+            message_title = u'邮箱修改成功'
             return render_template('auth/email/confirm_success.html', message_title=message_title)
         else:
             print 'confirm error'

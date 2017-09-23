@@ -4,6 +4,7 @@
 from flask import g
 from wtforms import Form, StringField, PasswordField, BooleanField, ValidationError
 from wtforms.validators import Length, DataRequired, EqualTo, Email, Regexp
+from flask_login import current_user
 from ..models import User
 
 
@@ -146,3 +147,30 @@ class ResetPasswordForm(Form):
             raise ValidationError([2, u'电子邮箱未注册'])
         else:
             g.re['data']['email'] = [0, u'电子邮箱正确']
+
+
+class ResetEmailForm(Form):
+    oldEmail = StringField(validators=[
+        DataRequired(message=[2, u'电子邮箱不能为空']),
+        MyLength(1, 64, message=[2, u'电子邮箱格式不对']),
+        Email(message=[2, u'电子邮箱格式不对'])])
+    newEmail = StringField(validators=[
+        DataRequired(message=[2, u'电子邮箱不能为空']),
+        MyLength(1, 64, message=[2, u'电子邮箱格式不对']),
+        Email(message=[2, u'电子邮箱格式不对'])])
+
+    def validate_oldEmail(self, filed):
+        if filed.data != current_user.email:
+            raise ValidationError([2, u'该电子邮箱不是您原绑定的邮箱'])
+        else:
+            g.re['data']['oldEmail'] = [0, u'原电子邮箱正确']
+
+    def validate_newEmail(self, filed):
+        if filed.data == current_user.email:
+            raise ValidationError([2, u'不能和原电子邮箱相同'])
+
+        if User.query.filter_by(email=filed.data).first():
+            raise ValidationError([2, u'该原电子邮箱已经注册'])
+
+        g.re['data']['newEmail'] = [0, u'新电子邮箱设置正确']
+

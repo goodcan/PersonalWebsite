@@ -13,12 +13,12 @@
     margin: 15px;
 }
 
-#user-profile .list-group{
+#user-profile .list-group {
     font-size: 10px;
     margin: 0;
 }
 
-#user-profile .panel-body{
+#user-profile .panel-body {
     padding: 0;
     bottom: 0;
 }
@@ -30,4 +30,20 @@
 #user-profile .panel-heading:hover {
     font-weight: bold;
     cursor: pointer;
+}
+
+.div-hide {
+    display: none;
+}
+
+#my-message-Modal .my-modal-dialog {
+    top: 25%;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.setting-content {
+    /*防止提示信息消除后间距变小*/
+    display: block;
 }

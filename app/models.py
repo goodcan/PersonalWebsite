@@ -140,6 +140,33 @@ class User(UserMixin, db.Model):
             self.password = data['new_password']
             return True
 
+    def generate_resetemail_token(self, new_email, expiration=3600):
+        """生成重置密码的令牌"""
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'reset': self.id,
+                        'new_email': new_email})
+
+    def reset_email(self, token):
+        """验证修改密码令牌"""
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data['reset'] != self.id:
+            return False
+        else:
+            self.email = data['new_email']
+
+            if self.email == current_app.config['FLASK_ADMIN']:
+                self.role = Role.query.filter_by(permissions=0xff).first()
+                self.role_id = self.role.id
+            else:
+                self.role = Role.query.filter_by(default=True).first()
+                self.role_id = self.role.id
+
+            return True
+
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('gb18030'))
 

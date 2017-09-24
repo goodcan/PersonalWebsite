@@ -1,3 +1,6 @@
+.set-gly-height {
+    top: 2.5px;
+}
 
 #profile-container {
     margin-top: 50px;
@@ -24,7 +27,7 @@
 }
 
 #user-profile .list-group {
-    font-size: 12px;
+    font-size: 15px;
     margin: 0;
 }
 
@@ -34,11 +37,12 @@
 }
 
 #user-profile .panel-heading {
-    font-size: 15px;
+    font-size: 18px;
+    opacity: 0.7;
 }
 
 #user-profile .panel-heading:hover {
-    font-weight: bold;
+    opacity: 1;
     cursor: pointer;
 }
 

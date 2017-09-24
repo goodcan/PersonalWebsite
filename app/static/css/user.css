@@ -9,7 +9,6 @@
     border-radius: 50%;
     border: 5px solid #ffffff;
     box-shadow: 0 5px 25px 1px #5e5e5e;
-    /*box-shadow: 0 3px 10px #5e5e5e;*/
     overflow: hidden;
 }
 
@@ -24,8 +23,8 @@
     margin: 15px;
 }
 
-#user-profile .list-group {
-    font-size: 10px;
+#user-profile .list-group-item {
+    font-size: 12px;
     margin: 0;
 }
 
@@ -52,9 +51,4 @@
     width: 350px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.setting-content {
-    /*防止提示信息消除后间距变小*/
-    display: block;
 }

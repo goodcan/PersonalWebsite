@@ -24,11 +24,12 @@ def index():
 @main.route('/user/<username>/')
 @login_required
 def user(username):
+    encode_usernaem = username.decode('utf-8')
     # 防止登录后其他账号直接伪登录
-    if current_user.username != username:
+    if current_user.username != encode_usernaem:
         return redirect(url_for('auth.login'))
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(username=encode_usernaem).first()
     context = {
         'user':user
     }

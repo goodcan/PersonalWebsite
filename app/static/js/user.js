@@ -174,7 +174,12 @@ $('#btn-set-information').click(function () {
         if (data['status'] == true) {
             $('#user-content h2 strong').html($('#set-name').val());
             $('#user-content h5').html($('#set-location').val());
-            $('#user-content p').html('“' + $('#set-about-me').val() + '”');
+            if ($('#set-about-me').val() == '') {
+                $('#user-content p').html('');
+            }
+            else {
+                 $('#user-content p').html('“' + $('#set-about-me').val() + '”');
+            }
             show_message(data);
         }
         else {

@@ -215,7 +215,7 @@ class User(UserMixin, db.Model):
         # stream 开启文件流方式
         with closing(requests.get(self.generate_portrait_url(size=250), headers=headers, stream=True)) as response:
 
-            f = BASE_PWD + '/app/static/images/user_portrait/{}.png'.format(self.username.encode('gb18030'))
+            f = BASE_PWD + '/app/static/images/user_portrait/{}.png'.format(self.username.encode('utf-8'))
             if os.path.exists(f):
                 os.remove(f)
 

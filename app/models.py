@@ -8,6 +8,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
 from datetime import datetime
 from hashlib import md5
+from threading import Thread
 import sys, os, requests
 
 reload(sys)
@@ -77,11 +78,11 @@ class User(UserMixin, db.Model):
             if self.email == current_app.config['FLASK_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
                 self.role_id = self.role.id
-                self.save_user_portrait()
+                Thread(target=self.save_user_portrait()).start()
             else:
                 self.role = Role.query.filter_by(default=True).first()
                 self.role_id = self.role.id
-                self.save_user_portrait()
+                Thread(target=self.save_user_portrait()).start()
 
     def ping(self):
         self.last_seen = datetime.now()
@@ -165,11 +166,11 @@ class User(UserMixin, db.Model):
             if self.email == current_app.config['FLASK_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
                 self.role_id = self.role.id
-                self.save_user_portrait()
+                Thread(target=self.save_user_portrait()).start()
             else:
                 self.role = Role.query.filter_by(default=True).first()
                 self.role_id = self.role.id
-                self.save_user_portrait()
+                Thread(target=self.save_user_portrait()).start()
 
             return True
 

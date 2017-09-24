@@ -20,11 +20,11 @@
     overflow: hidden;
 }
 
-.image-reel {
+.images-reel {
     position: absolute;
 }
 
-.image-reel img {
+.images-reel img {
     float: left;
 }
 

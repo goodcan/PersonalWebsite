@@ -148,10 +148,50 @@ $('#btn-resetemail').click(function () {
     });
 });
 
+$('#btn-set-information').click(function () {
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+    $.ajax({
+        url: '/auth/set_information/',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        },
+        data: JSON.stringify({
+            'data': {
+                'name': $('#set-name').val(),
+                'location': $('#set-location').val(),
+                'about_me': $('#set-about-me').val()
+            }
+        }),
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+
+        if (data['status'] == true) {
+            $('#user-content h2 strong').html($('#set-name').val());
+            $('#user-content h5').html($('#set-location').val());
+            $('#user-content p').html('“' + $('#set-about-me').val() + '”');
+            show_message(data);
+        }
+        else {
+            show_message(data);
+        }
+    }).fail(function () {
+        alert('请求失败！');
+    });
+});
+
 // 监听键盘
 $('body').keydown(function () {
     // enter的键值为13
     if (event.keyCode == '13') {
+        if ($('#setting-0-content').is(':visible')) {
+            $('#btn-set-information').click();
+        }
         if ($('#setting-1-content').is(':visible')) {
             $('#btn-resetpwd').click();
         }

@@ -9,6 +9,7 @@ from . import auth
 from .. import login_manager, db, csrf
 from ..models import User
 from ..email import send_email
+from ..common import response_messages
 from json import loads
 
 
@@ -119,8 +120,9 @@ def register():
                 token = user.generate_confirmation_token()
                 send_email(user.email, u'请验证你的账户', 'auth/email/confirm',
                            user=user, token=token)
-                g.re['data']['message-title'] = u'邮箱验证！'
-                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
+                title = u'邮箱验证！'
+                content = u'请查收验证邮件并及时完成验证！'
+                response_messages(g.re, title, content)
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -216,8 +218,9 @@ def reset_password_request():
                 token = user.generate_resetpwd_token(password1)
                 send_email(user.email, u'请验证您的账户并完成密码修改', 'auth/email/resetpwd_confirm',
                            user=user, token=token)
-                g.re['data']['message-title'] = u'邮箱验证'
-                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
+                title = u'邮箱验证'
+                content = u'请查收验证邮件并及时完成验证！'
+                response_messages(g.re, title, content)
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -249,6 +252,7 @@ def reset_password(token, user_id):
         return redirect(url_for('auth.unconfirmed'))
 
 @auth.route('/reset_email_request/', methods=['POST'])
+@login_required
 def reset_email_request():
     """
     验证输入并发送修改邮箱的邮箱验证
@@ -264,9 +268,9 @@ def reset_email_request():
 
         print data
 
-        resetpwd_data = data['data']
-        oldEmail = resetpwd_data['oldEmailRS']
-        newEmail = resetpwd_data['newEmailRS']
+        resetemail_data = data['data']
+        oldEmail = resetemail_data['oldEmailRS']
+        newEmail = resetemail_data['newEmailRS']
 
         form = ResetEmailForm(oldEmail=oldEmail,
                               newEmail=newEmail)
@@ -276,8 +280,9 @@ def reset_email_request():
                 token = user.generate_resetemail_token(newEmail)
                 send_email(newEmail, u'请验证您的新邮箱', 'auth/email/resetemail_confirm',
                            user=user, token=token)
-                g.re['data']['message-title'] = u'邮箱验证'
-                g.re['data']['message-content'] = u'请查收验证邮件并及时完成验证！'
+                title = u'邮箱验证'
+                content = u'请查收验证邮件并及时完成验证！'
+                response_messages(g.re, title, content)
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -306,3 +311,34 @@ def reset_email(token, user_id):
     else:
         print 'confirm error'
         return redirect(url_for('auth.unconfirmed'))
+
+
+@auth.route('/set_information/', methods=['POST'])
+@login_required
+def set_information():
+    """
+    设置用户个人信息
+    """
+    g.re = {'status': True, 'data': {}}
+
+    user = current_user
+    data = loads(request.get_data(), encoding='utf-8')
+
+    set_information_data = data['data']
+    name = set_information_data['name']
+    location = set_information_data['location']
+    about_me = set_information_data['about_me']
+
+    user.name = name
+    user.location = location
+    user.about_me = about_me
+
+    db.session.add(user)
+    db.session.commit()
+
+    title = u'消息'
+    content = u'个人信息设置成功！'
+
+    response_messages(g.re, title, content)
+
+    return jsonify(g.re)

@@ -1,16 +1,16 @@
 //表单状态数组
 var FORM_STATUS = [
-    'form has-success has-feedback clear-form-group',
-    'form has-warning has-feedback clear-form-group',
-    'form has-error has-feedback clear-form-group',
-    'form clear-form-group']
+    'form-group has-success has-feedback clear-form-group',
+    'form-group has-warning has-feedback clear-form-group',
+    'form-group has-error has-feedback clear-form-group',
+    'form-group clear-form-group'];
 
 //表单提示符数组
 var GLYPHICON_STATUS = [
     'glyphicon glyphicon-ok form-control-feedback clear-glyphicon',
     'glyphicon glyphicon-warning-sign form-control-feedback clear-glyphicon',
     'glyphicon glyphicon-remove form-control-feedback clear-glyphicon',
-    'clear-glyphicon']
+    'clear-glyphicon'];
 
 // 输入的参数没有格式问题时不显示验证后的错误信息
 function clear_one_tag(tag) {

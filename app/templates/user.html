@@ -18,7 +18,8 @@
         <div class="row" id="profile-container">
             <div class="col-sm-3">
                 <div id="user-portrait">
-                    <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}" alt="">
+                    <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                         alt="">
                 </div>
                 <div class="text-center" id="user-profile">
                     <div class="panel-group">
@@ -65,57 +66,74 @@
             </div>
             <div class="col-sm-9">
                 <div id="setting-0-content" class="setting-content">
-                    <img src="holder.js/100%x400" alt="">
+
                 </div>
                 <div id="setting-1-content" class="setting-content" style="display: none">
                     <h3 class="text-center">修改密码</h3>
-                    <form method="post">
-                        <label class="control-label">电子邮箱</label>
-                        <div class="form-group">
-                            <input id="emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
-                            <span class="clear-glyphicon"></span>
-                            <span class="help-block clear-help"></span>
+                    <form class="form-horizontal" method="post">
+                        <label class="col-md-2 control-label">电子邮箱：</label>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input id="emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
+                                <span class="clear-glyphicon"></span>
+                                <span class="help-block clear-help"></span>
+                            </div>
                         </div>
-                        <label class="control-label text-right">设置新秘密</label>
-                        <div class="form-group">
-                            <input id="passwordRS1" type="password" class="form-control" placeholder="请设置新密码">
-                            <span class="clear-glyphicon"></span>
-                            <span class="help-block clear-help"></span>
+                        <label class="col-md-2 control-label">设置新秘密：</label>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input id="passwordRS1" type="password" class="form-control" placeholder="请设置新密码">
+                                <span class="clear-glyphicon"></span>
+                                <span class="help-block clear-help"></span>
+                            </div>
                         </div>
-                        <label class="control-label text-right">确认新密码</label>
-                        <div class="form-group">
-                            <input id="passwordRS2" type="password" class="form-control" placeholder="请确认新密码">
-                            <span class="clear-glyphicon"></span>
-                            <span class="help-block clear-help"></span>
+                        <label class="col-md-2 control-label">确认新密码：</label>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input id="passwordRS2" type="password" class="form-control" placeholder="请确认新密码">
+                                <span class="clear-glyphicon"></span>
+                                <span class="help-block clear-help"></span>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <br>
-                            <button id="btn-resetpwd" type="button" class="btn btn-primary btn-block">立即修改</button>
-                            <button id="btn-cancel-1" type="button" class="btn btn-warning btn-block  btn-cancel">取消
-                            </button>
+                            <div class="col-md-2 col-md-offset-8" style="padding-bottom: 15px">
+                                <button id="btn-resetpwd" type="button" class="btn btn-primary btn-block">立即修改</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button id="btn-cancel-1" type="button" class="btn btn-warning btn-block btn-cancel">取消
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div id="setting-2-content" class="setting-content" style="display: none">
                     <h3 class="text-center">修改电子邮箱</h3>
-                    <form method="post">
-                        <label class="control-label">原电子邮箱</label>
-                        <div class="form-group">
-                            <input id="old-emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
-                            <span class="clear-glyphicon"></span>
-                            <span class="help-block clear-help"></span>
+                    <form class="form-horizontal" method="post">
+                        <label class="col-md-2 control-label">原电子邮箱：</label>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input id="old-emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
+                                <span class="clear-glyphicon"></span>
+                                <span class="help-block clear-help"></span>
+                            </div>
                         </div>
-                        <label class="control-label text-right">新电子邮箱</label>
-                        <div class="form-group">
-                            <input id="new-emailRS" type="text" class="form-control" placeholder="请设置新的电子邮箱">
-                            <span class="clear-glyphicon"></span>
-                            <span class="help-block clear-help"></span>
+                        <label class="col-md-2 control-label">新电子邮箱：</label>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <input id="new-emailRS" type="text" class="form-control" placeholder="请设置新的电子邮箱">
+                                <span class="clear-glyphicon"></span>
+                                <span class="help-block clear-help"></span>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <br>
-                            <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">立即修改</button>
-                            <button id="btn-cancel-2" type="button" class="btn btn-warning btn-block btn-cancel">取消
-                            </button>
+                            <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                                <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">立即修改
+                                </button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="btn-cancel-2" type="button" class="btn btn-warning btn-block btn-cancel">取消
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

@@ -176,6 +176,7 @@ def unconfirmed():
     """
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.index'))
+    logout_user()
     return render_template('auth/email/unconfirmed.html')
 
 

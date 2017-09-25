@@ -43,7 +43,7 @@
                 <div class="text-center" id="user-profile">
                     <div class="panel-group">
                         <div class="panel panel-info">
-                            <div class="panel-heading">
+                            <div class="panel-heading" title="profile-0">
                                 <span class="glyphicon glyphicon-home set-gly-height"></span>
                                 <span>我的主页</span>
                             </div>
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="panel panel-info">
-                            <div class="panel-heading">
+                            <div class="panel-heading" title="profile-1">
                                 <span class="glyphicon glyphicon-user set-gly-height"></span>
                                 <span>用户中心</span>
                             </div>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="panel panel-info">
-                            <div class="panel-heading">
+                            <div class="panel-heading"  title="profile-2">
                                 <span class="glyphicon glyphicon-cog set-gly-height"></span>
                                 <span>设置中心</span>
                             </div>
@@ -87,7 +87,13 @@
                 </div>
             </div>
             <div class="col-sm-9" style="top: 100px">
-                <div class="setting-contents">
+                <div id="profile-0" class="user-index">
+                    <img src="holder.js/100%x500" alt="">
+                </div>
+                <div id="profile-1" class="user-contents" style="display: none">
+                    <img src="holder.js/100%x700" alt="">
+                </div>
+                <div id="profile-2" class="setting-contents" style="display: none;">
                     <div id="setting-0-content" class="setting-content">
                         <h3 class="text-center">编辑详情</h3><br>
                         <form class="form-horizontal" method="post">

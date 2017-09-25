@@ -15,13 +15,16 @@ $(window).resize(function () {
     show_user_picture();
 });
 
-// 选项卡特效
+// 选项卡特效,总控制中心
 $('.panel-body').hide().first().show();
 $('.panel-heading').click(function () {
     $(this).next().slideDown();
     $('.panel-body').not($(this).next()).slideUp();
+    $('#' + $(this).attr('title')).show().siblings().hide();
 });
 
+
+// 设置中心选项卡
 $('#setting-btn-list .list-group-item').click(function () {
     clear_messages();
     $click_tag = $(this);

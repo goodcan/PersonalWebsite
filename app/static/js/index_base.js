@@ -50,7 +50,7 @@ $('#btn-login').click(function () {
                 $('#login-user').hide();
                 $('#register-user').hide();
                 $('#context-user')
-                    .attr('href', '/user/' + data['data']['login_user'] + '/')
+                    .attr('href', 'auth/user_profile/' + data['data']['login_user'] + '/')
                     .html(data['data']['login_user']).show();
                 $('#logout-user').show();
                 $('#my-login-Modal').modal('hide');

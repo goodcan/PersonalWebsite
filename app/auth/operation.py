@@ -64,8 +64,8 @@ def login():
             next = request.args.get('next')
             if next:
                 url_list = next.split('/')
-                if url_list[1] == 'user':
-                    url_list[2] = username
+                if url_list[2] == 'user_profile':
+                    url_list[3] = username
                     next = '/'.join(url_list)
 
                 print next

@@ -63,7 +63,13 @@ def login():
             # 获取用户前一个请求地址
             next = request.args.get('next')
             if next:
+                url_list = next.split('/')
+                if url_list[1] == 'user':
+                    url_list[2] = username
+                    next = '/'.join(url_list)
+
                 print next
+
                 g.re['data']['redirect'] = next
             else:
                 print "next page is none"

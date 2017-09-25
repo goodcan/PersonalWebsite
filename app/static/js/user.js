@@ -23,6 +23,12 @@ $('.panel-heading').click(function () {
     $('#' + $(this).attr('title')).show().siblings().hide();
 });
 
+// 我的主页选项卡
+$('#profile-0-nav li').click(function () {
+   $('#profile-0-nav li').removeClass('active');
+   $(this).addClass('active');
+   $('#user-' + $(this).attr('name')).show().siblings().hide();
+});
 
 // 设置中心选项卡
 $('#setting-btn-list .list-group-item').click(function () {

@@ -19,4 +19,4 @@ def user_profile(username):
     }
     if user is None:
         abort(404)
-    return render_template('user.html', **context)
+    return render_template('user_profile.html', **context)

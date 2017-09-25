@@ -1,6 +1,6 @@
 // 清除首页active和修改注销的跳转路径
 $('#my-navbar-collapse li').removeClass('active');
-$('#logout-user').click(function () {
+$('#logout-user-profile').click(function () {
     window.location.href = "/auth/login/";
 });
 

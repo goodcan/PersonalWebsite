@@ -10,7 +10,7 @@
 
 {% block user_navbar %}
     <li><a id="context-user" href="#">{{ user.username }}</a></li>
-    <li><a id="logout-user" href="#">注销</a></li>
+    <li><a id="logout-user-profile" href="#">注销</a></li>
 {% endblock %}
 
 {% block new_content %}
@@ -33,7 +33,7 @@
                     {% else %}
                         <h5 style="font-weight: 600">{{ user.location }}</h5>
                     {% endif %}
-                    {% if user.about_me == '' %}
+                    {% if user.about_me == None %}
                         <p></p>
                     {% else %}
                         <p>“{{ user.about_me }}”</p>

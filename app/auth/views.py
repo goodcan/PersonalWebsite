@@ -329,6 +329,13 @@ def set_information():
     location = set_information_data['location']
     about_me = set_information_data['about_me']
 
+    if name == '':
+        name = None
+    if location == '':
+        location = None
+    if about_me == '':
+        about_me = None
+
     user.name = name
     user.location = location
     user.about_me = about_me

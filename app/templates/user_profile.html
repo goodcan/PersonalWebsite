@@ -61,10 +61,10 @@
                                 <span>用户中心</span>
                             </div>
                             <div class="panel-body">
-                                <ul class="list-group">
-                                    <a href="#" class="list-group-item active">发表文章</a>
-                                    <a href="#" class="list-group-item">提个问题</a>
-                                    <a href="#" class="list-group-item">我的关注</a>
+                                <ul id="user-content-list" class="list-group">
+                                    <a name="posted-article" href="#" class="list-group-item active">发表文章</a>
+                                    <a name="posted-question" href="#" class="list-group-item">提个问题</a>
+                                    <a name="my-commentaries" href="#" class="list-group-item">我的评论</a>
                                 </ul>
                             </div>
                         </div>
@@ -101,10 +101,92 @@
                         </div>
                     </div>
                 </div>
-                <div id="profile-1" class="user-contents" style="display: none">
-                    <div class="write-article"></div>
+                <div id="profile-1" class="user-contents hide-tag">
+                    <div id="posted-article">
+                        <h3 class="text-center">发布文章</h3><br>
+                        <form class="form-horizontal" method="post">
+                            <label class="col-md-2 control-label">标题：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <input id="article-title-p" type="text" class="form-control"
+                                           placeholder="请输入2-30字符的标题">
+                                </div>
+                            </div>
+                            <label class="col-md-2 control-label">分类：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <select id="article-classes" class="form-control">
+                                        <option value="" selected style="display: none">请选择文章分类</option>
+                                        <option value="技术">技术</option>
+                                        <option value="生活">生活</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="col-md-2 control-label">内容：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <textarea id="article-body-p" rows="12" class="form-control"
+                                              placeholder="请撰写你想发布的文章内容"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                                    <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">发布
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button id="btn-cancel-2" type="button"
+                                            class="btn btn-warning btn-block btn-cancel">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="posted-question" class="hide-tag">
+                        <h3 class="text-center">提个问题</h3><br>
+                        <form class="form-horizontal" method="post">
+                            <label class="col-md-2 control-label">标题：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <input id="article-title-p" type="text" class="form-control"
+                                           placeholder="请输入2-30字符的标题">
+                                </div>
+                            </div>
+                            <label class="col-md-2 control-label">分类：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <select id="article-classes" class="form-control">
+                                        <option value="" selected style="display: none">请选择文章分类</option>
+                                        <option value="技术">技术</option>
+                                        <option value="生活">生活</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="col-md-2 control-label">内容：</label>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <textarea id="article-body-p" rows="6" class="form-control"
+                                              placeholder="请撰写你想发布的文章内容"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                                    <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">提问
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button id="btn-cancel-2" type="button"
+                                            class="btn btn-warning btn-block btn-cancel">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="my-commentaries" class="hide-tag">
+                        <img src="holder.js/100%x500" alt="">
+                    </div>
                 </div>
-                <div id="profile-2" class="setting-contents" style="display: none;">
+                <div id="profile-2" class="setting-contents hide-tag">
                     <div id="setting-0-content" class="setting-content">
                         <h3 class="text-center">编辑详情</h3><br>
                         <form class="form-horizontal" method="post">
@@ -162,7 +244,7 @@
                             </div>
                         </form>
                     </div>
-                    <div id="setting-1-content" class="setting-content" style="display: none">
+                    <div id="setting-1-content" class="setting-content hide-tag">
                         <h3 class="text-center">修改密码</h3><br>
                         <form class="form-horizontal" method="post">
                             <label class="col-md-2 control-label">电子邮箱：</label>
@@ -202,7 +284,7 @@
                             </div>
                         </form>
                     </div>
-                    <div id="setting-2-content" class="setting-content" style="display: none">
+                    <div id="setting-2-content" class="setting-content hide-tag">
                         <h3 class="text-center">修改电子邮箱</h3><br>
                         <form class="form-horizontal" method="post">
                             <label class="col-md-2 control-label">原电子邮箱：</label>

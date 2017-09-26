@@ -31,6 +31,15 @@ $('#profile-0-nav li').click(function () {
    $('#user-' + $(this).attr('name')).show().siblings().hide();
 });
 
+// 用户中心选项卡
+$('#user-content-list .list-group-item').click(function () {
+    clear_messages();
+    $click_tag = $(this);
+    $('#user-content-list .list-group-item').removeClass('active');
+    $click_tag.addClass('active');
+    $('#' + $click_tag.attr('name')).show().siblings().hide();
+});
+
 // 设置中心选项卡
 $('#setting-btn-list .list-group-item').click(function () {
     clear_messages();

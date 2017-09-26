@@ -16,6 +16,13 @@ body {
     padding: 0;
     margin: 0 15px;
 }
+#context-user {
+    padding: 12.5px;
+}
+#context-user img{
+    width: 25px;
+    border-radius: 50%;
+}
 
 .main {
     min-height: 100%;

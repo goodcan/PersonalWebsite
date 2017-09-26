@@ -47,11 +47,12 @@ $('#btn-login').click(function () {
         console.log(data);
         if (data['status'] == true) {
             if (data['data']['confirmed']) {
+                var username = data['data']['login_user'];
                 $('#login-user').hide();
                 $('#register-user').hide();
                 $('#context-user')
-                    .attr('href', 'auth/user_profile/' + data['data']['login_user'] + '/')
-                    .html(data['data']['login_user']).show();
+                    .attr('href', 'auth/user_profile/' + username + '/').show();
+                $('#context-user img').attr('src', 'static/images/user_portrait/' + username + '.png');
                 $('#logout-user').show();
                 $('#my-login-Modal').modal('hide');
             }
@@ -208,7 +209,8 @@ $('#logout-user').click(function () {
     $.get('/auth/logout/');
     $('#login-user').show();
     $('#register-user').show();
-    $('#context-user').html('').hide();
+    $('#context-user').hide();
+    $('#context-user img').attr('src', '');
     $('#logout-user').hide();
     $('#my-login-Modal').modal('show');
     $('#usernameL').val('');

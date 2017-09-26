@@ -227,7 +227,7 @@ class User(UserMixin, db.Model):
 
 
     def __repr__(self):
-        return '[user: {}]'.format(self.username.encode('gb18030'))
+        return '[user: {}]'.format(self.username.encode('utf-8'))
 
 
 @login_manager.user_loader

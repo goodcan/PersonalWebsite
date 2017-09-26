@@ -25,4 +25,5 @@ def youdao_spider():
             return jsonify(re)
         else:
             re['data']['answer'] = MyTranslation(question).GetAns()
+            print 'answer:' + re['data']['answer']
             return jsonify(re)

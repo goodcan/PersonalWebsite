@@ -15,7 +15,6 @@ def index():
     if current_user.is_anonymous:
         context['user'] = {}
         context['user']['username'] = None
-        print '*' * 40
     else:
         context['user'] = current_user
     context['carousel_imgs'] = ['1', '2', '3']

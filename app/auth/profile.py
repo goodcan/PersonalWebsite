@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, abort, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, confirm_login
 from . import auth
 from ..models import User
 
@@ -12,6 +12,9 @@ def user_profile(username):
     # 防止登录后其他账号直接伪登录
     if current_user.username != username:
         return redirect(url_for('auth.login'))
+
+    # 恢复新鲜，优化记住密码功能
+    confirm_login()
 
     user = User.query.filter_by(username=username).first()
     context = {

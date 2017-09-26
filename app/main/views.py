@@ -12,8 +12,11 @@ from . import main
 # @login_required
 def index():
     context = {}
-    confirm_login()  # 恢复新鲜，优化记住密码功能
     if current_user.is_authenticated:
+
+        # 恢复新鲜，优化记住密码功能
+        confirm_login()
+
         context['user'] = current_user
     else:
         context['user'] = {}

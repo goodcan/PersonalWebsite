@@ -14,7 +14,7 @@ def user_profile(username):
         return redirect(url_for('auth.login'))
 
     # 恢复新鲜，优化记住密码功能
-    confirm_login()
+    # confirm_login()
 
     user = User.query.filter_by(username=username).first()
     context = {

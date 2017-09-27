@@ -56,7 +56,7 @@ def add_article():
         db.session.add(article)
         db.session.commit()
 
-        message_title = u'发布成功'
+        message_title = u'消息'
         message_content = u'文章发布成功！'
         response_messages(g.re, message_title, message_content)
 
@@ -99,8 +99,8 @@ def add_question():
         db.session.add(question)
         db.session.commit()
 
-        message_title = u'提问成功'
-        message_content = u'文章发布成功！'
+        message_title = u'消息'
+        message_content = u'提问成功！'
         response_messages(g.re, message_title, message_content)
 
         return jsonify(g.re)

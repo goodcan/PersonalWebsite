@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import g
-from wtforms import Form, StringField, PasswordField, BooleanField, ValidationError
+from wtforms import Form, SelectField, TextField, StringField, PasswordField, BooleanField, ValidationError
 from wtforms.validators import Length, DataRequired, EqualTo, Email, Regexp
 from flask_login import current_user
 from ..models import User
@@ -174,3 +174,20 @@ class ResetEmailForm(Form):
 
         g.re['data']['newEmail'] = [0, u'新电子邮箱设置正确']
 
+class ArticleForm(Form):
+    title = StringField(validators=[
+        DataRequired(message=u'标题不能为空'),
+        MyLength(2, 30, message=u'标题需要为2-30个字符组成')])
+    class_name = StringField(validators=[
+        DataRequired(message=u'文章类型不能为空')])
+    body = TextField(validators=[
+        DataRequired(message=u'文章内容不能为空')])
+
+class QuestionForm(Form):
+    title = StringField(validators=[
+        DataRequired(message=u'标题不能为空'),
+        MyLength(2, 30, message=u'标题需要为2-30个字符组成')])
+    class_name = StringField(validators=[
+        DataRequired(message=u'问题类型不能为空')])
+    body = TextField(validators=[
+        DataRequired(message=u'问题内容不能为空')])

@@ -118,7 +118,7 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <select id="article-classes" class="form-control">
-                                        <option value="" selected style="display: none">请选择文章分类</option>
+                                        <option value="" class="hide-tag" selected>请选择文章分类</option>
                                         <option value="技术">技术</option>
                                         <option value="生活">生活</option>
                                     </select>
@@ -133,11 +133,11 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">发布
+                                    <button id="btn-add-article" type="button" class="btn btn-primary btn-block">发布
                                     </button>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button id="btn-cancel-2" type="button"
+                                    <button id="btn-cancel-article" type="button"
                                             class="btn btn-warning btn-block btn-cancel">取消
                                     </button>
                                 </div>
@@ -150,15 +150,15 @@
                             <label class="col-md-2 control-label">标题：</label>
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <input id="article-title-p" type="text" class="form-control"
+                                    <input id="question-title-p" type="text" class="form-control"
                                            placeholder="请输入2-30字符的标题">
                                 </div>
                             </div>
                             <label class="col-md-2 control-label">分类：</label>
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <select id="article-classes" class="form-control">
-                                        <option value="" selected style="display: none">请选择文章分类</option>
+                                    <select id="question-classes" class="form-control">
+                                        <option value="" class="hide-tag" selected>请选择文章分类</option>
                                         <option value="技术">技术</option>
                                         <option value="生活">生活</option>
                                     </select>
@@ -167,17 +167,17 @@
                             <label class="col-md-2 control-label">内容：</label>
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <textarea id="article-body-p" rows="6" class="form-control"
+                                    <textarea id="question-body-p" rows="6" class="form-control"
                                               placeholder="请撰写你想发布的文章内容"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">提问
+                                    <button id="btn-add-question" type="button" class="btn btn-primary btn-block">提问
                                     </button>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button id="btn-cancel-2" type="button"
+                                    <button id="btn-cancel-question" type="button"
                                             class="btn btn-warning btn-block btn-cancel">取消
                                     </button>
                                 </div>

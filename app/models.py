@@ -287,3 +287,17 @@ class Articles(db.Model):
     
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_articles = db.relationship('Classification', backref='class_articles')
+
+
+class Questions(db.Model):
+    __tablename_ = 'questions'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(30), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
+
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_questions = db.relationship('User', backref='user_questions')
+
+    class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
+    class_questions = db.relationship('Classification', backref='class_questions')

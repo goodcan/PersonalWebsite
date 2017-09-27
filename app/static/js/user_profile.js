@@ -50,6 +50,76 @@ $('#setting-btn-list .list-group-item').click(function () {
     $('#' + $click_tag.attr('id') + '-content').show();
 });
 
+$('#btn-add-article').click(function () {
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+    $.ajax({
+        url: '/auth/user_profile/add_article/',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        },
+        data: JSON.stringify({
+            'data': {
+                'title': $('#article-title-p').val(),
+                'class_name': $('#article-classes').val(),
+                'body': $('#article-body-p').val()
+            }
+        }),
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+
+        if (data['status'] == true) {
+            clear_messages();
+            show_message(data);
+        }
+        else {
+            show_message(data);
+        }
+    }).fail(function () {
+        alert('请求失败！');
+    });
+});
+
+$('#btn-add-question').click(function () {
+    var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+    $.ajax({
+        url: '/auth/user_profile/add_question/',
+        type: 'POST',
+        contentType: "application/json; charset=UTF-8",
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+        },
+        data: JSON.stringify({
+            'data': {
+                'title': $('#question-title-p').val(),
+                'class_name': $('#question-classes').val(),
+                'body': $('#question-body-p').val()
+            }
+        }),
+        dataType: 'json'
+    }).done(function (data) {
+        console.log(data);
+
+        if (data['status'] == true) {
+            clear_messages();
+            show_message(data);
+        }
+        else {
+            show_message(data);
+        }
+    }).fail(function () {
+        alert('请求失败！');
+    });
+});
+
 $('#btn-resetpwd').click(function () {
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 

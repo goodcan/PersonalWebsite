@@ -14,7 +14,7 @@ csrf = CSRFProtect()
 mail = Mail()
 login_manager = LoginManager()
 # 'strong' 开启会话保护，会记录客户端IP地址和浏览器的用户代理信息
-login_manager.session_protection = 'strong'
+login_manager.session_protection = 'basic'
 login_manager.login_view = "auth.login"
 
 

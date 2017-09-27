@@ -30,6 +30,10 @@
     margin: 15px;
 }
 
+.list-group-item {
+    cursor: pointer;
+}
+
 #user-profile .list-group {
     font-size: 15px;
     margin: 0;

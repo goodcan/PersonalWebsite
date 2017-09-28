@@ -1,5 +1,6 @@
 // 清除首页active和修改注销的跳转路径
-$('#my-navbar-collapse li').removeClass('active');
+// $('#my-navbar-collapse li').removeClass('active');
+clear_navbar_active();
 $('#logout-user-profile').click(function () {
     $.get('/auth/logout/');
     window.location.href = "/auth/login/";
@@ -21,7 +22,7 @@ $('.panel-body').hide().first().show();
 $('.panel-heading').click(function () {
     $(this).next().slideDown();
     $('.panel-body').not($(this).next()).slideUp();
-    $('#' + $(this).attr('title')).show().siblings().hide();
+    $('#' + $(this).attr('name')).show().siblings().hide();
 });
 
 // 我的主页选项卡

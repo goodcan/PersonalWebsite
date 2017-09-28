@@ -51,8 +51,8 @@ $('#btn-login').click(function () {
                 $('#login-user').hide();
                 $('#register-user').hide();
                 $('#context-user')
-                    .attr('href', 'auth/user_profile/' + username + '/').show();
-                $('#context-user img').attr('src', 'static/images/user_portrait/' + username + '.png');
+                    .attr('href', '/auth/user_profile/' + username + '/').show();
+                $('#context-user img').attr('src', '/static/images/user_portrait/' + username + '.png');
                 $('#logout-user').show();
                 $('#my-login-Modal').modal('hide');
             }

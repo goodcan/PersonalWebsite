@@ -38,12 +38,7 @@
 
 {% block new_js %}
     <script>
-        // 清除首页active和修改注销的跳转路径
-        $('#my-navbar-collapse li').removeClass('active');
-        $('#logout-user').click(function () {
-            window.location.href = "/auth/login/";
-        });
-
+        clear_navbar_active();
         $('#btn-translation').click(function () {
 
             var csrftoken = $('meta[name=csrf-token]').attr('content');

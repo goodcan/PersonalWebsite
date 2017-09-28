@@ -6,7 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from forms import ResetEmailForm, UsernameLoginForm, TelephoneLoginForm, RegisterForm, ResetPasswordForm
 from datetime import datetime
 from . import auth
-from .. import login_manager, db, csrf
+from .. import db
 from ..models import User
 from ..email import send_email
 from ..common import response_messages

@@ -52,3 +52,8 @@ function show_message(data) {
     $('#my-modal-title').html(data['data']['message-title']);
     $('#message-content').html(data['data']['message-content']);
 }
+
+// 清除首页active和修改注销的跳转路径
+function clear_navbar_active() {
+    $('#my-navbar-collapse li').removeClass('active');
+}

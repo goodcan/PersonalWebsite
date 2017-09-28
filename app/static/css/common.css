@@ -1,0 +1,20 @@
+.badge {
+    background-color: #777 !important;
+}
+
+.title-link {
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 180%;
+    text-decoration: none !important;
+}
+
+.title-link:hover {
+    color: #0f62c4 !important;
+    cursor: pointer;
+}
+
+.title-link:visited {
+    color: #333;
+}

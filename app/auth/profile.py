@@ -18,18 +18,13 @@ def user_profile(username):
     if current_user.username != username:
         return redirect(url_for('auth.login'))
 
-    # 恢复新鲜，优化记住密码功能
-    # confirm_login()
-
     user = User.query.filter_by(username=username).first()
-    # articles = Articles.query.filter_by(author_id=user.id).order_by(Articles.create_time.desc())
     context = {
         'user': user,
-        # 'articles': articles
     }
     if user is None:
         abort(404)
-    return render_template('user_profile.html', **context)
+    return render_template('auth/user_profile.html', **context)
 
 
 @auth.route('/user_profile/add_article/', methods=['POST'])
@@ -117,3 +112,34 @@ def add_question():
         response_messages(g.re, message_title, message_content)
 
         return jsonify(g.re)
+
+@auth.route('/detail_article/<article_id>')
+def detail_article(article_id):
+    context = {}
+
+    article = Articles.query.filter_by(id=article_id).first()
+
+    if current_user.is_authenticated:
+        context['user'] = current_user
+    else:
+        context['user'] = {}
+        context['user']['username'] = None
+
+    context['article'] = article
+    return render_template('auth/detail_article.html', **context)
+
+
+@auth.route('/detail_question/<question_id>')
+def detail_question(question_id):
+    context = {}
+
+    question = Questions.query.filter_by(id=question_id).first()
+
+    if current_user.is_authenticated:
+        context['user'] = current_user
+    else:
+        context['user'] = {}
+        context['user']['username'] = None
+
+    context['question'] = question
+    return render_template('auth/detail_question.html', **context)

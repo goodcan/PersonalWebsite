@@ -1,0 +1,76 @@
+{% extends 'index_base.html' %}
+
+{% block title %}
+    {{ question.title }}
+{% endblock %}
+
+{% block new_css %}
+    <style>
+        #question-title {
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        #question-body {
+            font-size: 18px;
+            line-height: 150%;
+        }
+
+        #question-comment {
+            margin-top: 30px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block user_navbar %}
+    {% if user.username == None %}
+        <li><a id="login-user" href="#">登录</a></li>
+        <li><a id="register-user" href="#">注册</a></li>
+        <li><a id="context-user" href="#" style="display: none"><img src="" alt=""></a></li>
+        <li><a id="logout-user" href="#" style="display: none">注销</a></li>
+    {% else %}
+        <li><a id="login-user" href="#" style="display: none">登录</a></li>
+        <li><a id="register-user" href="#" style="display: none">注册</a></li>
+        <li><a id="context-user" href="{{ url_for('auth.user_profile', username=user.username) }}">
+            <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">
+        </a></li>
+        <li><a id="logout-user" href="#">注销</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block new_content %}
+    <div class="container">
+        <div id="question-title">
+            <h1>{{ question.title }}</h1>
+            <h5>
+                <spqn>作者</spqn>
+                {{ question.author.username }}
+                <spqn>时间</spqn>
+                {{ question.create_time }}
+            </h5>
+        </div>
+        <div id="question-body">
+            <p>{{ question.body }}</p>
+        </div>
+        <div id="question-comment">
+            <h4><b>评论：</b></h4>
+            <form>
+                <div class="form-group">
+                    <textarea name="comment_content" class="form-control" rows="2" placeholder="请输入评论"></textarea>
+                    <input name="question_id" type="hidden" value="{{ question.id }}">
+                </div>
+                <div class="form-group pull-right">
+                    <a type="#" class="btn btn-primary">立即评论</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block new_js %}
+    <script>
+        clear_navbar_active();
+    </script>
+{% endblock %}

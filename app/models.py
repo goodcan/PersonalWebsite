@@ -72,6 +72,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     users = db.relationship('Role', backref='users')
+    article = db.relationship('Articles', backref='author')
+    question = db.relationship('Questions', backref='author')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

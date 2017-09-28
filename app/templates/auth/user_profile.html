@@ -45,7 +45,7 @@
                 <div class="text-center" id="user-profile">
                     <div class="panel-group">
                         <div class="panel panel-info">
-                            <div class="panel-heading" title="profile-0">
+                            <div class="panel-heading" name="profile-0">
                                 <span class="glyphicon glyphicon-home set-gly-height"></span>
                                 <span>我的主页</span>
                             </div>
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="panel panel-info">
-                            <div class="panel-heading" title="profile-1">
+                            <div class="panel-heading" name="profile-1">
                                 <span class="glyphicon glyphicon-user set-gly-height"></span>
                                 <span>用户中心</span>
                             </div>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div class="panel panel-info">
-                            <div class="panel-heading" title="profile-2">
+                            <div class="panel-heading" name="profile-2">
                                 <span class="glyphicon glyphicon-cog set-gly-height"></span>
                                 <span>设置中心</span>
                             </div>
@@ -98,36 +98,56 @@
                         <div id="user-articles">
                             {% for each in user.user_articles %}
                                 <div class="media">
-                                    <div class="media-body">
-                                        <div class="row">
-                                            <div class="col-sm-10">
-                                                <h4 class="media-heading">{{ each.title }}</h4>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <h6 class="media-heading">{{ each.create_time }}</h6>
-                                            </div>
-                                        </div>
-                                        <p>{{ each.body }}</p>
-                                        <hr>
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object user-little-portrait"
+                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                 alt="">
+                                        </a>
                                     </div>
+                                    <div class="media-body">
+                                        <a class="media-heading title-link"
+                                           href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                                        <h6 class="media-heading">{{ each.create_time }}</h6>
+                                        <p>{{ each.body }}</p>
+                                        <div class="btn-group btn-group-justified">
+                                            <a href="#" class="btn btn-default btn-no-border">评论
+                                                <span class="badge">3</span>
+                                            </a>
+                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                                <span class="badge">3</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
                                 </div>
                             {% endfor %}
                         </div>
-                        <div id="user-questions" style="display: none;">
+                        <div id="user-questions" class="hide-tag">
                             {% for each in user.user_questions %}
                                 <div class="media">
-                                    <div class="media-body">
-                                        <div class="row">
-                                            <div class="col-sm-10">
-                                                <h4 class="media-heading">{{ each.title }}</h4>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <h6 class="media-heading">{{ each.create_time }}</h6>
-                                            </div>
-                                        </div>
-                                        <p>{{ each.body }}</p>
-                                        <hr>
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object user-little-portrait"
+                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                 alt="">
+                                        </a>
                                     </div>
+                                    <div class="media-body">
+                                        <a class="media-heading title-link"
+                                           href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
+                                        <h6 class="media-heading">{{ each.create_time }}</h6>
+                                        <p>{{ each.body }}</p>
+                                        <div class="btn-group btn-group-justified">
+                                            <a href="#" class="btn btn-default btn-no-border">评论
+                                                <span class="badge">3</span>
+                                            </a>
+                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                                <span class="badge">3</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
                                 </div>
                             {% endfor %}
                         </div>

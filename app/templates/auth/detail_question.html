@@ -11,6 +11,10 @@
             text-align: center;
         }
 
+        #question-title span{
+            padding: 0 15px;
+        }
+
         #question-body {
             font-size: 18px;
             line-height: 150%;
@@ -44,10 +48,8 @@
         <div id="question-title">
             <h1>{{ question.title }}</h1>
             <h5>
-                <spqn>作者</spqn>
-                {{ question.author.username }}
-                <spqn>时间</spqn>
-                {{ question.create_time }}
+                <span>问者：{{ question.author.username }}</span>
+                <span>时间：{{ question.create_time }}</span>
             </h5>
         </div>
         <div id="question-body">

@@ -22,8 +22,10 @@ def user_profile(username):
     # confirm_login()
 
     user = User.query.filter_by(username=username).first()
+    # articles = Articles.query.filter_by(author_id=user.id).order_by(Articles.create_time.desc())
     context = {
-        'user': user
+        'user': user,
+        # 'articles': articles
     }
     if user is None:
         abort(404)

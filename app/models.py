@@ -16,6 +16,7 @@ sys.setdefaultencoding('utf-8')
 
 BASE_PWD = os.path.abspath(os.path.dirname('__file__'))
 
+
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
@@ -71,7 +72,6 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     users = db.relationship('Role', backref='users')
-
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -225,7 +225,6 @@ class User(UserMixin, db.Model):
                 for chunk in response.iter_content(128):
                     fw.write(chunk)
 
-
     def __repr__(self):
         return '[user: {}]'.format(self.username.encode('utf-8'))
 
@@ -262,6 +261,7 @@ class AnonymousUser(AnonymousUserMixin):
 # 自定义匿名用户
 login_manager.anonymous_user = AnonymousUser
 
+
 class Classification(db.Model):
     __tablename__ = 'classification'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -275,16 +275,17 @@ class Classification(db.Model):
             db.session.add(each_class)
             db.session.commit()
 
+
 class Articles(db.Model):
     __tablename_ = 'articles'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title =  db.Column(db.String(30), nullable=False)
+    title = db.Column(db.String(30), nullable=False)
     body = db.Column(db.Text, nullable=False)
     create_time = db.Column(db.DateTime, index=True, default=datetime.now())
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_articles = db.relationship('User', backref='user_articles')
-    
+    user_articles = db.relationship('User', backref=db.backref('user_articles', order_by=create_time.desc()))
+
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_articles = db.relationship('Classification', backref='class_articles')
 
@@ -297,7 +298,7 @@ class Questions(db.Model):
     create_time = db.Column(db.DateTime, index=True, default=datetime.now())
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_questions = db.relationship('User', backref='user_questions')
+    user_questions = db.relationship('User', backref=db.backref('user_questions', order_by=create_time.desc()))
 
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_questions = db.relationship('Classification', backref='class_questions')

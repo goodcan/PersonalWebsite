@@ -5,4 +5,4 @@ from flask import Blueprint
 
 auth = Blueprint('auth', __name__)
 
-from . import operation, profile
+from . import operation, profile, config

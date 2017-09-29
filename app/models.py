@@ -304,3 +304,25 @@ class Questions(db.Model):
 
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_questions = db.relationship('Classification', backref='class_questions')
+
+
+class ArticleComments(db.Model):
+    __tablename__ = 'article_comments'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    comment = db.Column(db.Text, nullable=False)
+
+    reviewer = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
+    article_comments = db.relationship('Articles', backref='comments')
+
+
+class QuestionComments(db.Model):
+    __tablename__ = 'question_comments'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    comment = db.Column(db.Text, nullable=False)
+
+    reviewer = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
+    question_comments = db.relationship('Questions', backref='comments')

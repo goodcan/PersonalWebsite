@@ -59,44 +59,89 @@
             <h4><b>评论：</b></h4>
             <form>
                 <div class="form-group">
-                    <textarea name="comment_content" class="form-control" rows="2" placeholder="请输入评论"></textarea>
-                    <input name="article_id" type="hidden" value="{{ article.id }}">
+                    <textarea id="comment_body" class="form-control" rows="2" placeholder="请输入评论"></textarea>
+                    <input id="article_id" type="hidden" value="{{ article.id }}">
                 </div>
                 <div class="form-group pull-right">
-                    <a type="#" class="btn btn-primary">立即评论</a>
+                    <a id="add-article-comment" type="#" class="btn btn-primary">立即评论</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="comments">
-        {% for each in article_comments %}
-            <div class="media">
-                <div class="media-body">
+    <div class="container comments">
+        {% if article_comments %}
+            {% for each in article_comments %}
+                <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object" style="width: 45px"
+                            <img class="media-object comment-portrait" style="width: 45px"
                                  src="{{ url_for('static', filename='images/user_portrait/' + each.reviewer.username + '.png') }}"
                                  alt="">
                         </a>
                     </div>
-                    <div class="media-heading">
-                        <div class="title-time">
-                            <h4>{{ each.reviewer.name }}</h4>
-                            <h6>{{ each.create_time }}</h6>
-                        </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ each.reviewer.name }}</h4>
+                        <h6 class="media-heading">{{ each.create_time }}</h6>
+                        <p>{{ each.body }}</p>
                     </div>
-                    <p>{{ each.body }}</p>
+                    <hr>
                 </div>
-                <hr>
-            </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <img src="holder.js/100%x200" alt="">
+        {% endif %}
+    </div>
 
 {% endblock %}
 
 {% block new_js %}
     <script>
         clear_navbar_active();
+
+        $('#add-article-comment').click(function () {
+            var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+            $.ajax({
+                url: '/auth/add_article_comment/' + $('#article_id').val(),
+                type: 'POST',
+                contentType: "application/json; charset=UTF-8",
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                },
+                data: JSON.stringify({
+                    'data': {
+                        'body': $('#comment_body').val()
+                    }
+                }),
+                dataType: 'json'
+            }).done(function (data) {
+                console.log(data);
+
+                if (data['status'] == true) {
+                    clear_messages();
+                    show_message(data);
+                }
+                else {
+                    if ('url' in data['data']) {
+                        console.log(data['data']['url']);
+                        window.location.href = data['data']['url'];
+                    }
+                    show_message(data);
+                }
+            }).fail(function () {
+                alert('请求失败！');
+            });
+        });
+
+        $('body').keydown(function () {
+            if (event.keyCode == '13') {
+                if ($('#add-article-comment').is(':visible')) {
+                    $('#add-article-comment').click();
+                }
+            }
+        });
     </script>
 {% endblock %}

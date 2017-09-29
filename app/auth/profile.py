@@ -70,6 +70,7 @@ def add_article():
 
         return jsonify(g.re)
 
+
 @auth.route('/user_profile/add_question/', methods=['POST'])
 def add_question():
     data = loads(request.get_data(), encoding='utf-8')
@@ -82,16 +83,16 @@ def add_question():
     body = question_data['body']
 
     form = QuestionForm(title=title,
-                       class_name=class_name,
-                       body=body)
+                        class_name=class_name,
+                        body=body)
 
     if form.validate():
         class_id = Classification.query.filter_by(class_name=class_name).first().id
 
         question = Questions(title=title,
-                           body=body,
-                           author_id=current_user.id,
-                           class_id=class_id)
+                             body=body,
+                             author_id=current_user.id,
+                             class_id=class_id)
 
         db.session.add(question)
         db.session.commit()
@@ -113,11 +114,12 @@ def add_question():
 
         return jsonify(g.re)
 
-@auth.route('/detail_article/<article_id>')
+
+@auth.route('/detail_article/<article_id>/')
 def detail_article(article_id):
     context = {
         'article': Articles.query.filter_by(id=article_id).first(),
-        'article_comments': ArticleComments.query.filter_by(id=article_id).first()
+        'article_comments': ArticleComments.query.filter_by(article_id=article_id).order_by('-create_time')
     }
 
     if current_user.is_authenticated:
@@ -129,11 +131,12 @@ def detail_article(article_id):
     return render_template('auth/detail_article.html', **context)
 
 
-@auth.route('/detail_question/<question_id>')
+@auth.route('/detail_question/<question_id>/')
 def detail_question(question_id):
-    context = {}
-
-    question = Questions.query.filter_by(id=question_id).first()
+    context = {
+        'question': Questions.query.filter_by(id=question_id).first(),
+        'question_comments': QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
+    }
 
     if current_user.is_authenticated:
         context['user'] = current_user
@@ -141,5 +144,81 @@ def detail_question(question_id):
         context['user'] = {}
         context['user']['username'] = None
 
-    context['question'] = question
     return render_template('auth/detail_question.html', **context)
+
+
+@auth.route('/add_article_comment/<article_id>', methods=['POST'])
+def add_article_comment(article_id):
+    g.re = {'status': True, 'data': {}}
+
+    if not current_user.is_authenticated:
+        g.re['status'] = False
+        g.re['data']['url'] = url_for('auth.login') + \
+                              '?next=%2Fauth%2Fdetail_article%2F' + article_id + '%2F'
+        print g.re['data']['url']
+        return jsonify(g.re)
+
+    data = loads(request.get_data(), encoding='utf-8')
+    print data
+
+    body = data['data']['body']
+
+    if body == '':
+        g.re['status'] = False
+
+        message_title = u'评论失败'
+        message_content = u'评论内容不能为空！'
+        response_messages(g.re, message_title, message_content)
+
+        return jsonify(g.re)
+
+    article_comment = ArticleComments(body=body,
+                                      article_id=article_id,
+                                      reviewer_id=current_user.id)
+
+    db.session.add(article_comment)
+    db.session.commit()
+
+    message_title = u'消息'
+    message_content = u'评论成功！'
+    response_messages(g.re, message_title, message_content)
+
+    return jsonify(g.re)
+
+@auth.route('/add_question_comment/<question_id>', methods=['POST'])
+def add_question_comment(question_id):
+    g.re = {'status': True, 'data': {}}
+
+    if not current_user.is_authenticated:
+        g.re['status'] = False
+        g.re['data']['url'] = url_for('auth.login') + \
+                              '?next=%2Fauth%2Fdetail_question%2F' + question_id + '%2F'
+        print g.re['data']['url']
+        return jsonify(g.re)
+
+    data = loads(request.get_data(), encoding='utf-8')
+    print data
+
+    body = data['data']['body']
+
+    if body == '':
+        g.re['status'] = False
+
+        message_title = u'评论失败'
+        message_content = u'评论内容不能为空！'
+        response_messages(g.re, message_title, message_content)
+
+        return jsonify(g.re)
+
+    question_comment = QuestionComments(body=body,
+                                      question_id=question_id,
+                                      reviewer_id=current_user.id)
+
+    db.session.add(question_comment)
+    db.session.commit()
+
+    message_title = u'消息'
+    message_content = u'评论成功！'
+    response_messages(g.re, message_title, message_content)
+
+    return jsonify(g.re)

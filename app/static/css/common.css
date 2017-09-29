@@ -18,3 +18,11 @@
 .title-link:visited {
     color: #333;
 }
+
+.comment-portrait {
+    width: 45px;
+    border: 0.5px solid #a1a1a1;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;.
+    border-radius: 50%;
+}

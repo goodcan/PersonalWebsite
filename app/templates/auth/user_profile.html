@@ -98,17 +98,19 @@
                         <div id="user-articles">
                             {% for each in user.user_articles %}
                                 <div class="media">
-{#                                    <div class="media-left">#}
-{#                                        <a href="#">#}
-{#                                            <img class="media-object user-little-portrait"#}
-{#                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"#}
-{#                                                 alt="">#}
-{#                                        </a>#}
-{#                                    </div>#}
                                     <div class="media-body">
-                                        <a class="media-heading title-link"
-                                           href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
-                                        <h6 class="pull-right">{{ each.create_time }}</h6>
+                                        <div class="media-heading">
+                                            <a href="" class="pull-left">
+                                                <img class="media-object user-little-portrait"
+                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                     alt="">
+                                            </a>
+                                            <div class="title-time">
+                                                <a class="title-link"
+                                                   href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                                                <h6>{{ each.create_time }}</h6>
+                                            </div>
+                                        </div>
                                         <p>{{ each.body }}</p>
                                         <div class="btn-group btn-group-justified">
                                             <a href="#" class="btn btn-default btn-no-border">评论
@@ -126,19 +128,21 @@
                         <div id="user-questions" class="hide-tag">
                             {% for each in user.user_questions %}
                                 <div class="media">
-{#                                    <div class="media-left">#}
-{#                                        <a href="#">#}
-{#                                            <img class="media-object user-little-portrait"#}
-{#                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"#}
-{#                                                 alt="">#}
-{#                                        </a>#}
-{#                                    </div>#}
                                     <div class="media-body">
-                                        <a class="media-heading title-link"
-                                           href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
-                                        <h6 class="pull-right">{{ each.create_time }}</h6>
+                                        <div class="media-heading">
+                                            <a href="" class="pull-left">
+                                                <img class="media-object user-little-portrait"
+                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                     alt="">
+                                            </a>
+                                            <div class="title-time">
+                                                <a class="title-link"
+                                                   href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
+                                                <h6>{{ each.create_time }}</h6>
+                                            </div>
+                                        </div>
                                         <p>{{ each.body }}</p>
-                                        <div class="btn-group btn-group-justified" style="font-size: x-small;">
+                                        <div class="btn-group btn-group-justified">
                                             <a href="#" class="btn btn-default btn-no-border">评论
                                                 <span class="badge">3</span>
                                             </a>

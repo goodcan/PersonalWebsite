@@ -69,6 +69,30 @@
         </div>
     </div>
 
+    <div class="comments">
+        {% for each in article_comments %}
+            <div class="media">
+                <div class="media-body">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" style="width: 45px"
+                                 src="{{ url_for('static', filename='images/user_portrait/' + each.reviewer.username + '.png') }}"
+                                 alt="">
+                        </a>
+                    </div>
+                    <div class="media-heading">
+                        <div class="title-time">
+                            <h4>{{ each.reviewer.name }}</h4>
+                            <h6>{{ each.create_time }}</h6>
+                        </div>
+                    </div>
+                    <p>{{ each.body }}</p>
+                </div>
+                <hr>
+            </div>
+            </div>
+        {% endfor %}
+
 {% endblock %}
 
 {% block new_js %}

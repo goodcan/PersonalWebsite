@@ -74,6 +74,8 @@ class User(UserMixin, db.Model):
     users = db.relationship('Role', backref='users')
     article = db.relationship('Articles', backref='author')
     question = db.relationship('Questions', backref='author')
+    article_comment = db.relationship('ArticleComments', backref='reviewer')
+    question_comment = db.relationship('QuestionComments', backref='reviewer')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -309,9 +311,10 @@ class Questions(db.Model):
 class ArticleComments(db.Model):
     __tablename__ = 'article_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    comment = db.Column(db.Text, nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
 
-    reviewer = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
     article_comments = db.relationship('Articles', backref='comments')
@@ -320,9 +323,10 @@ class ArticleComments(db.Model):
 class QuestionComments(db.Model):
     __tablename__ = 'question_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    comment = db.Column(db.Text, nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
 
-    reviewer = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     question_comments = db.relationship('Questions', backref='comments')

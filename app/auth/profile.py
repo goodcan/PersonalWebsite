@@ -8,7 +8,7 @@ from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
 from ..common import response_messages
-from ..models import User, Articles, Questions, Classification
+from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments
 
 
 @auth.route('/user_profile/<username>/')
@@ -115,9 +115,10 @@ def add_question():
 
 @auth.route('/detail_article/<article_id>')
 def detail_article(article_id):
-    context = {}
-
-    article = Articles.query.filter_by(id=article_id).first()
+    context = {
+        'article': Articles.query.filter_by(id=article_id).first(),
+        'article_comments': ArticleComments.query.filter_by(id=article_id).first()
+    }
 
     if current_user.is_authenticated:
         context['user'] = current_user
@@ -125,7 +126,6 @@ def detail_article(article_id):
         context['user'] = {}
         context['user']['username'] = None
 
-    context['article'] = article
     return render_template('auth/detail_article.html', **context)
 
 

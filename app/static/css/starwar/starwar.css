@@ -1,0 +1,162 @@
+body {
+    background-color: #272b30;
+    padding: 30px 40px;
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Microsoft JhengHei, sans-serif;
+}
+
+.links line {
+    stroke: rgb(240, 240, 240);
+    stroke-opacity: 0.2;
+}
+
+.links line.inactive {
+    /*stroke-opacity: 0;*/
+    display: none !important;
+}
+
+.nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.nodes circle:hover {
+    cursor: pointer;
+}
+
+.nodes circle.inactive {
+    display: none !important;
+}
+
+.texts text {
+    display: none;
+}
+
+.texts text:hover {
+    cursor: pointer;
+}
+
+.texts text.inactive {
+    display: none !important;
+}
+
+#title {
+    color: #fff;
+    font-size: 32px;
+    margin-bottom: 0;
+    text-align: left;
+    margin-left: 40px;
+}
+
+#relation-map {
+    position: relative;
+    text-align: center;
+}
+
+#svg-map {
+    margin-left: 80px;
+    margin-bottom: -40px;
+}
+
+#relation-axis {
+    position: relative;
+    text-align: center;
+}
+
+#svg-axis {
+    margin-right: 60px;
+}
+
+#indicator {
+    position: absolute;
+    left: 60px;
+    bottom: 120px;
+    text-align: left;
+    color: #f2f2f2;
+    font-size: 12px;
+}
+
+#indicator > div {
+    margin-bottom: 4px;
+}
+
+#indicator span {
+    display: inline-block;
+    width: 30px;
+    height: 14px;
+    position: relative;
+    top: 2px;
+    margin-right: 8px;
+}
+
+#mode {
+    position: absolute;
+    top: 160px;
+    left: 60px;
+}
+
+#mode span {
+    display: inline-block;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: color, background-color .3s;
+}
+
+#mode span.active, #mode span:hover {
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+}
+
+#info {
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+    text-align: right;
+    width: 270px;
+}
+
+#info p {
+    color: #fff;
+    font-size: 12px;
+    margin-top: 0;
+    margin-bottom: 3px;
+}
+
+#info p span {
+    color: #888;
+    margin-right: 10px;
+}
+
+#search input {
+    position: absolute;
+    top: 220px;
+    left: 60px;
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 200px;
+    background-color: #666;
+}
+
+#svg-axis g.row:hover {
+    stroke-width: 1px;
+    stroke: #fff;
+}
+
+.active-circle {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.active-text {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    position: relative;
+    left: -5px;
+}

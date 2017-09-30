@@ -34,4 +34,7 @@ def create_app(config_name):
     from YDSpider import trans as trans_blueprint
     app.register_blueprint(trans_blueprint, url_prefix='/translation')
 
+    from starwar import starwar as starwar_blueprint
+    app.register_blueprint(starwar_blueprint, url_prefix='/starwar')
+
     return app

@@ -2,6 +2,8 @@
  * Created by admin on 2017/8/7.
  */
 
+clear_navbar_active();
+
 $(document).ready(function () {
     var svg = d3.select("#svg-map"),
         width = svg.attr('width'),

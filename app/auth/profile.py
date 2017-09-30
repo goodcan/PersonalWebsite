@@ -26,6 +26,9 @@ def user_profile(username):
 
 @auth.route('/user_index/<username>/')
 def user_index(username):
+    if current_user.username == username:
+        return redirect(url_for('auth.user_profile', username=username))
+
     if current_user.is_authenticated:
         view_user = current_user
     else:

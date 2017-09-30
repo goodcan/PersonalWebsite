@@ -1,400 +1,249 @@
-{% extends 'index_base.html' %}
+{% extends 'auth/user_index.html' %}
 
-{% block title %}
-    {{ user.username }} 的主页
+{% block new_panel %}
+    <div class="panel panel-info">
+        <div class="panel-heading" name="profile-1">
+            <span class="glyphicon glyphicon-user set-gly-height"></span>
+            <span>用户中心</span>
+        </div>
+        <div class="panel-body">
+            <ul id="user-content-list" class="list-group">
+                <a name="posted-article" class="list-group-item active">发表文章</a>
+                <a name="posted-question" class="list-group-item">提个问题</a>
+                <a name="my-commentaries" class="list-group-item">我的评论</a>
+            </ul>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading" name="profile-2">
+            <span class="glyphicon glyphicon-cog set-gly-height"></span>
+            <span>设置中心</span>
+        </div>
+        <div class="panel-body">
+            <ul id="setting-btn-list" class="list-group">
+                <a id="setting-0" class="list-group-item active">编辑详情</a>
+                <a id="setting-1" class="list-group-item">修改密码</a>
+                <a id="setting-2" class="list-group-item">修改电子邮箱</a>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
-{% block new_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/user_profile.css') }}">
-{% endblock %}
-
-{% block user_navbar %}
-    <li><a id="context-user" href="#">
-        <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">
-    </a></li>
-    <li><a id="logout-user-profile" href="#">注销</a></li>
-{% endblock %}
-
-{% block new_content %}
-    <div class="container">
-        <div class="row" id="profile-container">
-            <div class="col-sm-3">
-                <div id="user-portrait">
-                    <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                         alt="">
-                </div>
-                <div id="user-content">
-                    {% if user.name == None %}
-                        <h2><strong></strong></h2>
-                    {% else %}
-                        <h2><strong>{{ user.name }}</strong></h2>
-                    {% endif %}
-                    <h4 style="opacity: 0.5">{{ user.username }}</h4>
-                    {% if user.location == None %}
-                        <h5 style="font-weight: 600"></h5>
-                    {% else %}
-                        <h5 style="font-weight: 600">{{ user.location }}</h5>
-                    {% endif %}
-                    {% if user.about_me == None %}
-                        <p></p>
-                    {% else %}
-                        <p>“{{ user.about_me }}”</p>
-                    {% endif %}
-
-                </div>
-                <div class="text-center" id="user-profile">
-                    <div class="panel-group">
-                        <div class="panel panel-info">
-                            <div class="panel-heading" name="profile-0">
-                                <span class="glyphicon glyphicon-home set-gly-height"></span>
-                                <span>我的主页</span>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    <a class="list-group-item active">全部</a>
-                                    <a class="list-group-item">技术</a>
-                                    <a class="list-group-item">生活</a>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading" name="profile-1">
-                                <span class="glyphicon glyphicon-user set-gly-height"></span>
-                                <span>用户中心</span>
-                            </div>
-                            <div class="panel-body">
-                                <ul id="user-content-list" class="list-group">
-                                    <a name="posted-article" class="list-group-item active">发表文章</a>
-                                    <a name="posted-question" class="list-group-item">提个问题</a>
-                                    <a name="my-commentaries" class="list-group-item">我的评论</a>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading" name="profile-2">
-                                <span class="glyphicon glyphicon-cog set-gly-height"></span>
-                                <span>设置中心</span>
-                            </div>
-                            <div class="panel-body">
-                                <ul id="setting-btn-list" class="list-group">
-                                    <a id="setting-0" class="list-group-item active">编辑详情</a>
-                                    <a id="setting-1" class="list-group-item">修改密码</a>
-                                    <a id="setting-2" class="list-group-item">修改电子邮箱</a>
-                                </ul>
-                            </div>
-                        </div>
+{% block new_profile %}
+    <div id="profile-1" class="user-contents hide-tag">
+        <div id="posted-article">
+            <h3 class="text-center">发布文章</h3><br>
+            <form class="form-horizontal" method="post">
+                <label class="col-md-2 control-label">标题：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="article-title-p" type="text" class="form-control"
+                               placeholder="请输入2-30字符的标题">
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-9" style="top: 100px">
-                <div id="profile-0" class="user-index">
-                    <div id="profile-0-nav">
-                        <ul class="nav nav-tabs nav-justified">
-                            <li class="active" name="articles"><a>我的文章</a></li>
-                            <li name="questions"><a>我的问答</a></li>
-                        </ul>
-                    </div>
-                    <div id="profile-0-content">
-                        <div id="user-articles">
-                            {% for each in user.user_articles %}
-                                <div class="media">
-                                    <div class="media-body">
-                                        <div class="media-heading">
-                                            <a href="" class="pull-left">
-                                                <img class="media-object user-little-portrait"
-                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                                                     alt="">
-                                            </a>
-                                            <div class="title-time">
-                                                <a class="title-link"
-                                                   href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
-                                                <h6>{{ each.create_time }}</h6>
-                                            </div>
-                                        </div>
-                                        <p>{{ each.body }}</p>
-                                        <div class="btn-group btn-group-justified">
-                                            <a href="#" class="btn btn-default btn-no-border">评论
-                                                <span class="badge">3</span>
-                                            </a>
-                                            <a href="#" class="btn btn-default btn-no-border">收藏
-                                                <span class="badge">3</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div id="user-questions" class="hide-tag">
-                            {% for each in user.user_questions %}
-                                <div class="media">
-                                    <div class="media-body">
-                                        <div class="media-heading">
-                                            <a href="" class="pull-left">
-                                                <img class="media-object user-little-portrait"
-                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                                                     alt="">
-                                            </a>
-                                            <div class="title-time">
-                                                <a class="title-link"
-                                                   href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
-                                                <h6>{{ each.create_time }}</h6>
-                                            </div>
-                                        </div>
-                                        <p>{{ each.body }}</p>
-                                        <div class="btn-group btn-group-justified">
-                                            <a href="#" class="btn btn-default btn-no-border">评论
-                                                <span class="badge">3</span>
-                                            </a>
-                                            <a href="#" class="btn btn-default btn-no-border">收藏
-                                                <span class="badge">3</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                            {% endfor %}
-                        </div>
+                <label class="col-md-2 control-label">分类：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <select id="article-classes" class="form-control">
+                            <option value="" class="hide-tag" selected>请选择文章分类</option>
+                            <option value="技术">技术</option>
+                            <option value="生活">生活</option>
+                        </select>
                     </div>
                 </div>
-                <div id="profile-1" class="user-contents hide-tag">
-                    <div id="posted-article">
-                        <h3 class="text-center">发布文章</h3><br>
-                        <form class="form-horizontal" method="post">
-                            <label class="col-md-2 control-label">标题：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="article-title-p" type="text" class="form-control"
-                                           placeholder="请输入2-30字符的标题">
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">分类：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <select id="article-classes" class="form-control">
-                                        <option value="" class="hide-tag" selected>请选择文章分类</option>
-                                        <option value="技术">技术</option>
-                                        <option value="生活">生活</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">内容：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
+                <label class="col-md-2 control-label">内容：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
                                     <textarea id="article-body-p" rows="12" class="form-control"
                                               placeholder="请撰写你想发布的文章内容"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-add-article" type="button" class="btn btn-primary btn-block">发布
-                                    </button>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button id="btn-cancel-article" type="button"
-                                            class="btn btn-warning btn-block btn-cancel">取消
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
                     </div>
-                    <div id="posted-question" class="hide-tag">
-                        <h3 class="text-center">提个问题</h3><br>
-                        <form class="form-horizontal" method="post">
-                            <label class="col-md-2 control-label">标题：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="question-title-p" type="text" class="form-control"
-                                           placeholder="请输入2-30字符的标题">
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">分类：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <select id="question-classes" class="form-control">
-                                        <option value="" class="hide-tag" selected>请选择文章分类</option>
-                                        <option value="技术">技术</option>
-                                        <option value="生活">生活</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">内容：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                        <button id="btn-add-article" type="button" class="btn btn-primary btn-block">发布
+                        </button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button id="btn-cancel-article" type="button"
+                                class="btn btn-warning btn-block btn-cancel">取消
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="posted-question" class="hide-tag">
+            <h3 class="text-center">提个问题</h3><br>
+            <form class="form-horizontal" method="post">
+                <label class="col-md-2 control-label">标题：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="question-title-p" type="text" class="form-control"
+                               placeholder="请输入2-30字符的标题">
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">分类：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <select id="question-classes" class="form-control">
+                            <option value="" class="hide-tag" selected>请选择文章分类</option>
+                            <option value="技术">技术</option>
+                            <option value="生活">生活</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">内容：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
                                     <textarea id="question-body-p" rows="6" class="form-control"
                                               placeholder="请撰写你想发布的文章内容"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-add-question" type="button" class="btn btn-primary btn-block">提问
-                                    </button>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button id="btn-cancel-question" type="button"
-                                            class="btn btn-warning btn-block btn-cancel">取消
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="my-commentaries" class="hide-tag">
-                        <img src="holder.js/100%x500" alt="">
                     </div>
                 </div>
-                <div id="profile-2" class="setting-contents hide-tag">
-                    <div id="setting-0-content" class="setting-content">
-                        <h3 class="text-center">编辑详情</h3><br>
-                        <form class="form-horizontal" method="post">
-                            <label class="col-md-2 control-label">昵称：</label>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    {% if user.name == None %}
-                                        <input id="set-name" type="text" class="form-control" placeholder="请填写您的姓名">
-                                    {% else %}
-                                        <input id="set-name" type="text" class="form-control" placeholder="请填写您的姓名"
-                                               value="{{ user.name }}">
-                                    {% endif %}
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">地区：</label>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    {% if user.location == None %}
-                                        <input id="set-location" type="text" class="form-control"
-                                               placeholder="请填写您的所在地">
-                                    {% else %}
-                                        <input id="set-location" type="text" class="form-control" placeholder="请填写您的所在地"
-                                               value="{{ user.location }}">
-                                    {% endif %}
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">自我介绍：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    {% if user.about_me == None %}
-                                        <textarea id="set-about-me" rows="3" class="form-control"
-                                                  placeholder="您可以进行简短的自我介绍"></textarea>
-                                    {% else %}
-                                        <textarea id="set-about-me" rows="3" class="form-control"
-                                                  placeholder="您可以进行简短的自我介绍">{{ user.about_me }}</textarea>
-                                    {% endif %}
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-set-information" type="button" class="btn btn-primary btn-block">保存
-                                    </button>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button id="btn-cancel-0" type="button"
-                                            class="btn btn-warning btn-block btn-cancel">清空
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                <div class="form-group">
+                    <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                        <button id="btn-add-question" type="button" class="btn btn-primary btn-block">提问
+                        </button>
                     </div>
-                    <div id="setting-1-content" class="setting-content hide-tag">
-                        <h3 class="text-center">修改密码</h3><br>
-                        <form class="form-horizontal" method="post">
-                            <label class="col-md-2 control-label">电子邮箱：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">设置新秘密：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="passwordRS1" type="password" class="form-control" placeholder="请设置新密码">
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">确认新密码：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="passwordRS2" type="password" class="form-control" placeholder="请确认新密码">
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-resetpwd" type="button" class="btn btn-primary btn-block">修改
-                                    </button>
-                                </div>
-                                <div class="col-md-2">
-                                    <button id="btn-cancel-1" type="button"
-                                            class="btn btn-warning btn-block btn-cancel">取消
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="setting-2-content" class="setting-content hide-tag">
-                        <h3 class="text-center">修改电子邮箱</h3><br>
-                        <form class="form-horizontal" method="post">
-                            <label class="col-md-2 control-label">原电子邮箱：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="old-emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <label class="col-md-2 control-label">新电子邮箱：</label>
-                            <div class="col-md-10">
-                                <div class="form-group">
-                                    <input id="new-emailRS" type="text" class="form-control" placeholder="请设置新的电子邮箱">
-                                    <span class="clear-glyphicon"></span>
-                                    <span class="help-block clear-help"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
-                                    <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">修改
-                                    </button>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button id="btn-cancel-2" type="button"
-                                            class="btn btn-warning btn-block btn-cancel">取消
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-sm-2">
+                        <button id="btn-cancel-question" type="button"
+                                class="btn btn-warning btn-block btn-cancel">取消
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
+        </div>
+        <div id="my-commentaries" class="hide-tag">
+            <img src="holder.js/100%x500" alt="">
         </div>
     </div>
-
-    <div class="modal fade" id="my-message-Modal">
-        <div class="modal-dialog my-modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                    <h4 id="my-modal-title" class="modal-title text-center"><strong class="sign"></strong></h4>
+    <div id="profile-2" class="setting-contents hide-tag">
+        <div id="setting-0-content" class="setting-content">
+            <h3 class="text-center">编辑详情</h3><br>
+            <form class="form-horizontal" method="post">
+                <label class="col-md-2 control-label">昵称：</label>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {% if user.name == None %}
+                            <input id="set-name" type="text" class="form-control" placeholder="请填写您的姓名">
+                        {% else %}
+                            <input id="set-name" type="text" class="form-control" placeholder="请填写您的姓名"
+                                   value="{{ user.name }}">
+                        {% endif %}
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
                 </div>
-                <div class="modal-body text-center">
-                    <h4 id="message-content"></h4>
+                <label class="col-md-2 control-label">地区：</label>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {% if user.location == None %}
+                            <input id="set-location" type="text" class="form-control"
+                                   placeholder="请填写您的所在地">
+                        {% else %}
+                            <input id="set-location" type="text" class="form-control" placeholder="请填写您的所在地"
+                                   value="{{ user.location }}">
+                        {% endif %}
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
                 </div>
-                <div class="modal-footer my-modal-footer">
-                    <button type="button" class="btn btn-warning btn-block" data-dismiss="modal">关闭</button>
+                <label class="col-md-2 control-label">自我介绍：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        {% if user.about_me == None %}
+                            <textarea id="set-about-me" rows="3" class="form-control"
+                                      placeholder="您可以进行简短的自我介绍"></textarea>
+                        {% else %}
+                            <textarea id="set-about-me" rows="3" class="form-control"
+                                      placeholder="您可以进行简短的自我介绍">{{ user.about_me }}</textarea>
+                        {% endif %}
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                        <button id="btn-set-information" type="button" class="btn btn-primary btn-block">保存
+                        </button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button id="btn-cancel-0" type="button"
+                                class="btn btn-warning btn-block btn-cancel">清空
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="setting-1-content" class="setting-content hide-tag">
+            <h3 class="text-center">修改密码</h3><br>
+            <form class="form-horizontal" method="post">
+                <label class="col-md-2 control-label">电子邮箱：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">设置新秘密：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="passwordRS1" type="password" class="form-control" placeholder="请设置新密码">
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">确认新密码：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="passwordRS2" type="password" class="form-control" placeholder="请确认新密码">
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 col-md-offset-8" style="padding-bottom: 15px">
+                        <button id="btn-resetpwd" type="button" class="btn btn-primary btn-block">修改
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button id="btn-cancel-1" type="button"
+                                class="btn btn-warning btn-block btn-cancel">取消
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="setting-2-content" class="setting-content hide-tag">
+            <h3 class="text-center">修改电子邮箱</h3><br>
+            <form class="form-horizontal" method="post">
+                <label class="col-md-2 control-label">原电子邮箱：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="old-emailRS" type="text" class="form-control" placeholder="请输入绑定的邮箱">
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
+                </div>
+                <label class="col-md-2 control-label">新电子邮箱：</label>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <input id="new-emailRS" type="text" class="form-control" placeholder="请设置新的电子邮箱">
+                        <span class="clear-glyphicon"></span>
+                        <span class="help-block clear-help"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2 col-md-offset-8" style="padding-bottom: 15px">
+                        <button id="btn-resetemail" type="button" class="btn btn-primary btn-block">修改
+                        </button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button id="btn-cancel-2" type="button"
+                                class="btn btn-warning btn-block btn-cancel">取消
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-{% endblock %}
-
-{% block new_js %}
-    <script src="{{ url_for('static', filename='js/auth/user_profile.js') }}"></script>
 {% endblock %}

@@ -20,12 +20,27 @@ def user_profile(username):
 
     user = User.query.filter_by(username=username).first()
     context = {
-        'user': user,
+        'user': user
     }
-    if user is None:
-        abort(404)
     return render_template('auth/user_profile.html', **context)
 
+@auth.route('/user_index/<username>/')
+def user_index(username):
+    if current_user.is_authenticated:
+        view_user = current_user
+    else:
+        view_user = None
+
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        abort(404)
+
+    context = {
+        'status': 0,   # user_navbar 状态标识
+        'view_user': view_user,
+        'user': user
+    }
+    return render_template('auth/user_index.html', **context)
 
 @auth.route('/user_profile/add_article/', methods=['POST'])
 def add_article():

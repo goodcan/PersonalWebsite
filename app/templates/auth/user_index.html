@@ -1,0 +1,157 @@
+{% extends 'index_base.html' %}
+
+{% block title %}
+    {{ user.username }} 的主页
+{% endblock %}
+
+{% block new_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/user_profile.css') }}">
+{% endblock %}
+
+{% block user_navbar %}
+    {% if status == 0 %}
+        {% if view_user == None %}
+            <li><a id="login-user" href="#">登录</a></li>
+            <li><a id="register-user" href="#">注册</a></li>
+            <li><a id="context-user" href="#" style="display: none"><img src="" alt=""></a></li>
+            <li><a id="logout-user" href="#" style="display: none">注销</a></li>
+        {% else %}
+            <li><a id="login-user" href="#" style="display: none">登录</a></li>
+            <li><a id="register-user" href="#" style="display: none">注册</a></li>
+            <li><a id="context-user" href="{{ url_for('auth.user_profile', username=view_user.username) }}">
+                <img src="{{ url_for('static', filename='images/user_portrait/' + view_user.username + '.png') }}">
+            </a></li>
+            <li><a id="logout-user" href="#">注销</a></li>
+        {% endif %}
+    {% else %}
+        <li><a id="context-user" href="#">
+            <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">
+        </a></li>
+        <li><a id="logout-user-profile" href="#">注销</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block new_content %}
+    <div class="container">
+        <div class="row" id="profile-container">
+            <div class="col-sm-3">
+                <div id="user-portrait">
+                    <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                         alt="">
+                </div>
+                <div id="user-content">
+                    {% if user.name == None %}
+                        <h2><strong></strong></h2>
+                    {% else %}
+                        <h2><strong>{{ user.name }}</strong></h2>
+                    {% endif %}
+                    <h4 style="opacity: 0.5">{{ user.username }}</h4>
+                    {% if user.location == None %}
+                        <h5 style="font-weight: 600"></h5>
+                    {% else %}
+                        <h5 style="font-weight: 600">{{ user.location }}</h5>
+                    {% endif %}
+                    {% if user.about_me == None %}
+                        <p></p>
+                    {% else %}
+                        <p>“{{ user.about_me }}”</p>
+                    {% endif %}
+
+                </div>
+                <div class="text-center" id="user-profile">
+                    <div class="panel-group">
+                        <div class="panel panel-info">
+                            <div class="panel-heading" name="profile-0">
+                                <span class="glyphicon glyphicon-home set-gly-height"></span>
+                                <span>我的主页</span>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <a class="list-group-item active">全部</a>
+                                    <a class="list-group-item">技术</a>
+                                    <a class="list-group-item">生活</a>
+                                </ul>
+                            </div>
+                        </div>
+                        {% block new_panel %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9" style="top: 100px">
+                <div id="profile-0" class="user-index">
+                    <div id="profile-0-nav">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="active" name="articles"><a>我的文章</a></li>
+                            <li name="questions"><a>我的问答</a></li>
+                        </ul>
+                    </div>
+                    <div id="profile-0-content">
+                        <div id="user-articles">
+                            {% for each in user.user_articles %}
+                                <div class="media">
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <img class="media-object pull-left user-little-portrait"
+                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                 alt="">
+                                            <div class="title-time">
+                                                <a class="title-link"
+                                                   href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                                                <h6>{{ each.create_time }}</h6>
+                                            </div>
+                                        </div>
+                                        <p>{{ each.body }}</p>
+                                        <div class="btn-group btn-group-justified">
+                                            <a href="#" class="btn btn-default btn-no-border">评论
+                                                <span class="badge">3</span>
+                                            </a>
+                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                                <span class="badge">3</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div id="user-questions" class="hide-tag">
+                            {% for each in user.user_questions %}
+                                <div class="media">
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <a href="" class="pull-left">
+                                                <img class="media-object user-little-portrait"
+                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                     alt="">
+                                            </a>
+                                            <div class="title-time">
+                                                <a class="title-link"
+                                                   href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
+                                                <h6>{{ each.create_time }}</h6>
+                                            </div>
+                                        </div>
+                                        <p>{{ each.body }}</p>
+                                        <div class="btn-group btn-group-justified">
+                                            <a href="#" class="btn btn-default btn-no-border">评论
+                                                <span class="badge">3</span>
+                                            </a>
+                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                                <span class="badge">3</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% block new_profile %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block new_js %}
+    <script src="{{ url_for('static', filename='js/auth/user_profile.js') }}"></script>
+{% endblock %}

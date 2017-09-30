@@ -19,8 +19,14 @@ def user_profile(username):
         return redirect(url_for('auth.login'))
 
     user = User.query.filter_by(username=username).first()
+    user_articles = user.user_articles
+    article_comments = {}
+    for each in user_articles:
+        article_comments[each] = len(each.comments)
+
     context = {
-        'user': user
+        'user': user,
+        'article_comments': article_comments
     }
     return render_template('auth/user_profile.html', **context)
 
@@ -35,13 +41,19 @@ def user_index(username):
         view_user = None
 
     user = User.query.filter_by(username=username).first()
+    user_articles = user.user_articles
+    article_comments = {}
+    for each in user_articles:
+        article_comments[each] = len(each.comments)
+
     if user is None:
         abort(404)
 
     context = {
         'status': 0,   # user_navbar 状态标识
         'view_user': view_user,
-        'user': user
+        'user': user,
+        'article_comments': article_comments
     }
     return render_template('auth/user_index.html', **context)
 

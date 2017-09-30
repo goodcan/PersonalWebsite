@@ -102,10 +102,11 @@
                                         </div>
                                         <p>{{ each.body }}</p>
                                         <div class="btn-group btn-group-justified">
-                                            <a href="#" class="btn btn-default btn-no-border">评论
-                                                <span class="badge">3</span>
+                                            <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                                               class="btn btn-default btn-no-border">评论
+                                                <span class="badge">{{ article_comments[each] }}</span>
                                             </a>
-                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                            <a href="#" class="btn btn-default btn-no-border">关注
                                                 <span class="badge">3</span>
                                             </a>
                                         </div>
@@ -132,10 +133,11 @@
                                         </div>
                                         <p>{{ each.body }}</p>
                                         <div class="btn-group btn-group-justified">
-                                            <a href="#" class="btn btn-default btn-no-border">评论
+                                            <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
+                                               class="btn btn-default btn-no-border">评论
                                                 <span class="badge">3</span>
                                             </a>
-                                            <a href="#" class="btn btn-default btn-no-border">收藏
+                                            <a href="#" class="btn btn-default btn-no-border">关注
                                                 <span class="badge">3</span>
                                             </a>
                                         </div>

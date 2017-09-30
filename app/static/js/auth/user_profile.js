@@ -293,6 +293,12 @@ $('body').keydown(function () {
         if ($('#setting-2-content').is(':visible')) {
             $('#btn-resetemail').click();
         }
+        if ($('#btn-add-article').is(':visible')) {
+            $('#btn-add-article').click();
+        }
+        if ($('#btn-add-question').is(':visible')) {
+            $('#btn-add-question').click();
+        }
     }
 });
 

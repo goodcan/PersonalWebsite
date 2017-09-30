@@ -74,7 +74,7 @@
             {% for each in article_comments %}
                 <div class="media">
                     <div class="media-left">
-                        <a href="#">
+                        <a href="{{ url_for('auth.user_index', username=each.reviewer.username) }}">
                             <img class="media-object comment-portrait" style="width: 45px"
                                  src="{{ url_for('static', filename='images/user_portrait/' + each.reviewer.username + '.png') }}"
                                  alt="">

@@ -138,7 +138,7 @@
 
         $('body').keydown(function () {
             if (event.keyCode == '13') {
-                if ($('#add-article-comment').is(':visible')) {
+                if ($('#add-article-comment').is(':visible') && $('#login-user').is(':hidden')) {
                     $('#add-article-comment').click();
                 }
             }

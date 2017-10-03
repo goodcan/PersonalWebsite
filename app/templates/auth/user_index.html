@@ -104,15 +104,16 @@
                                         <div class="btn-group btn-group-justified">
                                             <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
                                                class="btn btn-default btn-no-border">评论
-                                                <span id="comment-badge" class="badge">{{ article_comments[each] }}</span>
+                                                <span id="comment-badge"
+                                                      class="badge">{{ article_comments[each] }}</span>
                                             </a>
                                             <a href="#" class="btn btn-default btn-no-border">关注
                                                 <span id="care-badge" class="badge">3</span>
                                             </a>
                                         </div>
                                     </div>
-                                    <hr>
                                 </div>
+                                <hr>
                             {% endfor %}
                         </div>
                         <div id="user-questions" class="hide-tag">
@@ -120,11 +121,9 @@
                                 <div class="media">
                                     <div class="media-body">
                                         <div class="media-heading">
-                                            <a href="" class="pull-left">
-                                                <img class="media-object user-little-portrait"
-                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                                                     alt="">
-                                            </a>
+                                            <img class="media-object user-little-portrait pull-left"
+                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                 alt="">
                                             <div class="title-time">
                                                 <a class="title-link"
                                                    href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
@@ -142,8 +141,8 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <hr>
                                 </div>
+                                <hr>
                             {% endfor %}
                         </div>
                     </div>

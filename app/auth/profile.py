@@ -98,6 +98,7 @@ def add_article():
             'title_link': url_for('auth.detail_article', article_id=article.id),
             'create_time': str(article.create_time),
             'body': body,
+            'comment_link': url_for('auth.detail_article', article_id=article.id),
             'comment_num': 0,
             'care_num': 0
         }
@@ -154,6 +155,7 @@ def add_question():
             'title_link': url_for('auth.detail_question', question_id=question.id),
             'create_time': str(question.create_time),
             'body': body,
+            'comment_link': url_for('auth.detail_question', question_id=question.id),
             'comment_num': 0,
             'care_num': 0
         }

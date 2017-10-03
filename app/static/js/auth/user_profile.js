@@ -32,6 +32,25 @@ $('#profile-0-nav li').click(function () {
     $('#user-' + $(this).attr('name')).show().siblings().hide();
 });
 
+// 用户主页选项卡
+$('#user-index-list .list-group-item').click(function () {
+    clear_messages();
+    $click_tag = $(this);
+    $('#user-index-list .list-group-item').removeClass('active');
+    $click_tag.addClass('active');
+    $('#' + $click_tag.attr('name')).show().siblings().hide();
+    $.get('/auth/screening_articles/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
+        function (data) {
+            console.log(data);
+            $('#user-articles').html('');
+            load_data = data['data']['load_data'];
+            l = load_data.length;
+            for (i = 0; i < l; i++) {
+                load_content($('#user-articles'), load_data[i]);
+            }
+        });
+});
+
 // 用户中心选项卡
 $('#user-content-list .list-group-item').click(function () {
     clear_messages();

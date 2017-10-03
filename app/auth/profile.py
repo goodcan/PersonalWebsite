@@ -4,6 +4,7 @@
 from flask import g, jsonify, request, render_template, abort, redirect, url_for
 from flask_login import login_required, current_user
 from json import loads
+from datetime import datetime
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
@@ -30,6 +31,7 @@ def user_profile(username):
     }
     return render_template('auth/user_profile.html', **context)
 
+
 @auth.route('/user_index/<username>/')
 def user_index(username):
     if current_user.username == username:
@@ -50,12 +52,13 @@ def user_index(username):
         abort(404)
 
     context = {
-        'status': 0,   # user_navbar 状态标识
+        'status': 0,  # user_navbar 状态标识
         'view_user': view_user,
         'user': user,
         'article_comments': article_comments
     }
     return render_template('auth/user_index.html', **context)
+
 
 @auth.route('/user_profile/add_article/', methods=['POST'])
 def add_article():
@@ -77,6 +80,7 @@ def add_article():
 
         article = Articles(title=title,
                            body=body,
+                           create_time=datetime.now(),
                            author_id=current_user.id,
                            class_id=class_id)
 
@@ -121,6 +125,7 @@ def add_question():
 
         question = Questions(title=title,
                              body=body,
+                             create_time=datetime.now(),
                              author_id=current_user.id,
                              class_id=class_id)
 
@@ -203,6 +208,7 @@ def add_article_comment(article_id):
         return jsonify(g.re)
 
     article_comment = ArticleComments(body=body,
+                                      create_time=datetime.now(),
                                       article_id=article_id,
                                       reviewer_id=current_user.id)
 
@@ -214,6 +220,7 @@ def add_article_comment(article_id):
     response_messages(g.re, message_title, message_content)
 
     return jsonify(g.re)
+
 
 @auth.route('/add_question_comment/<question_id>', methods=['POST'])
 def add_question_comment(question_id):
@@ -241,8 +248,9 @@ def add_question_comment(question_id):
         return jsonify(g.re)
 
     question_comment = QuestionComments(body=body,
-                                      question_id=question_id,
-                                      reviewer_id=current_user.id)
+                                        create_time=datetime.now(),
+                                        question_id=question_id,
+                                        reviewer_id=current_user.id)
 
     db.session.add(question_comment)
     db.session.commit()

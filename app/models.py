@@ -285,7 +285,7 @@ class Articles(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(30), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
+    create_time = db.Column(db.DateTime, index=True)
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user_articles = db.relationship('User', backref=db.backref('user_articles', order_by=create_time.desc()))
@@ -299,7 +299,7 @@ class Questions(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(30), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
+    create_time = db.Column(db.DateTime, index=True)
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user_questions = db.relationship('User', backref=db.backref('user_questions', order_by=create_time.desc()))
@@ -312,7 +312,7 @@ class ArticleComments(db.Model):
     __tablename__ = 'article_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     body = db.Column(db.Text, nullable=False)
-    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
+    create_time = db.Column(db.DateTime, index=True)
 
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -324,7 +324,7 @@ class QuestionComments(db.Model):
     __tablename__ = 'question_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     body = db.Column(db.Text, nullable=False)
-    create_time = db.Column(db.DateTime, index=True, default=datetime.now())
+    create_time = db.Column(db.DateTime, index=True)
 
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

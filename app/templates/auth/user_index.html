@@ -104,10 +104,10 @@
                                         <div class="btn-group btn-group-justified">
                                             <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
                                                class="btn btn-default btn-no-border">评论
-                                                <span class="badge">{{ article_comments[each] }}</span>
+                                                <span id="comment-badge" class="badge">{{ article_comments[each] }}</span>
                                             </a>
                                             <a href="#" class="btn btn-default btn-no-border">关注
-                                                <span class="badge">3</span>
+                                                <span id="care-badge" class="badge">3</span>
                                             </a>
                                         </div>
                                     </div>
@@ -135,10 +135,10 @@
                                         <div class="btn-group btn-group-justified">
                                             <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
                                                class="btn btn-default btn-no-border">评论
-                                                <span class="badge">3</span>
+                                                <span id="comment-badge" class="badge">3</span>
                                             </a>
                                             <a href="#" class="btn btn-default btn-no-border">关注
-                                                <span class="badge">3</span>
+                                                <span id="care-badge" class="badge">3</span>
                                             </a>
                                         </div>
                                     </div>

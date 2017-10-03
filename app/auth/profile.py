@@ -87,11 +87,22 @@ def add_article():
         db.session.add(article)
         db.session.commit()
 
+        re = g.re
         message_title = u'消息'
         message_content = u'文章发布成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(re, message_title, message_content)
 
-        return jsonify(g.re)
+        re['load_data'] = {
+            'user_portrait_url': url_for('static', filename='images/user_portrait/' + current_user.username + '.png'),
+            'title': title,
+            'title_link': url_for('auth.detail_article', article_id=article.id),
+            'create_time': str(article.create_time),
+            'body': body,
+            'comment_num': 0,
+            'care_num': 0
+        }
+
+        return jsonify(re)
     else:
         g.re['status'] = False
         message_title = u'发布失败'
@@ -132,11 +143,22 @@ def add_question():
         db.session.add(question)
         db.session.commit()
 
+        re = g.re
         message_title = u'消息'
         message_content = u'提问成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(re, message_title, message_content)
 
-        return jsonify(g.re)
+        re['load_data'] = {
+            'user_portrait_url': url_for('static', filename='images/user_portrait/' + current_user.username + '.png'),
+            'title': title,
+            'title_link': url_for('auth.detail_question', question_id=question.id),
+            'create_time': str(question.create_time),
+            'body': body,
+            'comment_num': 0,
+            'care_num': 0
+        }
+
+        return jsonify(re)
     else:
         g.re['status'] = False
         message_title = u'提问失败'
@@ -260,3 +282,8 @@ def add_question_comment(question_id):
     response_messages(g.re, message_title, message_content)
 
     return jsonify(g.re)
+
+
+@auth.route('/load_article/<article_id>/')
+def load_article(article_id):
+    pass

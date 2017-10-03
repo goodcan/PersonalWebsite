@@ -27,9 +27,9 @@ $('.panel-heading').click(function () {
 
 // 我的主页选项卡
 $('#profile-0-nav li').click(function () {
-   $('#profile-0-nav li').removeClass('active');
-   $(this).addClass('active');
-   $('#user-' + $(this).attr('name')).show().siblings().hide();
+    $('#profile-0-nav li').removeClass('active');
+    $(this).addClass('active');
+    $('#user-' + $(this).attr('name')).show().siblings().hide();
 });
 
 // 用户中心选项卡
@@ -77,6 +77,16 @@ $('#btn-add-article').click(function () {
         if (data['status'] == true) {
             clear_messages();
             show_message(data);
+            load_data = data['load_data']
+            $load_article = $('#user-articles .media:first').clone(true);
+            $load_article.find('img').attr('src', load_data['user_portrait_url']);
+            $load_article.find('.title-link').html(load_data['title']);
+            $load_article.find('.title-link').attr('href', load_data['title_link']);
+            $load_article.find('h6').html(load_data['create_time']);
+            $load_article.find('p').html(load_data['body']);
+            $load_article.find('#comment-badge').html(load_data['comment_num']);
+            $load_article.find('#care-badge').html(load_data['care_num']);
+            $('#user-articles').prepend($load_article);
         }
         else {
             show_message(data);
@@ -112,6 +122,16 @@ $('#btn-add-question').click(function () {
         if (data['status'] == true) {
             clear_messages();
             show_message(data);
+            load_data = data['load_data']
+            $load_question = $('#user-questions .media:first').clone(true);
+            $load_question.find('img').attr('src', load_data['user_portrait_url']);
+            $load_question.find('.title-link').html(load_data['title']);
+            $load_question.find('.title-link').attr('href', load_data['title_link']);
+            $load_question.find('h6').html(load_data['create_time']);
+            $load_question.find('p').html(load_data['body']);
+            $load_question.find('#comment-badge').html(load_data['comment_num']);
+            $load_question.find('#care-badge').html(load_data['care_num']);
+            $('#user-questions').prepend($load_question);
         }
         else {
             show_message(data);
@@ -268,7 +288,7 @@ $('#btn-set-information').click(function () {
                 $('#user-content p').html('');
             }
             else {
-                 $('#user-content p').html('“' + $('#set-about-me').val() + '”');
+                $('#user-content p').html('“' + $('#set-about-me').val() + '”');
             }
             show_message(data);
         }

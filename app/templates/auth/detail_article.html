@@ -81,7 +81,11 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">{{ each.reviewer.name }}</h4>
+                        {% if each.reviewer.name == None %}
+                            <h4 class="media-heading">{{ each.reviewer.username }}</h4>
+                        {% else %}
+                            <h4 class="media-heading">{{ each.reviewer.name }}</h4>
+                        {% endif %}
                         <h6 class="media-heading">{{ each.create_time }}</h6>
                         <p>{{ each.body }}</p>
                     </div>

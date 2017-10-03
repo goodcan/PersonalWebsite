@@ -51,30 +51,6 @@ $('#setting-btn-list .list-group-item').click(function () {
     $('#' + $click_tag.attr('id') + '-content').show();
 });
 
-function load_content($object, data) {
-    var load_html = '<div class="media">' +
-        '<div class="media-body">' +
-        '<div class="media-heading">' +
-        '<img class="media-object user-little-portrait pull-left" ' +
-        'src="' + data['user_portrait_url'] + '" alt="">' +
-        '<div class="title-time">' +
-        '<a href="' + data['title_link'] + '" class="title-link">' + data['title'] + '</a>' +
-        '<h6>' + data['create_time'] + '</h6>' +
-        '</div>' +
-        '</div>' +
-        '<p>' + data['body'] + '</p>' +
-        '<div class="btn-group btn-group-justified">' +
-        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论' +
-        '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +
-        '<a href="#" class="btn btn-default btn-no-border">关注' +
-        '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
-        '</div>' +
-        '</div>' +
-        '</div>' +
-        '<hr>';
-
-    $object.prepend(load_html);
-}
 
 $('#btn-add-article').click(function () {
     var csrftoken = $('meta[name=csrf-token]').attr('content');

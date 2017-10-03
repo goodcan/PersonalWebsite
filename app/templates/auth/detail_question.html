@@ -69,13 +69,13 @@
         </div>
     </div>
 
-    <div class="container comments">
+    <div class="container comments" id="question-comments">
         {% if question_comments %}
             {% for each in question_comments %}
                 <div class="media">
                     <div class="media-left">
                         <a href="{{ url_for('auth.user_index', username=each.reviewer.username) }}">
-                            <img class="media-object comment-portrait" style="width: 45px"
+                            <img class="media-object comment-portrait"
                                  src="{{ url_for('static', filename='images/user_portrait/' + each.reviewer.username + '.png') }}"
                                  alt="">
                         </a>
@@ -126,6 +126,8 @@
                 if (data['status'] == true) {
                     clear_messages();
                     show_message(data);
+                    load_data = data['load_data'];
+                    load_comment($('#question-comments'), load_data);
                 }
                 else {
                     if ('url' in data['data']) {

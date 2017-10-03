@@ -69,13 +69,13 @@
         </div>
     </div>
 
-    <div class="container comments">
+    <div class="container comments" id="article-comments">
         {% if article_comments %}
             {% for each in article_comments %}
                 <div class="media">
                     <div class="media-left">
                         <a href="{{ url_for('auth.user_index', username=each.reviewer.username) }}">
-                            <img class="media-object comment-portrait" style="width: 45px"
+                            <img class="media-object comment-portrait"
                                  src="{{ url_for('static', filename='images/user_portrait/' + each.reviewer.username + '.png') }}"
                                  alt="">
                         </a>
@@ -89,8 +89,8 @@
                         <h6 class="media-heading">{{ each.create_time }}</h6>
                         <p>{{ each.body }}</p>
                     </div>
-                    <hr>
                 </div>
+                <hr>
             {% endfor %}
         {% else %}
             <img src="holder.js/100%x200" alt="">
@@ -127,6 +127,8 @@
                 if (data['status'] == true) {
                     clear_messages();
                     show_message(data);
+                    load_data = data['load_data'];
+                    load_comment($("#article-comments"), load_data);
                 }
                 else {
                     if ('url' in data['data']) {

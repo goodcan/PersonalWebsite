@@ -239,11 +239,26 @@ def add_article_comment(article_id):
     db.session.add(article_comment)
     db.session.commit()
 
+    re = g.re
     message_title = u'消息'
     message_content = u'评论成功！'
-    response_messages(g.re, message_title, message_content)
+    response_messages(re, message_title, message_content)
 
-    return jsonify(g.re)
+    reviewer = article_comment.reviewer
+    if reviewer.name == None:
+        name = reviewer.username
+    else:
+        name = reviewer.name
+
+    re['load_data'] = {
+        'user_portrait_link': url_for('auth.user_index', username=reviewer.username),
+        'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
+        'name': name,
+        'create_time': str(article_comment.create_time),
+        'body': body
+    }
+
+    return jsonify(re)
 
 
 @auth.route('/add_question_comment/<question_id>', methods=['POST'])
@@ -279,11 +294,26 @@ def add_question_comment(question_id):
     db.session.add(question_comment)
     db.session.commit()
 
+    re = g.re
     message_title = u'消息'
     message_content = u'评论成功！'
-    response_messages(g.re, message_title, message_content)
+    response_messages(re, message_title, message_content)
 
-    return jsonify(g.re)
+    reviewer = question_comment.reviewer
+    if reviewer.name == None:
+        name = reviewer.username
+    else:
+        name = reviewer.name
+
+    re['load_data'] = {
+        'user_portrait_link': url_for('auth.user_index', username=reviewer.username),
+        'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
+        'name': name,
+        'create_time': str(question_comment.create_time),
+        'body': body
+    }
+
+    return jsonify(re)
 
 
 @auth.route('/load_article/<article_id>/')

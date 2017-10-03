@@ -57,3 +57,48 @@ function show_message(data) {
 function clear_navbar_active() {
     $('#my-navbar-collapse li').removeClass('active');
 }
+
+// 加载文章和问答
+function load_content($object, data) {
+    var load_html = '<div class="media">' +
+        '<div class="media-body">' +
+        '<div class="media-heading">' +
+        '<img class="media-object user-little-portrait pull-left" ' +
+        'src="' + data['user_portrait_url'] + '" alt="">' +
+        '<div class="title-time">' +
+        '<a href="' + data['title_link'] + '" class="title-link">' + data['title'] + '</a>' +
+        '<h6>' + data['create_time'] + '</h6>' +
+        '</div>' +
+        '</div>' +
+        '<p>' + data['body'] + '</p>' +
+        '<div class="btn-group btn-group-justified">' +
+        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论' +
+        '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +
+        '<a href="#" class="btn btn-default btn-no-border">关注' +
+        '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<hr>';
+
+    $object.prepend(load_html);
+}
+
+// 加载文章和问答
+function load_comment($object, data) {
+    var load_html = '<div class="media">' +
+        '<div class="media-left">' +
+        '<a href="' + data['user_portrait_link'] + '">' +
+        '<img class="media-object comment-portrait" src="' + data['user_portrait_url'] + '" alt="">' +
+        '</a>' +
+        '</div>' +
+        '<div class="media-body">' +
+        '<h4 class="media-heading">' + data['name'] + '</h4>' +
+        '<h6 class="media-heading">' + data['create_time'] + '</h6>' +
+        '<p>' + data['body'] + '</p>' +
+        '</div>' +
+        '</div>' +
+        '<hr>';
+
+    $object.prepend(load_html);
+}

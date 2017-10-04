@@ -371,8 +371,6 @@ def add_question_comment(question_id):
 
 @auth.route('/screening_articles/<class_name>/<user_id>/')
 def screening_articles(class_name, user_id):
-    print type(class_name)
-    print class_name
     author_id = int(user_id)
 
     if class_name == u'全部':
@@ -419,8 +417,6 @@ def screening_articles(class_name, user_id):
 
 @auth.route('/screening_questions/<class_name>/<user_id>/')
 def screening_questions(class_name, user_id):
-    print type(class_name)
-    print class_name
     author_id = int(user_id)
 
     if class_name == u'全部':

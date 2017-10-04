@@ -39,31 +39,27 @@ $('#user-index-list .list-group-item').click(function () {
     $('#user-index-list .list-group-item').removeClass('active');
     $click_tag.addClass('active');
     $('#' + $click_tag.attr('name')).show().siblings().hide();
-    if ($('#profile-0-nav [name=articles]').hasClass('active')) {
-        $.get('/auth/screening_articles/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
-            function (data) {
-                console.log(data);
-                $('#user-articles').html('');
-                load_data = data['data']['load_data'];
-                l = load_data.length;
-                for (i = 0; i < l; i++) {
-                    load_content($('#user-articles'), load_data[i]);
-                }
-            });
-    }
-    else {
-        $.get('/auth/screening_questions/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
-            function (data) {
-                console.log(data);
-                $('#user-questions').html('');
-                load_data = data['data']['load_data'];
-                l = load_data.length;
-                for (i = 0; i < l; i++) {
-                    load_content($('#user-questions'), load_data[i]);
-                }
-            });
-    }
+    $.get('/auth/screening_articles/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
+        function (data) {
+            console.log(data);
+            $('#user-articles').html('');
+            load_data = data['data']['load_data'];
+            l = load_data.length;
+            for (i = 0; i < l; i++) {
+                load_content($('#user-articles'), load_data[i]);
+            }
+        });
 
+    $.get('/auth/screening_questions/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
+        function (data) {
+            console.log(data);
+            $('#user-questions').html('');
+            load_data = data['data']['load_data'];
+            l = load_data.length;
+            for (i = 0; i < l; i++) {
+                load_content($('#user-questions'), load_data[i]);
+            }
+        });
 });
 
 // 用户中心选项卡

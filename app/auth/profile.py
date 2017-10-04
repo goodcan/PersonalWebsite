@@ -24,17 +24,23 @@ def user_profile(username):
     user = User.query.filter_by(username=username).first()
     user_articles = user.user_articles
     article_comments = {}
+    article_care_num = {}
     for each in user_articles:
         article_comments[each] = len(each.comments)
+        article_care_num[each] = len(each.care_article_users)
     user_questions = user.user_questions
     question_comments = {}
+    question_care_num = {}
     for each in user_questions:
         question_comments[each] = len(each.comments)
+        question_care_num[each] = len(each.care_question_users)
 
     context = {
         'user': user,
         'article_comments': article_comments,
-        'question_comments': question_comments
+        'question_comments': question_comments,
+        'article_care_num': article_care_num,
+        'question_care_num': question_care_num
     }
     return render_template('auth/user_profile.html', **context)
 
@@ -55,12 +61,16 @@ def user_index(username):
     user = User.query.filter_by(username=username).first()
     user_articles = user.user_articles
     article_comments = {}
+    article_care_num = {}
     for each in user_articles:
         article_comments[each] = len(each.comments)
+        article_care_num[each] = len(each.care_article_users)
     user_questions = user.user_questions
     question_comments = {}
+    question_care_num = {}
     for each in user_questions:
         question_comments[each] = len(each.comments)
+        question_care_num[each] = len(each.care_question_users)
 
     if user is None:
         abort(404)
@@ -70,7 +80,9 @@ def user_index(username):
         'view_user': view_user,
         'user': user,
         'article_comments': article_comments,
-        'question_comments': question_comments
+        'question_comments': question_comments,
+        'article_care_num': article_care_num,
+        'question_care_num': question_care_num
     }
     return render_template('auth/user_index.html', **context)
 

@@ -107,8 +107,9 @@
                                                 <span id="comment-badge"
                                                       class="badge">{{ article_comments[each] }}</span>
                                             </a>
-                                            <a href="#" class="btn btn-default btn-no-border">关注
-                                                <span id="care-badge" class="badge">3</span>
+                                            <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                                               class="btn btn-default btn-no-border">关注
+                                                <span id="care-badge" class="badge">{{ article_care_num[each] }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -137,8 +138,9 @@
                                                 <span id="comment-badge"
                                                       class="badge">{{ question_comments[each] }}</span>
                                             </a>
-                                            <a href="#" class="btn btn-default btn-no-border">关注
-                                                <span id="care-badge" class="badge">3</span>
+                                            <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
+                                               class="btn btn-default btn-no-border">关注
+                                                <span id="care-badge" class="badge">{{ question_care_num[each] }}</span>
                                             </a>
                                         </div>
                                     </div>

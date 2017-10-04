@@ -56,7 +56,7 @@
             <p>{{ article.body }}</p>
         </div>
         <div id="article-comment">
-            <h4><b>评论（{{ comment_num }}）：</b></h4>
+            <h4><b id="comment_num">评论（{{ comment_num }}）</b>| <b id="care_num">关注（{{ care_num }}）</b></h4>
             <form>
                 <div class="form-group">
                     <textarea id="comment_body" class="form-control" rows="2" placeholder="请输入评论"></textarea>

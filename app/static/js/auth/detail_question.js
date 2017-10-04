@@ -1,5 +1,12 @@
 clear_navbar_active();
 
+function update_care() {
+    $.get('/auth/update_question_care/' + $('#question-title').attr('role') + '/',
+        function (data) {
+            $('#care_num').text('关注（' + data['num'] + '）');
+        });
+}
+
 $('#add-question-comment').click(function () {
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 
@@ -26,7 +33,7 @@ $('#add-question-comment').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_comment($('#question-comments'), load_data);
-            $('#question-comment b').text('评论（' + load_data['comment_num'] + '）：');
+            $('#comment_num').text('评论（' + load_data['comment_num'] + '）');
         }
         else {
             if ('url' in data['data']) {
@@ -63,12 +70,14 @@ $("#question-care").click(function () {
                     .addClass('btn-warning')
                     .text('取消关注')
                     .attr('role', 'del');
+                update_care();
             }
             else {
                 $care_btn.removeClass('btn-warning')
                     .addClass('btn-success')
                     .text('立即关注')
                     .attr('role', 'add');
+                update_care();
             }
 
             show_message(data);

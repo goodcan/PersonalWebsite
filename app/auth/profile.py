@@ -389,7 +389,7 @@ def screening_articles(class_name, user_id):
                 'body': each.body,
                 'comment_link': url_for('auth.detail_article', article_id=each.id),
                 'comment_num': len(each.comments),
-                'care_num': 0
+                'care_num': len(each.care_article_users)
             }
 
             re['data']['load_data'].append(each_load_data)
@@ -409,7 +409,7 @@ def screening_articles(class_name, user_id):
                     'body': each.body,
                     'comment_link': url_for('auth.detail_article', article_id=each.id),
                     'comment_num': len(each.comments),
-                    'care_num': 0
+                    'care_num': len(each.care_article_users)
                 }
 
                 re['data']['load_data'].append(each_load_data)
@@ -437,7 +437,7 @@ def screening_questions(class_name, user_id):
                 'body': each.body,
                 'comment_link': url_for('auth.detail_question', question_id=each.id),
                 'comment_num': len(each.comments),
-                'care_num': 0
+                'care_num': len(each.care_question_users)
             }
 
             re['data']['load_data'].append(each_load_data)
@@ -457,7 +457,7 @@ def screening_questions(class_name, user_id):
                     'body': each.body,
                     'comment_link': url_for('auth.detail_question', question_id=each.id),
                     'comment_num': len(each.comments),
-                    'care_num': 0
+                    'care_num': len(each.care_question_users)
                 }
 
                 re['data']['load_data'].append(each_load_data)
@@ -555,4 +555,26 @@ def check_question_care(question_id):
             care = True
 
     re = {'care': care}
+    return jsonify(re)
+
+@auth.route('/update_article_care/<article_id>/')
+def update_article_care(article_id):
+    article = Articles.query.filter_by(id=article_id).first()
+    if article:
+        num = len(article.care_article_users)
+    else:
+        abort(404)
+
+    re = {'num': num}
+    return jsonify(re)
+
+@auth.route('/update_question_care/<question_id>/')
+def update_question_care(question_id):
+    question = Questions.query.filter_by(id=question_id).first()
+    if question:
+        num = len(question.care_question_users)
+    else:
+        abort(404)
+
+    re = {'num': num}
     return jsonify(re)

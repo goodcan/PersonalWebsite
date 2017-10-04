@@ -1,5 +1,12 @@
 clear_navbar_active();
 
+function update_care() {
+    $.get('/auth/update_article_care/' + $('#article-title').attr('role') + '/',
+        function (data) {
+            $('#care_num').text('关注（' + data['num'] + '）');
+        });
+}
+
 $('#add-article-comment').click(function () {
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 
@@ -26,7 +33,7 @@ $('#add-article-comment').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_comment($("#article-comments"), load_data);
-            $('#article-comment b').text('评论（' + load_data['comment_num'] + '）：');
+            $('#comment_num').text('评论（' + load_data['comment_num'] + '）');
         }
         else {
             if ('url' in data['data']) {
@@ -63,12 +70,14 @@ $("#article-care").click(function () {
                     .addClass('btn-warning')
                     .text('取消关注')
                     .attr('role', 'del');
+                update_care();
             }
             else {
                 $care_btn.removeClass('btn-warning')
                     .addClass('btn-success')
                     .text('立即关注')
                     .attr('role', 'add');
+                update_care();
             }
 
             show_message(data);

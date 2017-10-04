@@ -203,7 +203,7 @@ def detail_article(article_id):
         'article': article,
         'article_comments': article_comments,
         'comment_num': len(article.comments),
-        'care_num': len(article.care_users),
+        'care_num': len(article.care_article_users),
         'care': care
     }
 
@@ -221,10 +221,18 @@ def detail_question(question_id):
     question = Questions.query.filter_by(id=question_id).first()
     question_comments = QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
 
+    care = False
+    if current_user.is_authenticated:
+        if QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
+                                             care_question_id=question_id).first():
+            care = True
+
     context = {
         'question': question,
         'question_comments': question_comments,
-        'comment_num': len(question.comments)
+        'comment_num': len(question.comments),
+        'care_num': len(question.care_question_users),
+        'care': care
     }
 
     if current_user.is_authenticated:

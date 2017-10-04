@@ -363,3 +363,50 @@ def screening_articles( class_name, user_id):
 
     return jsonify(re)
 
+@auth.route('/screening_questions/<class_name>/<user_id>/')
+def screening_questions( class_name, user_id):
+    print type(class_name)
+    print class_name
+    author_id = int(user_id)
+
+    if class_name == u'全部':
+        re = {'status': True, 'data': {'load_data': []}}
+        questions = Questions.query.filter_by(author_id=user_id)
+        for each in questions:
+            author = each.author
+            each_load_data = {
+                'user_portrait_url': url_for('static',
+                                             filename='images/user_portrait/' + author.username + '.png'),
+                'title': each.title,
+                'title_link': url_for('auth.detail_question', question_id=each.id),
+                'create_time': str(each.create_time),
+                'body': each.body,
+                'comment_link': url_for('auth.detail_question', question_id=each.id),
+                'comment_num': len(each.comments),
+                'care_num': 0
+            }
+
+            re['data']['load_data'].append(each_load_data)
+
+    if class_name != u'全部':
+        re = {'status': True, 'data': {'load_data': []}}
+        questions = Classification.query.filter_by(class_name=class_name).first().class_questions
+        for each in questions:
+            author = each.author
+            if author.id == author_id:
+                each_load_data = {
+                    'user_portrait_url': url_for('static',
+                                                 filename='images/user_portrait/' + author.username + '.png'),
+                    'title': each.title,
+                    'title_link': url_for('auth.detail_question', question_id=each.id),
+                    'create_time': str(each.create_time),
+                    'body': each.body,
+                    'comment_link': url_for('auth.detail_question', question_id=each.id),
+                    'comment_num': len(each.comments),
+                    'care_num': 0
+                }
+
+                re['data']['load_data'].append(each_load_data)
+
+    return jsonify(re)
+

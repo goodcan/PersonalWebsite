@@ -72,9 +72,9 @@ function load_content($object, data) {
         '</div>' +
         '<p>' + data['body'] + '</p>' +
         '<div class="btn-group btn-group-justified">' +
-        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论' +
+        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论 ' +
         '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +
-        '<a href="#" class="btn btn-default btn-no-border">关注' +
+        '<a href="#" class="btn btn-default btn-no-border">关注 ' +
         '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
         '</div>' +
         '</div>' +

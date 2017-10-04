@@ -574,3 +574,48 @@ def update_question_care(question_id):
 
     re = {'num': num}
     return jsonify(re)
+
+@auth.route('/user_care_content/')
+def user_care_content():
+    load_artilces = []
+    articles_id = current_user.care_articles
+    for each_id in articles_id:
+        each = Articles.query.filter_by(id=each_id.care_article_id).first()
+        author = each.author
+        each_load_data = {
+            'user_portrait_url': url_for('static',
+                                         filename='images/user_portrait/' + author.username + '.png'),
+            'title': each.title,
+            'title_link': url_for('auth.detail_article', article_id=each.id),
+            'create_time': str(each.create_time),
+            'body': each.body,
+            'comment_link': url_for('auth.detail_article', article_id=each.id),
+            'comment_num': len(each.comments),
+            'care_num': len(each.care_article_users)
+        }
+        load_artilces.append(each_load_data)
+
+    load_questions = []
+    questions_id = current_user.care_questions
+    for each_id in questions_id:
+        each = Questions.query.filter_by(id=each_id.care_question_id).first()
+        author = each.author
+        each_load_data = {
+            'user_portrait_url': url_for('static',
+                                         filename='images/user_portrait/' + author.username + '.png'),
+            'title': each.title,
+            'title_link': url_for('auth.detail_question', question_id=each.id),
+            'create_time': str(each.create_time),
+            'body': each.body,
+            'comment_link': url_for('auth.detail_question', question_id=each.id),
+            'comment_num': len(each.comments),
+            'care_num': len(each.care_question_users)
+        }
+        load_questions.append(each_load_data)
+
+    re = {'load_data': {
+        'load_articles': load_artilces,
+        'load_questions': load_questions
+    }}
+
+    return jsonify(re)

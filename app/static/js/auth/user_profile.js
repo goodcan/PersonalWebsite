@@ -32,6 +32,13 @@ $('#profile-0-nav li').click(function () {
     $('#user-' + $(this).attr('name')).show().siblings().hide();
 });
 
+// 我的关注选项卡
+$('#my-care-nav li').click(function () {
+    $('#my-care-nav li').removeClass('active');
+    $(this).addClass('active');
+    $('#my-care-' + $(this).attr('name')).show().siblings().hide();
+});
+
 // 用户主页选项卡
 $('#user-index-list .list-group-item').click(function () {
     clear_messages();
@@ -313,6 +320,26 @@ $('#btn-set-information').click(function () {
     }).fail(function () {
         alert('请求失败！');
     });
+});
+
+$('#user-content-list [name=my-care]').click(function () {
+   $.get('/auth/user_care_content/', function (data) {
+       console.log(data);
+       load_articles = data['load_data']['load_articles'];
+       l = load_articles.length;
+       if (l != 0) {
+           for (i = 0; i < l; i ++) {
+               load_content($("#my-care-articles"), load_articles[i]);
+           }
+       }
+       load_questions = data['load_data']['load_questions'];
+       l = load_questions.length;
+        if (l != 0) {
+            for (i = 0; i < l; i ++) {
+                load_content($("#my-care-questions"), load_questions[i]);
+            }
+       }
+   });
 });
 
 // 监听键盘

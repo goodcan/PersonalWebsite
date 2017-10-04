@@ -338,7 +338,7 @@ class ArticlesCareTable(db.Model):
     care_article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
     care_time = db.Column(db.DateTime, index=True)
 
-    care_articles = db.relationship('User', backref=db.backref('care_articles', order_by=care_time.desc()))
+    care_articles = db.relationship('User', backref=db.backref('care_articles'))
     care_users = db.relationship('Articles', backref=db.backref('care_article_users', order_by=care_time.desc()))
 
 class QuestionsCareTable(db.Model):
@@ -348,5 +348,5 @@ class QuestionsCareTable(db.Model):
     care_question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     care_time = db.Column(db.DateTime, index=True)
 
-    care_questions = db.relationship('User', backref=db.backref('care_questions', order_by=care_time.desc()))
+    care_questions = db.relationship('User', backref=db.backref('care_questions'))
     care_users = db.relationship('Questions', backref=db.backref('care_question_users', order_by=care_time.desc()))

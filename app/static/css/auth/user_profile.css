@@ -69,7 +69,7 @@
     margin-bottom: 30px;
 }
 
-#profile-0-nav a{
+#profile-0-nav a, #my-care-nav a {
     cursor: pointer;
 }
 

@@ -78,8 +78,8 @@ function load_content($object, data) {
         '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
         '</div>' +
         '</div>' +
-        '</div>' +
-        '<hr>';
+        '<hr>' +
+        '</div>';
 
     $object.prepend(load_html);
 }
@@ -97,8 +97,8 @@ function load_comment($object, data) {
         '<h6 class="media-heading">' + data['create_time'] + '</h6>' +
         '<p>' + data['body'] + '</p>' +
         '</div>' +
-        '</div>' +
-        '<hr>';
+        '<hr>' +
+        '</div>';
 
     $object.prepend(load_html);
 }

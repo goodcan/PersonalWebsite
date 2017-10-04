@@ -56,7 +56,7 @@
             <p>{{ article.body }}</p>
         </div>
         <div id="article-comment">
-            <h4><b>评论：</b></h4>
+            <h4><b>评论（{{ comment_num }}）：</b></h4>
             <form>
                 <div class="form-group">
                     <textarea id="comment_body" class="form-control" rows="2" placeholder="请输入评论"></textarea>
@@ -89,8 +89,8 @@
                         <h6 class="media-heading">{{ each.create_time }}</h6>
                         <p>{{ each.body }}</p>
                     </div>
+                    <hr>
                 </div>
-                <hr>
             {% endfor %}
         {% else %}
             <img src="holder.js/100%x200" alt="">
@@ -129,6 +129,7 @@
                     show_message(data);
                     load_data = data['load_data'];
                     load_comment($("#article-comments"), load_data);
+                    $('#article-comment b').text('评论（' + load_data['comment_num'] + '）：');
                 }
                 else {
                     if ('url' in data['data']) {
@@ -144,7 +145,7 @@
 
         $('body').keydown(function () {
             if (event.keyCode == '13') {
-                if ($('#add-article-comment').is(':visible') && $('#btn-login').is(':hidden') ) {
+                if ($('#add-article-comment').is(':visible') && $('#btn-login').is(':hidden')) {
                     $('#add-article-comment').click();
                 }
             }

@@ -34,8 +34,11 @@ def user_profile(username):
 
 @auth.route('/user_index/<username>/')
 def user_index(username):
-    if current_user.username == username:
-        return redirect(url_for('auth.user_profile', username=username))
+    try:
+        if current_user.username == username:
+            return redirect(url_for('auth.user_profile', username=username))
+    except:
+        pass
 
     if current_user.is_authenticated:
         view_user = current_user
@@ -176,9 +179,13 @@ def add_question():
 
 @auth.route('/detail_article/<article_id>/')
 def detail_article(article_id):
+    article = Articles.query.filter_by(id=article_id).first()
+    article_comments = ArticleComments.query.filter_by(article_id=article_id).order_by('-create_time')
+
     context = {
-        'article': Articles.query.filter_by(id=article_id).first(),
-        'article_comments': ArticleComments.query.filter_by(article_id=article_id).order_by('-create_time')
+        'article': article,
+        'article_comments': article_comments,
+        'comment_num': len(article.comments)
     }
 
     if current_user.is_authenticated:
@@ -192,10 +199,15 @@ def detail_article(article_id):
 
 @auth.route('/detail_question/<question_id>/')
 def detail_question(question_id):
+    question =  Questions.query.filter_by(id=question_id).first()
+    question_comments = QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
+
     context = {
-        'question': Questions.query.filter_by(id=question_id).first(),
-        'question_comments': QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
+        'question': question,
+        'question_comments': question_comments,
+        'comment_num': len(question.comments)
     }
+
 
     if current_user.is_authenticated:
         context['user'] = current_user
@@ -255,7 +267,8 @@ def add_article_comment(article_id):
         'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
         'name': name,
         'create_time': str(article_comment.create_time),
-        'body': body
+        'body': body,
+        'comment_num': len(Articles.query.filter_by(id=article_id).first().comments)
     }
 
     return jsonify(re)
@@ -310,14 +323,15 @@ def add_question_comment(question_id):
         'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
         'name': name,
         'create_time': str(question_comment.create_time),
-        'body': body
+        'body': body,
+        'comment_num': len(Questions.query.filter_by(id=question_id).first().comments)
     }
 
     return jsonify(re)
 
 
 @auth.route('/screening_articles/<class_name>/<user_id>/')
-def screening_articles( class_name, user_id):
+def screening_articles(class_name, user_id):
     print type(class_name)
     print class_name
     author_id = int(user_id)
@@ -363,8 +377,9 @@ def screening_articles( class_name, user_id):
 
     return jsonify(re)
 
+
 @auth.route('/screening_questions/<class_name>/<user_id>/')
-def screening_questions( class_name, user_id):
+def screening_questions(class_name, user_id):
     print type(class_name)
     print class_name
     author_id = int(user_id)
@@ -409,4 +424,3 @@ def screening_questions( class_name, user_id):
                 re['data']['load_data'].append(each_load_data)
 
     return jsonify(re)
-

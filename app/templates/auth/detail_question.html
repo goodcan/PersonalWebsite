@@ -56,7 +56,7 @@
             <p>{{ question.body }}</p>
         </div>
         <div id="question-comment">
-            <h4><b>评论：</b></h4>
+            <h4><b>评论（{{ comment_num }}）：</b></h4>
             <form>
                 <div class="form-group">
                     <textarea id="comment_body" class="form-control" rows="2" placeholder="请输入评论"></textarea>
@@ -81,7 +81,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                         {% if each.reviewer.name == None %}
+                        {% if each.reviewer.name == None %}
                             <h4 class="media-heading">{{ each.reviewer.username }}</h4>
                         {% else %}
                             <h4 class="media-heading">{{ each.reviewer.name }}</h4>
@@ -128,6 +128,7 @@
                     show_message(data);
                     load_data = data['load_data'];
                     load_comment($('#question-comments'), load_data);
+                    $('#question-comment b').text('评论（' + load_data['comment_num'] + '）：');
                 }
                 else {
                     if ('url' in data['data']) {

@@ -192,10 +192,18 @@ def detail_article(article_id):
     article = Articles.query.filter_by(id=article_id).first()
     article_comments = ArticleComments.query.filter_by(article_id=article_id).order_by('-create_time')
 
+    care = False
+    if current_user.is_authenticated:
+        if ArticlesCareTable.query.filter_by(care_user_id=current_user.id,
+                                             care_article_id=article_id).first():
+            care = True
+
     context = {
         'article': article,
         'article_comments': article_comments,
-        'comment_num': len(article.comments)
+        'comment_num': len(article.comments),
+        'care_num': len(article.care_users),
+        'care': care
     }
 
     if current_user.is_authenticated:
@@ -209,7 +217,7 @@ def detail_article(article_id):
 
 @auth.route('/detail_question/<question_id>/')
 def detail_question(question_id):
-    question =  Questions.query.filter_by(id=question_id).first()
+    question = Questions.query.filter_by(id=question_id).first()
     question_comments = QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
 
     context = {
@@ -217,7 +225,6 @@ def detail_question(question_id):
         'question_comments': question_comments,
         'comment_num': len(question.comments)
     }
-
 
     if current_user.is_authenticated:
         context['user'] = current_user
@@ -435,8 +442,9 @@ def screening_questions(class_name, user_id):
 
     return jsonify(re)
 
-@auth.route('/add_care_article/<article_id>/')
-def add_care_article(article_id):
+
+@auth.route('/care_article/<operation>/<article_id>/')
+def care_article(operation, article_id):
     g.re = {'status': True, 'data': {}}
 
     if not current_user.is_authenticated:
@@ -446,14 +454,25 @@ def add_care_article(article_id):
         print g.re['data']['url']
         return jsonify(g.re)
 
-    care_article = ArticlesCareTable(care_user_id=current_user.id,
-                                     care_article_id=article_id,
-                                     care_time=datetime.now())
-    db.session.add(care_article)
-    db.session.commit()
+    if operation == 'add':
+        article = ArticlesCareTable(care_user_id=current_user.id,
+                                         care_article_id=article_id,
+                                         care_time=datetime.now())
+        db.session.add(article)
+        db.session.commit()
 
-    message_title = u'消息'
-    message_content = u'关注成功！'
-    response_messages(g.re, message_title, message_content)
+        message_title = u'消息'
+        message_content = u'关注成功！'
+        response_messages(g.re, message_title, message_content)
+
+    if operation == 'del':
+        article = ArticlesCareTable.query.filter_by(care_user_id=current_user.id,
+                                                         care_article_id=article_id).first()
+        db.session.delete(article)
+        db.session.commit()
+
+        message_title = u'消息'
+        message_content = u'取消关注成功！'
+        response_messages(g.re, message_title, message_content)
 
     return jsonify(g.re)

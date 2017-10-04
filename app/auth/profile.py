@@ -24,10 +24,15 @@ def user_profile(username):
     article_comments = {}
     for each in user_articles:
         article_comments[each] = len(each.comments)
+    user_questions = user.user_questions
+    question_comments = {}
+    for each in user_questions:
+        question_comments[each] = len(each.comments)
 
     context = {
         'user': user,
-        'article_comments': article_comments
+        'article_comments': article_comments,
+        'question_comments': question_comments
     }
     return render_template('auth/user_profile.html', **context)
 
@@ -50,6 +55,10 @@ def user_index(username):
     article_comments = {}
     for each in user_articles:
         article_comments[each] = len(each.comments)
+    user_questions = user.user_questions
+    question_comments = {}
+    for each in user_questions:
+        question_comments[each] = len(each.comments)
 
     if user is None:
         abort(404)
@@ -58,7 +67,8 @@ def user_index(username):
         'status': 0,  # user_navbar 状态标识
         'view_user': view_user,
         'user': user,
-        'article_comments': article_comments
+        'article_comments': article_comments,
+        'question_comments': question_comments
     }
     return render_template('auth/user_index.html', **context)
 

@@ -5,6 +5,7 @@ from flask import g, jsonify, request, render_template, abort, redirect, url_for
 from flask_login import login_required, current_user
 from json import loads
 from datetime import datetime
+from time import sleep
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
@@ -520,3 +521,26 @@ def care_question(operation, question_id):
         response_messages(g.re, message_title, message_content)
 
     return jsonify(g.re)
+
+@auth.route('/check_article_care/<article_id>/')
+def check_article_care(article_id):
+    care = False
+    if current_user.is_authenticated:
+        if ArticlesCareTable.query.filter_by(care_user_id=current_user.id,
+                                             care_article_id=article_id).first():
+            care = True
+
+    re = {'care': care}
+    return jsonify(re)
+
+
+@auth.route('/check_question_care/<question_id>/')
+def check_question_care(question_id):
+    care = False
+    if current_user.is_authenticated:
+        if QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
+                                             care_question_id=question_id).first():
+            care = True
+
+    re = {'care': care}
+    return jsonify(re)

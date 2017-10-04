@@ -92,3 +92,28 @@ $('body').keydown(function () {
         }
     }
 });
+
+$('body').keydown(function () {
+    if (event.keyCode == '13') {
+        if ($('#add-article-comment').is(':visible') && $('#btn-login').is(':hidden')) {
+            $('#add-article-comment').click();
+        }
+    }
+});
+
+$('#my-login-Modal').on('hidden.bs.modal', function (e) {
+    $.get('/auth/check_question_care/' + $('#question-title').attr('role') + '/',
+        function (data) {
+            console.log(data['care']);
+            if (data['care']) {
+                $('#question-care').attr('class', 'btn btn-warning')
+                    .text('取消关注')
+                    .attr('role', 'del');
+            }
+            else {
+                $('#question-care').attr('class', 'btn btn-success')
+                    .text('立即关注')
+                    .attr('role', 'add');
+            }
+        });
+});

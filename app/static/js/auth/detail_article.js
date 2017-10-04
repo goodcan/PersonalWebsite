@@ -92,3 +92,20 @@ $('body').keydown(function () {
         }
     }
 });
+
+$('#my-login-Modal').on('hidden.bs.modal', function (e) {
+    $.get('/auth/check_article_care/' + $('#article-title').attr('role') + '/',
+        function (data) {
+            console.log(data['care']);
+            if (data['care']) {
+                $('#article-care').attr('class', 'btn btn-warning')
+                    .text('取消关注')
+                    .attr('role', 'del');
+            }
+            else {
+                $('#article-care').attr('class', 'btn btn-success')
+                    .text('立即关注')
+                    .attr('role', 'add');
+            }
+        });
+});

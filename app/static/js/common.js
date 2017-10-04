@@ -74,7 +74,7 @@ function load_content($object, data) {
         '<div class="btn-group btn-group-justified">' +
         '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论 ' +
         '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +
-        '<a href="#" class="btn btn-default btn-no-border">关注 ' +
+        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">关注 ' +
         '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
         '</div>' +
         '</div>' +
@@ -84,7 +84,7 @@ function load_content($object, data) {
     $object.prepend(load_html);
 }
 
-// 加载文章和问答
+// 加载文章和问答的评论
 function load_comment($object, data) {
     var load_html = '<div class="media">' +
         '<div class="media-left">' +

@@ -45,7 +45,7 @@
 
 {% block new_content %}
     <div class="container">
-        <div id="article-title">
+        <div id="article-title" role="{{ article.id }}">
             <h1>{{ article.title }}</h1>
             <h5>
                 <span>作者：{{ article.author.username }}</span>
@@ -63,7 +63,8 @@
                     <input id="article_id" type="hidden" value="{{ article.id }}">
                 </div>
                 <div class="form-group pull-right">
-                    <a id="add-article-comment" type="#" class="btn btn-primary">立即评论</a>
+                    <a id="add-article-comment" href="#" class="btn btn-primary">立即评论</a>
+                    <a id="add-article-care" href="#" class="btn btn-success">立即关注</a>
                 </div>
             </form>
         </div>
@@ -130,6 +131,38 @@
                     load_data = data['load_data'];
                     load_comment($("#article-comments"), load_data);
                     $('#article-comment b').text('评论（' + load_data['comment_num'] + '）：');
+                }
+                else {
+                    if ('url' in data['data']) {
+                        console.log(data['data']['url']);
+                        window.location.href = data['data']['url'];
+                    }
+                    show_message(data);
+                }
+            }).fail(function () {
+                alert('请求失败！');
+            });
+        });
+
+        $("#add-article-care").click(function () {
+            var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+            $.ajax({
+                url: '/auth/add_care_article/' + $('#article-title').attr('role') + '/',
+                type: 'GET',
+                contentType: "application/json; charset=UTF-8",
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                    }
+                },
+            }).done(function (data) {
+                console.log(data);
+
+                if (data['status'] == true) {
+                    clear_messages();
+                    show_message(data);
+                    $(this).removeClass('btn-success').addClass('btn-warning').text('取消评论');
                 }
                 else {
                     if ('url' in data['data']) {

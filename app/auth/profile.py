@@ -9,7 +9,7 @@ from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
 from ..common import response_messages
-from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments
+from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable
 
 
 @auth.route('/user_profile/<username>/')
@@ -434,3 +434,26 @@ def screening_questions(class_name, user_id):
                 re['data']['load_data'].append(each_load_data)
 
     return jsonify(re)
+
+@auth.route('/add_care_article/<article_id>/')
+def add_care_article(article_id):
+    g.re = {'status': True, 'data': {}}
+
+    if not current_user.is_authenticated:
+        g.re['status'] = False
+        g.re['data']['url'] = url_for('auth.login') + \
+                              '?next=%2Fauth%2Fdetail_article%2F' + article_id + '%2F'
+        print g.re['data']['url']
+        return jsonify(g.re)
+
+    care_article = ArticlesCareTable(care_user_id=current_user.id,
+                                     care_article_id=article_id,
+                                     care_time=datetime.now())
+    db.session.add(care_article)
+    db.session.commit()
+
+    message_title = u'消息'
+    message_content = u'关注成功！'
+    response_messages(g.re, message_title, message_content)
+
+    return jsonify(g.re)

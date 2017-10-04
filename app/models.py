@@ -330,3 +330,13 @@ class QuestionComments(db.Model):
 
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     question_comments = db.relationship('Questions', backref='comments')
+
+class ArticlesCareTable(db.Model):
+    __tablename__ = 'articles_care_table'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    care_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    care_article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
+    care_time = db.Column(db.DateTime, index=True)
+
+    care_articles = db.relationship('User', backref=db.backref('care_articles', order_by=care_time.desc()))
+    care_users = db.relationship('Articles', backref=db.backref('care_users', order_by=care_time.desc()))

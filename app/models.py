@@ -345,7 +345,7 @@ class QuestionsCareTable(db.Model):
     __tablename__ = 'questions_care_table'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     care_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    care_question_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
+    care_question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     care_time = db.Column(db.DateTime, index=True)
 
     care_questions = db.relationship('User', backref=db.backref('care_questions', order_by=care_time.desc()))

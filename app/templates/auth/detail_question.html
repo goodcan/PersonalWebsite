@@ -45,7 +45,7 @@
 
 {% block new_content %}
     <div class="container">
-        <div id="question-title">
+        <div id="question-title" role="{{ question.id }}">
             <h1>{{ question.title }}</h1>
             <h5>
                 <span>提问者：{{ question.author.username }}</span>
@@ -63,6 +63,7 @@
                     <input id="question_id" type="hidden" value="{{ question.id }}">
                 </div>
                 <div class="form-group pull-right">
+                <a id="add-question-comment" type="#" class="btn btn-primary">立即评论</a>
                     {% if care %}
                         <a id="question-care" href="#" role="del" class="btn btn-warning">取消关注</a>
                     {% else %}
@@ -150,7 +151,7 @@
             var csrftoken = $('meta[name=csrf-token]').attr('content');
 
             $.ajax({
-                url: '/auth/care_question/' + $(this).attr('role') + '/' + $('#article-title').attr('role') + '/',
+                url: '/auth/care_question/' + $(this).attr('role') + '/' + $('#question-title').attr('role') + '/',
                 type: 'GET',
                 contentType: "application/json; charset=UTF-8",
                 beforeSend: function (xhr, settings) {

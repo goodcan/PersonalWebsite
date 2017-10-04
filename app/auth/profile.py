@@ -9,7 +9,8 @@ from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
 from ..common import response_messages
-from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable
+from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
+    QuestionsCareTable
 
 
 @auth.route('/user_profile/<username>/')
@@ -456,8 +457,8 @@ def care_article(operation, article_id):
 
     if operation == 'add':
         article = ArticlesCareTable(care_user_id=current_user.id,
-                                         care_article_id=article_id,
-                                         care_time=datetime.now())
+                                    care_article_id=article_id,
+                                    care_time=datetime.now())
         db.session.add(article)
         db.session.commit()
 
@@ -467,8 +468,43 @@ def care_article(operation, article_id):
 
     if operation == 'del':
         article = ArticlesCareTable.query.filter_by(care_user_id=current_user.id,
-                                                         care_article_id=article_id).first()
+                                                    care_article_id=article_id).first()
         db.session.delete(article)
+        db.session.commit()
+
+        message_title = u'消息'
+        message_content = u'取消关注成功！'
+        response_messages(g.re, message_title, message_content)
+
+    return jsonify(g.re)
+
+
+@auth.route('/care_question/<operation>/<question_id>/')
+def care_question(operation, question_id):
+    g.re = {'status': True, 'data': {}}
+
+    if not current_user.is_authenticated:
+        g.re['status'] = False
+        g.re['data']['url'] = url_for('auth.login') + \
+                              '?next=%2Fauth%2Fdetail_question%2F' + question_id + '%2F'
+        print g.re['data']['url']
+        return jsonify(g.re)
+
+    if operation == 'add':
+        question = QuestionsCareTable(care_user_id=current_user.id,
+                                    care_question_id=question_id,
+                                    care_time=datetime.now())
+        db.session.add(question)
+        db.session.commit()
+
+        message_title = u'消息'
+        message_content = u'关注成功！'
+        response_messages(g.re, message_title, message_content)
+
+    if operation == 'del':
+        question = QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
+                                                    care_question_id=question_id).first()
+        db.session.delete(question)
         db.session.commit()
 
         message_title = u'消息'

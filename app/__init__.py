@@ -37,4 +37,7 @@ def create_app(config_name):
     from starwar import starwar as starwar_blueprint
     app.register_blueprint(starwar_blueprint, url_prefix='/starwar')
 
+    from weather import weather as weather_blueprint
+    app.register_blueprint(weather_blueprint, url_prefix='/weather')
+
     return app

@@ -4,6 +4,10 @@
     我的翻译器
 {% endblock %}
 
+{% block user_navbar %}
+    {% include '_user_navbar.html' %}
+{% endblock %}
+
 {% block new_css %}
     <style>
         .trans-container {
@@ -75,9 +79,9 @@
         });
 
         $('body').keydown(function () {
-           if (event.keyCode == '13') {
-               $('#btn-translation').click();
-           }
+            if (event.keyCode == '13' && $('#btn-login').is(':hidden')) {
+                $('#btn-translation').click();
+            }
         });
     </script>
 {% endblock %}

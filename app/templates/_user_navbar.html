@@ -1,0 +1,13 @@
+{% if user.username == None %}
+    <li><a id="login-user" href="#">登录</a></li>
+    <li><a id="register-user" href="#">注册</a></li>
+    <li><a id="context-user" href="#" style="display: none"><img src="" alt=""></a></li>
+    <li><a id="logout-user" href="#" style="display: none">注销</a></li>
+{% else %}
+    <li><a id="login-user" href="#" style="display: none">登录</a></li>
+    <li><a id="register-user" href="#" style="display: none">注册</a></li>
+    <li><a id="context-user" href="{{ url_for('auth.user_profile', username=user.username) }}">
+        <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">
+    </a></li>
+    <li><a id="logout-user" href="#">注销</a></li>
+{% endif %}

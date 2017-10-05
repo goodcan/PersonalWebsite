@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, request, jsonify
+from flask_login import current_user
 from . import trans
 from YoudaoSpider import MyTranslation
 import json
@@ -9,7 +10,13 @@ import json
 @trans.route('/youdao_spider/', methods=['GET', 'POST'])
 def youdao_spider():
     if request.method == 'GET':
-        return render_template('YDSpider/youdao_spider.html')
+        context = {}
+        if current_user.is_authenticated:
+            context['user'] = current_user
+        else:
+            context['user'] = {}
+            context['user']['username'] = None
+        return render_template('YDSpider/youdao_spider.html', **context)
 
     if request.method == 'POST':
         re = {'status': True, 'data': {}}

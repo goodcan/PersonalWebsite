@@ -4,6 +4,10 @@
     Star wars
 {% endblock %}
 
+{% block user_navbar %}
+    {% include '_user_navbar.html' %}
+{% endblock %}
+
 {% block new_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/starwar/starwar.css') }}">
 {% endblock %}

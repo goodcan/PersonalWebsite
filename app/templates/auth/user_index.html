@@ -97,10 +97,10 @@
                                             <div class="title-time">
                                                 <a class="title-link"
                                                    href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
-                                                <h6>{{ moment(each.create_time).fromNow() }}</h6>
+                                                <h6>{{ each.create_time }}</h6>
                                             </div>
                                         </div>
-                                        <pre>{{ each.body }}</pre>
+                                        <pre class="my-pre">{{ each.body }}</pre>
                                         <div class="btn-group btn-group-justified">
                                             <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
                                                class="btn btn-default btn-no-border">评论
@@ -131,7 +131,7 @@
                                                 <h6>{{ each.create_time }}</h6>
                                             </div>
                                         </div>
-                                        <pre>{{ each.body }}</pre>
+                                        <pre class="my-pre">{{ each.body }}</pre>
                                         <div class="btn-group btn-group-justified">
                                             <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
                                                class="btn btn-default btn-no-border">评论

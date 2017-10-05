@@ -328,6 +328,7 @@ $('#user-content-list [name=my-care]').click(function () {
        load_articles = data['load_data']['load_articles'];
        l = load_articles.length;
        if (l != 0) {
+           $("#my-care-articles").html('');
            for (i = 0; i < l; i ++) {
                load_content($("#my-care-articles"), load_articles[i]);
            }
@@ -335,6 +336,7 @@ $('#user-content-list [name=my-care]').click(function () {
        load_questions = data['load_data']['load_questions'];
        l = load_questions.length;
         if (l != 0) {
+            $("#my-care-questions").html('');
             for (i = 0; i < l; i ++) {
                 load_content($("#my-care-questions"), load_questions[i]);
             }

@@ -15,7 +15,7 @@ def index():
     else:
         context['user'] = {}
         context['user']['username'] = None
-    return render_template('weather/index.html')
+    return render_template('weather/index.html', **context)
 
 @weather.route('/data.json/')
 def sendData():

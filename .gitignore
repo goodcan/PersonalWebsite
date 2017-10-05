@@ -9,4 +9,4 @@ jquery*.js
 bootstrap*.*
 migrations
 *.ini
-echarts.js
+echarts*.js

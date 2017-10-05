@@ -70,7 +70,7 @@ function load_content($object, data) {
         '<h6>' + data['create_time'] + '</h6>' +
         '</div>' +
         '</div>' +
-        '<p>' + data['body'] + '</p>' +
+        '<pre>' + data['body'] + '</pre>' +
         '<div class="btn-group btn-group-justified">' +
         '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论 ' +
         '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +

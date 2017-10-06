@@ -1,5 +1,5 @@
 clear_navbar_active();
-
+update_time($('.deal-time'));
 function update_care() {
     $.get('/auth/update_question_care/' + $('#question-title').attr('role') + '/',
         function (data) {
@@ -34,6 +34,7 @@ $('#add-question-comment').click(function () {
             load_data = data['load_data'];
             load_comment($('#question-comments'), load_data);
             $('#comment_num').text('评论（' + load_data['comment_num'] + '）');
+            update_time($('#question-comments .deal-time'));
         }
         else {
             if ('url' in data['data']) {

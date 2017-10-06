@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 
 def response_messages(response, title, content):
     """
@@ -10,3 +11,19 @@ def response_messages(response, title, content):
     """
     response['data']['message-title'] = title
     response['data']['message-content'] = content
+
+def deal_time(start_time):
+    end_time = datetime.now()
+    D_value = end_time - start_time
+    if D_value.days > 0:
+        return str(D_value.days) + u'天前'
+    else:
+        s = D_value.seconds
+        h = s / 3600
+        m = s % 3600 / 60
+        if h > 0:
+            return str(h) + u'小时前'
+        elif m > 0:
+            return str(m) + u'分钟前'
+        else:
+            return u'刚刚'

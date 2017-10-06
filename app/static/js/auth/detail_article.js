@@ -1,5 +1,5 @@
 clear_navbar_active();
-update_time($('.deal-time'));
+
 function update_care() {
     $.get('/auth/update_article_care/' + $('#article-title').attr('role') + '/',
         function (data) {
@@ -34,7 +34,6 @@ $('#add-article-comment').click(function () {
             load_data = data['load_data'];
             load_comment($("#article-comments"), load_data);
             $('#comment_num').text('评论（' + load_data['comment_num'] + '）');
-            update_time($('#article-comments .deal-time:first'));
         }
         else {
             if ('url' in data['data']) {

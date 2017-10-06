@@ -75,15 +75,15 @@
                     </div>
                     <div class="media-body">
                         <div class="row">
-                            <div class="col-sm-9">
+                            <div class="col-xs-8">
                                 {% if each.reviewer.name == None %}
                                     <h4 class="media-heading">{{ each.reviewer.username }}</h4>
                                 {% else %}
                                     <h4 class="media-heading">{{ each.reviewer.name }}</h4>
                                 {% endif %}
                             </div>
-                            <div class="col-sm-3 text-right">
-                                <span class="media-heading deal-time">{{ each.create_time }}</span>
+                            <div class="col-xs-4 text-right">
+                                <span class="media-heading`">{{ each.show_create_time() }}</span>
                             </div>
                         </div>
                         <p>{{ each.body }}</p>

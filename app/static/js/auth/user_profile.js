@@ -1,4 +1,3 @@
-update_time($('.deal-time'));
 // 清除首页active和修改注销的跳转路径
 // $('#my-navbar-collapse li').removeClass('active');
 clear_navbar_active();
@@ -56,7 +55,6 @@ $('#user-index-list .list-group-item').click(function () {
             for (i = 0; i < l; i++) {
                 load_content($('#user-articles'), load_data[i]);
             }
-            update_time($('#user-articles .deal-time'));
         });
     $.get('/auth/screening_questions/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
         function (data) {
@@ -67,7 +65,6 @@ $('#user-index-list .list-group-item').click(function () {
             for (i = 0; i < l; i++) {
                 load_content($('#user-questions'), load_data[i]);
             }
-            update_time($('#user-questions .deal-time'));
         });
 });
 
@@ -119,7 +116,6 @@ $('#btn-add-article').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_content($('#user-articles'), load_data);
-            update_time($('#user-articles .deal-time:first'));
         }
         else {
             show_message(data);
@@ -157,7 +153,6 @@ $('#btn-add-question').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_content($('#user-questions'), load_data);
-            update_time($('#user-questions .deal-time:first'));
         }
         else {
             show_message(data);
@@ -336,7 +331,6 @@ $('#user-content-list [name=my-care]').click(function () {
            for (i = 0; i < l; i ++) {
                load_content($("#my-care-articles"), load_articles[i]);
            }
-           update_time($('#my-care-articles .deal-time'));
        }
        load_questions = data['load_data']['load_questions'];
        l = load_questions.length;
@@ -345,7 +339,6 @@ $('#user-content-list [name=my-care]').click(function () {
             for (i = 0; i < l; i ++) {
                 load_content($("#my-care-questions"), load_questions[i]);
             }
-            update_time($('#my-care-questions .deal-time'));
        }
    });
 });

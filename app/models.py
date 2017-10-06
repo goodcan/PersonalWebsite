@@ -6,6 +6,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, login_manager
+from common import deal_time
 from datetime import datetime
 from hashlib import md5
 from threading import Thread
@@ -293,6 +294,9 @@ class Articles(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_articles = db.relationship('Classification', backref='class_articles')
 
+    def show_create_time(self):
+        return deal_time(self.create_time)
+
 
 class Questions(db.Model):
     __tablename_ = 'questions'
@@ -307,6 +311,9 @@ class Questions(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_questions = db.relationship('Classification', backref='class_questions')
 
+    def show_create_time(self):
+        return deal_time(self.create_time)
+
 
 class ArticleComments(db.Model):
     __tablename__ = 'article_comments'
@@ -319,6 +326,8 @@ class ArticleComments(db.Model):
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
     article_comments = db.relationship('Articles', backref='comments')
 
+    def show_create_time(self):
+        return deal_time(self.create_time)
 
 class QuestionComments(db.Model):
     __tablename__ = 'question_comments'
@@ -330,6 +339,9 @@ class QuestionComments(db.Model):
 
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     question_comments = db.relationship('Questions', backref='comments')
+
+    def show_create_time(self):
+        return deal_time(self.create_time)
 
 class ArticlesCareTable(db.Model):
     __tablename__ = 'articles_care_table'

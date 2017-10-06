@@ -67,7 +67,7 @@ function load_content($object, data) {
         'src="' + data['user_portrait_url'] + '" alt="">' +
         '<div class="title-time">' +
         '<a href="' + data['title_link'] + '" class="title-link">' + data['title'] + '</a>' +
-        '<h6 class="media-heading deal-time">' + data['create_time'] + '</h6>' +
+        '<h6 class="media-heading">' + data['create_time'] + '</h6>' +
         '</div>' +
         '</div>' +
         '<pre class="my-pre">' + data['body'] + '</pre>' +
@@ -94,11 +94,11 @@ function load_comment($object, data) {
         '</div>' +
         '<div class="media-body">' +
         '<div class="row">' +
-        '<div class="col-sm-9">' +
+        '<div class="col-xs-8">' +
         '<h4 class="media-heading">' + data['name'] + '</h4>' +
         '</div>' +
-        '<div class="col-sm-3 text-right">' +
-        '<h6 class="media-heading deal-time">' + data['create_time'] + '</h6>' +
+        '<div class="col-xs-4 text-right">' +
+        '<h6 class="media-heading">' + data['create_time'] + '</h6>' +
         '</div>' +
         '</div>' +
         '<p>' + data['body'] + '</p>' +
@@ -107,48 +107,4 @@ function load_comment($object, data) {
         '</div>';
 
     $object.prepend(load_html);
-}
-
-function deal_time($object) {
-    var date1 = new Date($object.text());  //开始时间
-    var date2 = new Date();    //结束时间
-    var date3 = date2.getTime() - date1.getTime();  //时间差的毫秒数
-
-    //计算出相差天数
-    var days = Math.floor(date3 / (24 * 3600 * 1000));
-
-    //计算出小时数
-    var leave1 = date3 % (24 * 3600 * 1000);    //计算天数后剩余的毫秒数
-    var hours = Math.floor(leave1 / (3600 * 1000));
-
-    //计算相差分钟数
-    var leave2 = leave1 % (3600 * 1000);       //计算小时数后剩余的毫秒数
-    var minutes = Math.floor(leave2 / (60 * 1000));
-
-    // //计算相差秒数
-    // var leave3 = leave2 % (60 * 1000);      //计算分钟数后剩余的毫秒数
-    // var seconds = Math.round(leave3 / 1000);
-
-    if (days < 0 || hours < 0 || minutes < 0) {
-        return "刚刚"
-    }
-
-    if ( days == 0 && hours == 0 && minutes < 1){
-        return "刚刚"
-    }
-    else if ( days == 0 && hours == 0 && minutes >= 1) {
-        return minutes + "分钟前"
-    }
-    else if ( days == 0 && hours != 0) {
-        return hours + "小时" + minutes + "分钟前"
-    }
-    else if ( days != 0) {
-        return days + "天" + hours + "小时" + minutes + "分钟前"
-    }
-}
-
-function update_time($object) {
-    $object.text(function () {
-        return deal_time($(this));
-    });
 }

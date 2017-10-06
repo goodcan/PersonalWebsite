@@ -13,4 +13,4 @@ def index():
     else:
         context['user'] = {}
         context['user']['username'] = None
-    return render_template('starwar/starwar.html', **context)
+    return render_template('starwar/index.html', **context)

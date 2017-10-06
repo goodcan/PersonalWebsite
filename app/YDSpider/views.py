@@ -16,7 +16,7 @@ def youdao_spider():
         else:
             context['user'] = {}
             context['user']['username'] = None
-        return render_template('YDSpider/youdao_spider.html', **context)
+        return render_template('YDSpider/index.html', **context)
 
     if request.method == 'POST':
         re = {'status': True, 'data': {}}

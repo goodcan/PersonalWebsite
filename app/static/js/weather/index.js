@@ -1,3 +1,5 @@
+clear_navbar_active();
+
 // 初始化echarts示例mapChart
 var mapChart = echarts.init(document.getElementById('main'));
 

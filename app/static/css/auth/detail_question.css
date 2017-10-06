@@ -1,0 +1,17 @@
+#question-title {
+    margin: 30px auto;
+    text-align: center;
+}
+
+#question-title span {
+    padding: 0 15px;
+}
+
+#question-body {
+    font-size: 18px;
+    line-height: 150%;
+}
+
+#question-comment {
+    margin-top: 30px;
+}

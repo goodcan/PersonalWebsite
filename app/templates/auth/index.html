@@ -18,10 +18,43 @@
                 </button>
             </span>
         </div>
-        {#            <button type="submit" class="btn btn-default">Submit</button>#}
     </form>
 {% endblock %}
 
+{% block new_content %}
+    <div class="container">
+        {% for each in articles %}
+            <div class="media">
+                <div class="media-body">
+                    <div class="media-heading">
+                        <img class="media-object pull-left user-little-portrait"
+                             src="{{ url_for('static', filename='images/user_portrait/' + each.author.username + '.png') }}"
+                             alt="">
+                        <div class="title-time">
+                            <a class="title-link"
+                               href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                            <h6 class="media-heading">{{ each.show_create_time() }}</h6>
+                        </div>
+                    </div>
+                    <pre class="my-pre">{{ each.body }}</pre>
+                    <div class="btn-group btn-group-justified">
+                        <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                           class="btn btn-default btn-no-border">评论
+                            <span id="comment-badge"
+                                  class="badge">{{ article_comments[each] }}</span>
+                        </a>
+                        <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                           class="btn btn-default btn-no-border">关注
+                            <span id="care-badge" class="badge">{{ article_care_num[each] }}</span>
+                        </a>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
 {% block new_js %}
-<script src="{{ url_for('static', filename='js/auth/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/auth/index.js') }}"></script>
 {% endblock %}

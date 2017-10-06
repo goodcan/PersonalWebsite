@@ -1,10 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import abort, render_template, url_for, request, redirect, g
-from flask_login import confirm_login, current_user
-from ..decorators import admin_required, permission_required
-from ..models import User, Permission
+from flask import render_template
+from flask_login import current_user
 from . import main
 
 # @csrf.exempt

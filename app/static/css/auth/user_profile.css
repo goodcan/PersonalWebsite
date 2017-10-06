@@ -73,18 +73,6 @@
     cursor: pointer;
 }
 
-.user-little-portrait {
-    width: 45px;
-    border: 0.5px solid #a1a1a1;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;.
-    border-radius: 50%;
-}
-
-.title-time {
-    margin-left: 55px;
-}
-
 .btn-no-border {
     border-color: #e4e4e4;
 }

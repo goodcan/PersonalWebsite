@@ -13,14 +13,39 @@ from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable
 
+
 @auth.route('/index/')
 def index():
     context = {}
+
+    articles = Articles.query.all()
+    questions = Questions.query.all()
+    article_comments = {}
+    article_care_num = {}
+    for each in articles:
+        article_comments[each] = len(each.comments)
+        article_care_num[each] = len(each.care_article_users)
+    question_comments = {}
+    question_care_num = {}
+    for each in questions:
+        question_comments[each] = len(each.comments)
+        question_care_num[each] = len(each.care_question_users)
+
+    context = {
+        'articles':articles,
+        'questions': questions,
+        'article_comments': article_comments,
+        'question_comments': question_comments,
+        'article_care_num': article_care_num,
+        'question_care_num': question_care_num
+    }
+
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
         context['user'] = {}
         context['user']['username'] = None
+
     return render_template('auth/index.html', **context)
 
 
@@ -247,7 +272,7 @@ def detail_question(question_id):
     care = False
     if current_user.is_authenticated:
         if QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
-                                             care_question_id=question_id).first():
+                                              care_question_id=question_id).first():
             care = True
 
     context = {
@@ -519,8 +544,8 @@ def care_question(operation, question_id):
 
     if operation == 'add':
         question = QuestionsCareTable(care_user_id=current_user.id,
-                                    care_question_id=question_id,
-                                    care_time=datetime.now())
+                                      care_question_id=question_id,
+                                      care_time=datetime.now())
         db.session.add(question)
         db.session.commit()
 
@@ -530,7 +555,7 @@ def care_question(operation, question_id):
 
     if operation == 'del':
         question = QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
-                                                    care_question_id=question_id).first()
+                                                      care_question_id=question_id).first()
         db.session.delete(question)
         db.session.commit()
 
@@ -539,6 +564,7 @@ def care_question(operation, question_id):
         response_messages(g.re, message_title, message_content)
 
     return jsonify(g.re)
+
 
 @auth.route('/check_article_care/<article_id>/')
 def check_article_care(article_id):
@@ -557,11 +583,12 @@ def check_question_care(question_id):
     care = False
     if current_user.is_authenticated:
         if QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
-                                             care_question_id=question_id).first():
+                                              care_question_id=question_id).first():
             care = True
 
     re = {'care': care}
     return jsonify(re)
+
 
 @auth.route('/update_article_care/<article_id>/')
 def update_article_care(article_id):
@@ -574,6 +601,7 @@ def update_article_care(article_id):
     re = {'num': num}
     return jsonify(re)
 
+
 @auth.route('/update_question_care/<question_id>/')
 def update_question_care(question_id):
     question = Questions.query.filter_by(id=question_id).first()
@@ -584,6 +612,7 @@ def update_question_care(question_id):
 
     re = {'num': num}
     return jsonify(re)
+
 
 @auth.route('/user_care_content/')
 def user_care_content():

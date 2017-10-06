@@ -34,3 +34,15 @@
     -moz-border-radius: 15px;
     border-radius: 15px;
 }
+
+.user-little-portrait {
+    width: 45px;
+    border: 0.5px solid #a1a1a1;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;.
+    border-radius: 50%;
+}
+
+.title-time {
+    margin-left: 55px;
+}

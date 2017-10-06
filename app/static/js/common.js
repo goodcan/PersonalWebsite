@@ -93,8 +93,14 @@ function load_comment($object, data) {
         '</a>' +
         '</div>' +
         '<div class="media-body">' +
+        '<div class="row">' +
+        '<div class="col-sm-9">' +
         '<h4 class="media-heading">' + data['name'] + '</h4>' +
+        '</div>' +
+        '<div class="col-sm-3 text-right">' +
         '<h6 class="media-heading deal-time">' + data['create_time'] + '</h6>' +
+        '</div>' +
+        '</div>' +
         '<p>' + data['body'] + '</p>' +
         '</div>' +
         '<hr>' +
@@ -123,10 +129,14 @@ function deal_time($object) {
     // var leave3 = leave2 % (60 * 1000);      //计算分钟数后剩余的毫秒数
     // var seconds = Math.round(leave3 / 1000);
 
+    if (days < 0 || hours < 0 || minutes < 0) {
+        return "刚刚"
+    }
+
     if ( days == 0 && hours == 0 && minutes < 1){
         return "刚刚"
     }
-    else if ( days == 0 && hours == 0 && minutes > 1) {
+    else if ( days == 0 && hours == 0 && minutes >= 1) {
         return minutes + "分钟前"
     }
     else if ( days == 0 && hours != 0) {

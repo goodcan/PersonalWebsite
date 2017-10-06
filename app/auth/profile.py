@@ -13,6 +13,16 @@ from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable
 
+@auth.route('/index/')
+def index():
+    context = {}
+    if current_user.is_authenticated:
+        context['user'] = current_user
+    else:
+        context['user'] = {}
+        context['user']['username'] = None
+    return render_template('auth/index.html', **context)
+
 
 @auth.route('/user_profile/<username>/')
 @login_required

@@ -27,9 +27,11 @@
             <div class="media">
                 <div class="media-body">
                     <div class="media-heading">
-                        <img class="media-object pull-left user-little-portrait"
-                             src="{{ url_for('static', filename='images/user_portrait/' + each.author.username + '.png') }}"
-                             alt="">
+                        <a href="{{ url_for('auth.user_index', username=each.author.username) }}">
+                            <img class="media-object pull-left user-little-portrait"
+                                 src="{{ url_for('static', filename='images/user_portrait/' + each.author.username + '.png') }}"
+                                 alt="">
+                        </a>
                         <div class="title-time">
                             <a class="title-link"
                                href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>

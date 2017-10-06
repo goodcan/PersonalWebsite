@@ -18,8 +18,8 @@ from ..models import User, Articles, Questions, Classification, ArticleComments,
 def index():
     context = {}
 
-    articles = Articles.query.all()
-    questions = Questions.query.all()
+    articles = Articles.query.order_by(Articles.create_time.desc()).all()
+    questions = Questions.query.order_by(Questions.create_time.desc()).all()
     article_comments = {}
     article_care_num = {}
     for each in articles:

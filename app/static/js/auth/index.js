@@ -2,7 +2,8 @@ clear_navbar_active();
 
 $('#btn-search').click(function () {
     data = {
-        'class_name': $('#search-select').val(),
+        'project_name': $('#project-search-select').val(),
+        'class_name': $('#class-search-select').val(),
         'search_content': $('#search-content').val()
     }
     $.get('/auth/index/search/', data, function (data) {

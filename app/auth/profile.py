@@ -11,7 +11,7 @@ from .forms import ArticleForm, QuestionForm
 from .. import db
 from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
-    QuestionsCareTable
+    QuestionsCareTable, CLASSIFICATION
 
 
 @auth.route('/index/')
@@ -49,17 +49,40 @@ def index():
     return render_template('auth/index.html', **context)
 
 
-@auth.route('/index/search/<search_content>/')
-def index_search(search_content):
+@auth.route('/index/search/')
+def index_search():
     re = {'data': {'load_data': []}}
+    class_name = request.args.get('class_name')
+    search_content = request.args.get('search_content')
+    print class_name, search_content
 
-    all_articles = Articles.query.all()
+    if class_name == u'全部':
+        all_articles = Articles.query.all()
+    else:
+        all_articles = Articles.query.filter_by(class_id=CLASSIFICATION[class_name]).all()
+
     for each in all_articles:
-        if search_content.lower() in each.title.lower():
+        if search_content != '':
+            if search_content.lower() in each.title.lower():
+                author = each.author
+                each_load_data = {
+                    'user_portrait_link': url_for('auth.user_index', username=author.username),
+                    'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
+                    'title': each.title,
+                    'title_link': url_for('auth.detail_article', article_id=each.id),
+                    'create_time': str(each.show_create_time()),
+                    'body': each.body,
+                    'comment_link': url_for('auth.detail_article', article_id=each.id),
+                    'comment_num': len(each.comments),
+                    'care_num': len(each.care_article_users)
+                }
+
+                re['data']['load_data'].append(each_load_data)
+        else:
             author = each.author
             each_load_data = {
-                'user_portrait_url': url_for('static',
-                                             filename='images/user_portrait/' + author.username + '.png'),
+                'user_portrait_link': url_for('auth.user_index', username=author.username),
+                'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
                 'title': each.title,
                 'title_link': url_for('auth.detail_article', article_id=each.id),
                 'create_time': str(each.show_create_time()),

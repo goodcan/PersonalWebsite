@@ -58,7 +58,35 @@ function clear_navbar_active() {
     $('#my-navbar-collapse li').removeClass('active');
 }
 
-// 加载文章和问答
+// 主页加载文章和问答
+function index_load_content($object, data) {
+    var load_html = '<div class="media">' +
+        '<div class="media-body">' +
+        '<div class="media-heading">' +
+        '<a href="' + data['user_portrait_link'] + '">' +
+        '<img class="media-object user-little-portrait pull-left" ' +
+        'src="' + data['user_portrait_url'] + '" alt="">' +
+        '</a>' +
+        '<div class="title-time">' +
+        '<a href="' + data['title_link'] + '" class="title-link">' + data['title'] + '</a>' +
+        '<h6 class="media-heading">' + data['create_time'] + '</h6>' +
+        '</div>' +
+        '</div>' +
+        '<pre class="my-pre">' + data['body'] + '</pre>' +
+        '<div class="btn-group btn-group-justified">' +
+        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">评论 ' +
+        '<span id="comment-badge" class="badge">' + data['comment_num'] + '</span></a>' +
+        '<a href="' + data['comment_link'] + '" class="btn btn-default btn-no-border">关注 ' +
+        '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
+        '</div>' +
+        '</div>' +
+        '<hr>' +
+        '</div>';
+
+    $object.prepend(load_html);
+}
+
+// 用户主页加载文章和问答
 function load_content($object, data) {
     var load_html = '<div class="media">' +
         '<div class="media-body">' +

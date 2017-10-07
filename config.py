@@ -30,8 +30,8 @@ class DevelopmentConfig(Config):
     DRIVER = 'mysqldb'
     USERNAME = 'root'
     PASSWORD = '104200'
-    HOST = '101.132.123.153'
-    # HOST = '127.0.0.1'
+    # HOST = '101.132.123.153'
+    HOST = '127.0.0.1'
     PORT = '3306'
     DATABASE = 'my_website'
 

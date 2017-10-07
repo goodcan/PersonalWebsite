@@ -1,3 +1,8 @@
 #cou-index {
     margin-top: 80px;
 }
+
+#search-select {
+    margin-right: -1px !important;
+    height: 34px;
+}

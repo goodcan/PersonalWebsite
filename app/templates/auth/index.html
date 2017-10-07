@@ -15,7 +15,14 @@
 {% block new_navbar_title %}
     <form class="navbar-form navbar-left">
         <div class="row">
-            <div class="form-group input-group">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <select name="search" class="btn" id="search-select">
+                        <option value="全部">全部</option>
+                        <option value="科技">科技</option>
+                        <option value="生活">生活</option>
+                    </select>
+                </div>
                 <input id="search-content" type="text" class="form-control" placeholder="请输入搜索内容">
                 <div class="input-group-btn">
                     <button id="btn-search" class="btn btn-default" type="button">
@@ -36,7 +43,8 @@
                         <div class="media-heading">
                             <a href="{{ url_for('auth.user_index', username=each.author.username) }}">
                                 <img class="media-object pull-left user-little-portrait"
-                                     src="{{ url_for('static', filename='images/user_portrait/' + each.author.username + '.png') }}"
+                                     src="
+    {{ url_for('static', filename='images/user_portrait/' + each.author.username + '.png') }}"
                                      alt="">
                             </a>
                             <div class="title-time">

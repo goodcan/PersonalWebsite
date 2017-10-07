@@ -32,7 +32,7 @@ def index():
         question_care_num[each] = len(each.care_question_users)
 
     context = {
-        'articles':articles,
+        'articles': articles,
         'questions': questions,
         'article_comments': article_comments,
         'question_comments': question_comments,
@@ -47,6 +47,31 @@ def index():
         context['user']['username'] = None
 
     return render_template('auth/index.html', **context)
+
+
+@auth.route('/index/search/<search_content>/')
+def index_search(search_content):
+    re = {'data': {'load_data': []}}
+
+    all_articles = Articles.query.all()
+    for each in all_articles:
+        if search_content.lower() in each.title.lower():
+            author = each.author
+            each_load_data = {
+                'user_portrait_url': url_for('static',
+                                             filename='images/user_portrait/' + author.username + '.png'),
+                'title': each.title,
+                'title_link': url_for('auth.detail_article', article_id=each.id),
+                'create_time': str(each.show_create_time()),
+                'body': each.body,
+                'comment_link': url_for('auth.detail_article', article_id=each.id),
+                'comment_num': len(each.comments),
+                'care_num': len(each.care_article_users)
+            }
+
+            re['data']['load_data'].append(each_load_data)
+
+    return jsonify(re)
 
 
 @auth.route('/user_profile/<username>/')

@@ -2,7 +2,19 @@
     margin-top: 80px;
 }
 
-#search-select {
+#project-search-select, #class-search-select {
     margin-right: -1px !important;
+    border-color: #ccc;
     height: 34px;
+}
+
+#project-search-select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#class-search-select {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }

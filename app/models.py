@@ -187,12 +187,9 @@ class User(UserMixin, db.Model):
         """
         生成生成头像的url
         size范围：1 - 512px
-        default参数：gravatar官方图形
-                    404 直接返回404错误状态
-                    mm 神秘人(一个灰白头像)
-                    identicon 抽象几何图形
-                    monsterid 小怪物
-                    wavatar 用不同面孔和背景组合生成的头像
+        default参数：gravatar官方图形        404 直接返回404错误状态
+                    mm 神秘人(一个灰白头像)  identicon 抽象几何图形
+                    monsterid 小怪物        wavatar 用不同面孔和背景组合生成的头像
                     retro 八位像素复古头像
         rating头像等级：g 适合任何年龄的访客查看，一般都用这个
                        pg 可能有争议的头像，只适合13岁以上读者查看
@@ -284,7 +281,12 @@ class Classification(db.Model):
             db.session.commit()
 
 
-class Articles(db.Model):
+class Common:
+    @property
+    def show_create_time(self):
+        return deal_time(self.create_time)
+
+class Articles(db.Model, Common):
     __tablename_ = 'articles'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(30), nullable=False)
@@ -297,11 +299,8 @@ class Articles(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_articles = db.relationship('Classification', backref='class_articles')
 
-    def show_create_time(self):
-        return deal_time(self.create_time)
 
-
-class Questions(db.Model):
+class Questions(db.Model, Common):
     __tablename_ = 'questions'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(30), nullable=False)
@@ -314,11 +313,8 @@ class Questions(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classification.id'))
     class_questions = db.relationship('Classification', backref='class_questions')
 
-    def show_create_time(self):
-        return deal_time(self.create_time)
 
-
-class ArticleComments(db.Model):
+class ArticleComments(db.Model, Common):
     __tablename__ = 'article_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     body = db.Column(db.Text, nullable=False)
@@ -329,10 +325,8 @@ class ArticleComments(db.Model):
     article_id = db.Column(db.Integer, db.ForeignKey('articles.id'))
     article_comments = db.relationship('Articles', backref='comments')
 
-    def show_create_time(self):
-        return deal_time(self.create_time)
 
-class QuestionComments(db.Model):
+class QuestionComments(db.Model, Common):
     __tablename__ = 'question_comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     body = db.Column(db.Text, nullable=False)
@@ -343,8 +337,6 @@ class QuestionComments(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     question_comments = db.relationship('Questions', backref='comments')
 
-    def show_create_time(self):
-        return deal_time(self.create_time)
 
 class ArticlesCareTable(db.Model):
     __tablename__ = 'articles_care_table'

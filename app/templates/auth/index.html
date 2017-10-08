@@ -56,7 +56,7 @@
                             <div class="title-time">
                                 <a class="title-link"
                                    href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
-                                <h6 class="media-heading">{{ each.show_create_time() }}</h6>
+                                <h6 class="media-heading">{{ each.show_create_time }}</h6>
                             </div>
                         </div>
                         <pre class="my-pre">{{ each.body }}</pre>

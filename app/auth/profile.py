@@ -9,7 +9,7 @@ from time import sleep
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
-from ..common import response_messages
+from ..common import response_messages, MakeLoadDate
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
 
@@ -20,25 +20,12 @@ def index():
 
     articles = Articles.query.order_by(Articles.create_time.desc()).all()
     questions = Questions.query.order_by(Questions.create_time.desc()).all()
-    article_comments = {}
-    article_care_num = {}
-    for each in articles:
-        article_comments[each] = len(each.comments)
-        article_care_num[each] = len(each.care_article_users)
-    question_comments = {}
-    question_care_num = {}
-    for each in questions:
-        question_comments[each] = len(each.comments)
-        question_care_num[each] = len(each.care_question_users)
 
     context = {
         'articles': articles,
         'questions': questions,
-        'article_comments': article_comments,
-        'question_comments': question_comments,
-        'article_care_num': article_care_num,
-        'question_care_num': question_care_num
     }
+    context.update(MakeLoadDate.comments_and_care_num_dict(articles, questions))
 
     if current_user.is_authenticated:
         context['user'] = current_user
@@ -66,36 +53,9 @@ def index_search():
         for each in all_articles:
             if search_content != '':
                 if search_content.lower() in each.title.lower():
-                    author = each.author
-                    each_load_data = {
-                        'user_portrait_link': url_for('auth.user_index', username=author.username),
-                        'user_portrait_url': url_for('static',
-                                                     filename='images/user_portrait/' + author.username + '.png'),
-                        'title': each.title,
-                        'title_link': url_for('auth.detail_article', article_id=each.id),
-                        'create_time': str(each.show_create_time),
-                        'body': each.body,
-                        'comment_link': url_for('auth.detail_article', article_id=each.id),
-                        'comment_num': len(each.comments),
-                        'care_num': len(each.care_article_users)
-                    }
-
-                    re['data']['load_data'].append(each_load_data)
+                    re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
             else:
-                author = each.author
-                each_load_data = {
-                    'user_portrait_link': url_for('auth.user_index', username=author.username),
-                    'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
-                    'title': each.title,
-                    'title_link': url_for('auth.detail_article', article_id=each.id),
-                    'create_time': str(each.show_create_time),
-                    'body': each.body,
-                    'comment_link': url_for('auth.detail_article', article_id=each.id),
-                    'comment_num': len(each.comments),
-                    'care_num': len(each.care_article_users)
-                }
-
-                re['data']['load_data'].append(each_load_data)
+                re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
     else:
         if class_name == u'全部':
             all_questions = Questions.query.all()
@@ -105,36 +65,9 @@ def index_search():
         for each in all_questions:
             if search_content != '':
                 if search_content.lower() in each.title.lower():
-                    author = each.author
-                    each_load_data = {
-                        'user_portrait_link': url_for('auth.user_index', username=author.username),
-                        'user_portrait_url': url_for('static',
-                                                     filename='images/user_portrait/' + author.username + '.png'),
-                        'title': each.title,
-                        'title_link': url_for('auth.detail_question', question_id=each.id),
-                        'create_time': str(each.show_create_time),
-                        'body': each.body,
-                        'comment_link': url_for('auth.detail_question', question_id=each.id),
-                        'comment_num': len(each.comments),
-                        'care_num': len(each.care_question_users)
-                    }
-
-                    re['data']['load_data'].append(each_load_data)
+                    re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
             else:
-                author = each.author
-                each_load_data = {
-                    'user_portrait_link': url_for('auth.user_index', username=author.username),
-                    'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
-                    'title': each.title,
-                    'title_link': url_for('auth.detail_question', question_id=each.id),
-                    'create_time': str(each.show_create_time),
-                    'body': each.body,
-                    'comment_link': url_for('auth.detail_question', question_id=each.id),
-                    'comment_num': len(each.comments),
-                    'care_num': len(each.care_question_users)
-                }
-
-                re['data']['load_data'].append(each_load_data)
+                re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
 
     return jsonify(re)
 
@@ -148,25 +81,11 @@ def user_profile(username):
 
     user = User.query.filter_by(username=username).first()
     user_articles = user.user_articles
-    article_comments = {}
-    article_care_num = {}
-    for each in user_articles:
-        article_comments[each] = len(each.comments)
-        article_care_num[each] = len(each.care_article_users)
     user_questions = user.user_questions
-    question_comments = {}
-    question_care_num = {}
-    for each in user_questions:
-        question_comments[each] = len(each.comments)
-        question_care_num[each] = len(each.care_question_users)
 
-    context = {
-        'user': user,
-        'article_comments': article_comments,
-        'question_comments': question_comments,
-        'article_care_num': article_care_num,
-        'question_care_num': question_care_num
-    }
+    context = MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions)
+    context['user'] = user
+
     return render_template('auth/user_profile.html', **context)
 
 
@@ -185,17 +104,7 @@ def user_index(username):
 
     user = User.query.filter_by(username=username).first()
     user_articles = user.user_articles
-    article_comments = {}
-    article_care_num = {}
-    for each in user_articles:
-        article_comments[each] = len(each.comments)
-        article_care_num[each] = len(each.care_article_users)
     user_questions = user.user_questions
-    question_comments = {}
-    question_care_num = {}
-    for each in user_questions:
-        question_comments[each] = len(each.comments)
-        question_care_num[each] = len(each.care_question_users)
 
     if user is None:
         abort(404)
@@ -204,11 +113,9 @@ def user_index(username):
         'status': 0,  # user_navbar 状态标识
         'view_user': view_user,
         'user': user,
-        'article_comments': article_comments,
-        'question_comments': question_comments,
-        'article_care_num': article_care_num,
-        'question_care_num': question_care_num
     }
+    context.update(MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions))
+
     return render_template('auth/user_index.html', **context)
 
 
@@ -420,20 +327,11 @@ def add_article_comment(article_id):
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
-    reviewer = article_comment.reviewer
-    if reviewer.name == None:
-        name = reviewer.username
-    else:
-        name = reviewer.name
-
-    re['load_data'] = {
-        'user_portrait_link': url_for('auth.user_index', username=reviewer.username),
-        'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
-        'name': name,
-        'create_time': str(article_comment.show_create_time),
-        'body': body,
-        'comment_num': len(Articles.query.filter_by(id=article_id).first().comments)
-    }
+    all_comments = Articles.query.filter_by(id=article_id).first().comments
+    re['comment_num'] = len(all_comments)
+    re['load_data'] = []
+    for each in all_comments:
+        re['load_data'].append(MakeLoadDate.comment(each))
 
     return jsonify(re)
 
@@ -476,20 +374,11 @@ def add_question_comment(question_id):
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
-    reviewer = question_comment.reviewer
-    if reviewer.name == None:
-        name = reviewer.username
-    else:
-        name = reviewer.name
-
-    re['load_data'] = {
-        'user_portrait_link': url_for('auth.user_index', username=reviewer.username),
-        'user_portrait_url': url_for('static', filename='images/user_portrait/' + reviewer.username + '.png'),
-        'name': name,
-        'create_time': str(question_comment.show_create_time),
-        'body': body,
-        'comment_num': len(Questions.query.filter_by(id=question_id).first().comments)
-    }
+    all_comments = Questions.query.filter_by(id=question_id).first().comments
+    re['comment_num'] = len(all_comments)
+    re['load_data'] = []
+    for each in all_comments:
+        re['load_data'].append(MakeLoadDate.comment(each))
 
     return jsonify(re)
 
@@ -497,45 +386,17 @@ def add_question_comment(question_id):
 @auth.route('/screening_articles/<class_name>/<user_id>/')
 def screening_articles(class_name, user_id):
     author_id = int(user_id)
+    re = {'status': True, 'data': {'load_data': []}}
 
     if class_name == u'全部':
-        re = {'status': True, 'data': {'load_data': []}}
         articles = Articles.query.filter_by(author_id=user_id)
         for each in articles:
-            author = each.author
-            each_load_data = {
-                'user_portrait_url': url_for('static',
-                                             filename='images/user_portrait/' + author.username + '.png'),
-                'title': each.title,
-                'title_link': url_for('auth.detail_article', article_id=each.id),
-                'create_time': str(each.show_create_time),
-                'body': each.body,
-                'comment_link': url_for('auth.detail_article', article_id=each.id),
-                'comment_num': len(each.comments),
-                'care_num': len(each.care_article_users)
-            }
-
-            re['data']['load_data'].append(each_load_data)
-
-    if class_name != u'全部':
-        re = {'status': True, 'data': {'load_data': []}}
+            re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
+    else:
         articles = Classification.query.filter_by(class_name=class_name).first().class_articles
         for each in articles:
-            author = each.author
-            if author.id == author_id:
-                each_load_data = {
-                    'user_portrait_url': url_for('static',
-                                                 filename='images/user_portrait/' + author.username + '.png'),
-                    'title': each.title,
-                    'title_link': url_for('auth.detail_article', article_id=each.id),
-                    'create_time': str(each.show_create_time),
-                    'body': each.body,
-                    'comment_link': url_for('auth.detail_article', article_id=each.id),
-                    'comment_num': len(each.comments),
-                    'care_num': len(each.care_article_users)
-                }
-
-                re['data']['load_data'].append(each_load_data)
+            if each.author.id == author_id:
+                re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
 
     return jsonify(re)
 
@@ -543,45 +404,17 @@ def screening_articles(class_name, user_id):
 @auth.route('/screening_questions/<class_name>/<user_id>/')
 def screening_questions(class_name, user_id):
     author_id = int(user_id)
+    re = {'status': True, 'data': {'load_data': []}}
 
     if class_name == u'全部':
-        re = {'status': True, 'data': {'load_data': []}}
         questions = Questions.query.filter_by(author_id=user_id)
         for each in questions:
-            author = each.author
-            each_load_data = {
-                'user_portrait_url': url_for('static',
-                                             filename='images/user_portrait/' + author.username + '.png'),
-                'title': each.title,
-                'title_link': url_for('auth.detail_question', question_id=each.id),
-                'create_time': str(each.show_create_time),
-                'body': each.body,
-                'comment_link': url_for('auth.detail_question', question_id=each.id),
-                'comment_num': len(each.comments),
-                'care_num': len(each.care_question_users)
-            }
-
-            re['data']['load_data'].append(each_load_data)
-
-    if class_name != u'全部':
-        re = {'status': True, 'data': {'load_data': []}}
+            re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
+    else:
         questions = Classification.query.filter_by(class_name=class_name).first().class_questions
         for each in questions:
-            author = each.author
-            if author.id == author_id:
-                each_load_data = {
-                    'user_portrait_url': url_for('static',
-                                                 filename='images/user_portrait/' + author.username + '.png'),
-                    'title': each.title,
-                    'title_link': url_for('auth.detail_question', question_id=each.id),
-                    'create_time': str(each.show_create_time),
-                    'body': each.body,
-                    'comment_link': url_for('auth.detail_question', question_id=each.id),
-                    'comment_num': len(each.comments),
-                    'care_num': len(each.care_question_users)
-                }
-
-                re['data']['load_data'].append(each_load_data)
+            if each.author.id == author_id:
+                re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
 
     return jsonify(re)
 
@@ -710,39 +543,13 @@ def user_care_content():
     articles_id = current_user.care_articles
     for each_id in articles_id:
         each = Articles.query.filter_by(id=each_id.care_article_id).first()
-        author = each.author
-        each_load_data = {
-            'user_portrait_link': url_for('auth.user_index', username=author.username),
-            'user_portrait_url': url_for('static',
-                                         filename='images/user_portrait/' + author.username + '.png'),
-            'title': each.title,
-            'title_link': url_for('auth.detail_article', article_id=each.id),
-            'create_time': str(each.show_create_time),
-            'body': each.body,
-            'comment_link': url_for('auth.detail_article', article_id=each.id),
-            'comment_num': len(each.comments),
-            'care_num': len(each.care_article_users)
-        }
-        load_artilces.append(each_load_data)
+        load_artilces.append(MakeLoadDate.all_article_data(each))
 
     load_questions = []
     questions_id = current_user.care_questions
     for each_id in questions_id:
         each = Questions.query.filter_by(id=each_id.care_question_id).first()
-        author = each.author
-        each_load_data = {
-            'user_portrait_link': url_for('auth.user_index', username=author.username),
-            'user_portrait_url': url_for('static',
-                                         filename='images/user_portrait/' + author.username + '.png'),
-            'title': each.title,
-            'title_link': url_for('auth.detail_question', question_id=each.id),
-            'create_time': str(each.show_create_time),
-            'body': each.body,
-            'comment_link': url_for('auth.detail_question', question_id=each.id),
-            'comment_num': len(each.comments),
-            'care_num': len(each.care_question_users)
-        }
-        load_questions.append(each_load_data)
+        load_questions.append(MakeLoadDate.all_question_data(each))
 
     re = {'load_data': {
         'load_articles': load_artilces,

@@ -32,8 +32,11 @@ $('#add-article-comment').click(function () {
             clear_messages();
             show_message(data);
             load_data = data['load_data'];
-            load_comment($("#article-comments"), load_data);
-            $('#comment_num').text('评论（' + load_data['comment_num'] + '）');
+            $("#article-comments").html('');
+            for (i = 0; i < load_data.length; i ++ ) {
+                load_comment($("#article-comments"), load_data[i]);
+            }
+            $('#comment_num').text('评论（' + data['comment_num'] + '）');
         }
         else {
             if ('url' in data['data']) {

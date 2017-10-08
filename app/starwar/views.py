@@ -11,6 +11,5 @@ def index():
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
-        context['user'] = {}
-        context['user']['username'] = None
+        context['user'] = None
     return render_template('starwar/index.html', **context)

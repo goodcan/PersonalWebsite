@@ -14,8 +14,7 @@ def youdao_spider():
         if current_user.is_authenticated:
             context['user'] = current_user
         else:
-            context['user'] = {}
-            context['user']['username'] = None
+            context['user'] = None
         return render_template('YDSpider/index.html', **context)
 
     if request.method == 'POST':

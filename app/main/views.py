@@ -13,7 +13,7 @@ def index():
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
-        context['user'] = {}
-        context['user']['username'] = None
+        context['user'] = None
     context['carousel_imgs'] = ['1', '2', '3']
+
     return render_template('index.html', **context)

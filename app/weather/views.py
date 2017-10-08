@@ -13,8 +13,7 @@ def index():
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
-        context['user'] = {}
-        context['user']['username'] = None
+        context['user'] = None
     return render_template('weather/index.html', **context)
 
 @weather.route('/data.json/')

@@ -18,7 +18,14 @@ def deal_time(start_time):
         D_value = end_time - start_time
     else:
         D_value = end_time - end_time
+
     if D_value.days > 0:
+        if D_value.days >= 364:
+            return start_time.strftime('%Y-%m-%d')
+
+        if D_value.days > 5:
+            return start_time.strftime('%m-%d %H:%M')
+
         return str(D_value.days) + u'天前'
     else:
         s = D_value.seconds

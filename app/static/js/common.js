@@ -58,8 +58,8 @@ function clear_navbar_active() {
     $('#my-navbar-collapse li').removeClass('active');
 }
 
-// 主页加载文章和问答
-function index_load_content($object, data) {
+// 加载带用户连接的文章和问答
+function load_all_content($object, data) {
     var load_html = '<div class="media">' +
         '<div class="media-body">' +
         '<div class="media-heading">' +

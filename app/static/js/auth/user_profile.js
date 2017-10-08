@@ -329,7 +329,7 @@ $('#user-content-list [name=my-care]').click(function () {
        if (l != 0) {
            $("#my-care-articles").html('');
            for (i = 0; i < l; i ++) {
-               load_content($("#my-care-articles"), load_articles[i]);
+               load_all_content($("#my-care-articles"), load_articles[i]);
            }
        }
        load_questions = data['load_data']['load_questions'];
@@ -337,7 +337,7 @@ $('#user-content-list [name=my-care]').click(function () {
         if (l != 0) {
             $("#my-care-questions").html('');
             for (i = 0; i < l; i ++) {
-                load_content($("#my-care-questions"), load_questions[i]);
+                load_all_content($("#my-care-questions"), load_questions[i]);
             }
        }
    });

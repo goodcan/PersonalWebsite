@@ -712,6 +712,7 @@ def user_care_content():
         each = Articles.query.filter_by(id=each_id.care_article_id).first()
         author = each.author
         each_load_data = {
+            'user_portrait_link': url_for('auth.user_index', username=author.username),
             'user_portrait_url': url_for('static',
                                          filename='images/user_portrait/' + author.username + '.png'),
             'title': each.title,
@@ -730,6 +731,7 @@ def user_care_content():
         each = Questions.query.filter_by(id=each_id.care_question_id).first()
         author = each.author
         each_load_data = {
+            'user_portrait_link': url_for('auth.user_index', username=author.username),
             'user_portrait_url': url_for('static',
                                          filename='images/user_portrait/' + author.username + '.png'),
             'title': each.title,

@@ -88,7 +88,7 @@
                     <div id="profile-0-content">
                         <div id="user-articles">
                             {% for each in user.user_articles %}
-                                <div class="media">
+                                <div class="media" role="{{ each.id }}">
                                     <div class="media-body">
                                         <div class="media-heading">
                                             <img class="media-object pull-left user-little-portrait"
@@ -97,6 +97,11 @@
                                             <div class="title-time">
                                                 <a class="title-link"
                                                    href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                                                {% if add_delete_btn %}
+                                                    <a class="delete_link" title="删除">
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                {% endif %}
                                                 <h6 class="media-heading">{{ each.show_create_time }}</h6>
                                             </div>
                                         </div>
@@ -119,7 +124,7 @@
                         </div>
                         <div id="user-questions" class="hide-tag">
                             {% for each in user.user_questions %}
-                                <div class="media">
+                                <div class="media" role="{{ each.id }}">
                                     <div class="media-body">
                                         <div class="media-heading">
                                             <img class="media-object user-little-portrait pull-left"
@@ -128,6 +133,11 @@
                                             <div class="title-time">
                                                 <a class="title-link"
                                                    href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
+                                                {% if add_delete_btn %}
+                                                    <a class="delete_link" title="删除">
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                {% endif %}
                                                 <h6 class="media-heading">{{ each.show_create_time }}</h6>
                                             </div>
                                         </div>

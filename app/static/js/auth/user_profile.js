@@ -116,6 +116,9 @@ $('#btn-add-article').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_content($('#user-articles'), load_data);
+            $target = $('#user-articles .media:first');
+            $target.attr('role', load_data['article_id']);
+            $target.find('.title-link').after(add_delete_btn());
         }
         else {
             show_message(data);
@@ -153,6 +156,9 @@ $('#btn-add-question').click(function () {
             show_message(data);
             load_data = data['load_data'];
             load_content($('#user-questions'), load_data);
+            $target = $('#user-questions .media:first');
+            $target.attr('role', load_data['question_id']);
+            $target.find('.title-link').after(add_delete_btn());
         }
         else {
             show_message(data);
@@ -367,4 +373,22 @@ $('body').keydown(function () {
 
 $('.btn-cancel').click(function () {
     clear_messages();
+});
+
+
+
+$('#user-articles .delete_link').click(function () {
+    delete_content($(this), 'article');
+});
+
+$('#user-questions .delete_link').click(function () {
+    delete_content($(this), 'question');
+});
+
+// 为动态加载的删除按钮添加click事件
+$(document).on('click', '#user-articles .delete_link', function () {
+    delete_content($(this), 'article');
+});
+$(document).on('click', '#user-questions .delete_link', function () {
+    delete_content($(this), 'question');
 });

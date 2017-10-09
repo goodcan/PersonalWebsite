@@ -47,6 +47,7 @@ class MakeLoadDate:
         """不带头像连接"""
         author = obj.author
         load_data = {
+            'article_id': obj.id,
             'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
             'title': obj.title,
             'title_link': url_for('auth.detail_article', article_id=obj.id),
@@ -64,6 +65,7 @@ class MakeLoadDate:
         """不带头像连接"""
         author = obj.author
         load_data = {
+            'question_id': obj.id,
             'user_portrait_url': url_for('static', filename='images/user_portrait/' + author.username + '.png'),
             'title': obj.title,
             'title_link': url_for('auth.detail_question', question_id=obj.id),

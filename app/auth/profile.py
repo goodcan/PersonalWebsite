@@ -82,8 +82,12 @@ def user_profile(username):
     user_articles = user.user_articles
     user_questions = user.user_questions
 
-    context = MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions)
-    context['user'] = user
+    context = {
+        'user': user,
+        'add_delete_btn': True
+    }
+
+    context.update(MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions))
 
     return render_template('auth/user_profile.html', **context)
 
@@ -112,6 +116,7 @@ def user_index(username):
         'status': 0,  # user_navbar 状态标识
         'view_user': view_user,
         'user': user,
+        'add_delete_btn': False
     }
     context.update(MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions))
 
@@ -534,5 +539,41 @@ def user_care_content():
         'load_articles': load_artilces,
         'load_questions': load_questions
     }}
+
+    return jsonify(re)
+
+@auth.route('/delete_article/<article_id>/')
+@login_required
+def delete_article(article_id):
+    article = Articles.query.filter_by(id=article_id).first()
+
+    if current_user.id != article.author.id:
+        abort(403)
+
+    db.session.delete(article)
+    db.session.commit()
+
+    re = {'status': True, 'data': {}}
+    message_title = u'消息'
+    message_content = u'文章删除成功！'
+    response_messages(re, message_title, message_content)
+
+    return jsonify(re)
+
+@auth.route('/delete_question/<question_id>/')
+@login_required
+def delete_question(question_id):
+    question = Questions.query.filter_by(id=question_id).first()
+
+    if current_user.id != question.author.id:
+        abort(403)
+
+    db.session.delete(question)
+    db.session.commit()
+
+    re = {'status': True, 'data': {}}
+    message_title = u'消息'
+    message_content = u'问题删除成功！'
+    response_messages(re, message_title, message_content)
 
     return jsonify(re)

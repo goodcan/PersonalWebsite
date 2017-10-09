@@ -136,3 +136,23 @@ function load_comment($object, data) {
 
     $object.prepend(load_html);
 }
+
+
+function add_delete_btn() {
+    var add_html = '<a class="delete_link" title="删除">' +
+        '<span class="glyphicon glyphicon-trash"></span>' +
+        '</a>';
+
+    return add_html;
+}
+
+function delete_content($object, content) {
+    $target = $object.closest('.media');
+    article_id = $target.attr('role');
+    $.get('/auth/delete_' + content + '/' + article_id + '/', function (data) {
+        if (data['status']) {
+            $target.slideUp();
+            show_message(data);
+        }
+    });
+}

@@ -6,7 +6,7 @@
     color: #333;
     font-size: 18px;
     font-weight: bold;
-    line-height: 150%;
+    line-height: 180%;
     text-decoration: none !important;
 }
 
@@ -24,7 +24,7 @@
     border: 0.5px solid #a1a1a1;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
-. border-radius: 50 %;
+    border-radius: 50%;
 }
 
 .my-pre {
@@ -52,4 +52,16 @@ pre {
     word-wrap: break-word;      /* InternetExplorer5.5+ */
     white-space: -moz-pre-wrap; /* Mozilla,since1999 */
     white-space: -o-pre-wrap;   /* Opera7 */
+}
+
+.delete_link {
+    display: inline-flex;
+    float: right;
+    color: #ccc;
+    margin: 15px;
+    text-decoration: none !important;
+}
+
+.delete_link:hover {
+    color: #000;
 }

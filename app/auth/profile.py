@@ -150,16 +150,7 @@ def add_article():
         message_content = u'文章发布成功！'
         response_messages(re, message_title, message_content)
 
-        re['load_data'] = {
-            'user_portrait_url': url_for('static', filename='images/user_portrait/' + current_user.username + '.png'),
-            'title': title,
-            'title_link': url_for('auth.detail_article', article_id=article.id),
-            'create_time': str(article.show_create_time),
-            'body': body,
-            'comment_link': url_for('auth.detail_article', article_id=article.id),
-            'comment_num': 0,
-            'care_num': 0
-        }
+        re['load_data'] = MakeLoadDate.some_article_data(article)
 
         return jsonify(re)
     else:
@@ -207,16 +198,7 @@ def add_question():
         message_content = u'提问成功！'
         response_messages(re, message_title, message_content)
 
-        re['load_data'] = {
-            'user_portrait_url': url_for('static', filename='images/user_portrait/' + current_user.username + '.png'),
-            'title': title,
-            'title_link': url_for('auth.detail_question', question_id=question.id),
-            'create_time': str(question.show_create_time),
-            'body': body,
-            'comment_link': url_for('auth.detail_question', question_id=question.id),
-            'comment_num': 0,
-            'care_num': 0
-        }
+        re['load_data'] = MakeLoadDate.some_question_data(question)
 
         return jsonify(re)
     else:

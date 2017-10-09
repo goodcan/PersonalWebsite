@@ -254,8 +254,7 @@ def detail_article(article_id):
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
-        context['user'] = {}
-        context['user']['username'] = None
+        context['user'] = None
 
     return render_template('auth/detail_article.html', **context)
 
@@ -282,8 +281,7 @@ def detail_question(question_id):
     if current_user.is_authenticated:
         context['user'] = current_user
     else:
-        context['user'] = {}
-        context['user']['username'] = None
+        context['user'] = None
 
     return render_template('auth/detail_question.html', **context)
 

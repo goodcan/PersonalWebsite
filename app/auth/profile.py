@@ -545,12 +545,21 @@ def user_care_content():
 @auth.route('/delete_article/<article_id>/')
 @login_required
 def delete_article(article_id):
-    article = Articles.query.filter_by(id=article_id).first()
+    article = Articles.query.filter_by(id=article_id, author_id=current_user.id).first()
 
-    if current_user.id != article.author.id:
-        abort(403)
+    if not article:
+        abort(400)
 
+    about_comments = article.comments
+    if len(about_comments) != 0:
+        for each in about_comments:
+            db.session.delete(each)
+    about_care = article.care_article_users
+    if len(about_care) != 0:
+        for each in about_care:
+            db.session.delete(each)
     db.session.delete(article)
+
     db.session.commit()
 
     re = {'status': True, 'data': {}}
@@ -563,11 +572,19 @@ def delete_article(article_id):
 @auth.route('/delete_question/<question_id>/')
 @login_required
 def delete_question(question_id):
-    question = Questions.query.filter_by(id=question_id).first()
+    question = Questions.query.filter_by(id=question_id, author_id=current_user.id).first()
 
-    if current_user.id != question.author.id:
-        abort(403)
+    if not question:
+        return abort(400)
 
+    about_comments = question.comments
+    if len(about_comments) != 0:
+        for each in about_comments:
+            db.session.delete(each)
+    about_care = question.care_question_users
+    if len(about_care) != 0:
+        for each in about_care:
+            db.session.delete(each)
     db.session.delete(question)
     db.session.commit()
 

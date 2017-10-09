@@ -2,32 +2,40 @@
  * Created by admin on 2017/9/9.
  */
 
+function show_login_form() {
+    $('#login-form-only').show();
+    $('#register-form-only').hide();
+}
+
+function show_register_form() {
+    $('#login-form-only').hide();
+    $('#register-form-only').show();
+}
+
 if ($('.title-active').text() == '登录') {
-    $('#login-form').show();
-    $('#register-form').hide();
+    show_login_form();
 }
 else if ($('.title-active').text() == '注册') {
-    $('#login-form').hide();
-    $('#register-form').show();
+    show_register_form();
 }
+
+clear_navbar_active();
 
 $('.login-title').click(function () {
     $(this).addClass('title-active');
     $(this).siblings().removeClass('title-active');
-    $('#login-form').show();
-    $('#register-form').hide();
-    clear_prev_form();
+    show_login_form();
+    clear_prev_form_only();
 });
 
 $('.register-title').click(function () {
     $(this).addClass('title-active');
     $(this).siblings().removeClass('title-active');
-    $('#login-form').hide();
-    $('#register-form').show();
-    clear_prev_form();
+    show_register_form();
+    clear_prev_form_only();
 });
 
-$('#btn-login').click(function () {
+$('#btn-login-only').click(function () {
     // 生成csrf令牌
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 
@@ -43,8 +51,8 @@ $('#btn-login').click(function () {
         },
         data: JSON.stringify({
             'data': {
-                'username': $('#usernameL').val(),
-                'password': $('#passwordL').val(),
+                'username': $('#usernameLO').val(),
+                'password': $('#passwordLO').val(),
                 'remember_me': $("#remember_me").is(':checked')
             },
         }),
@@ -58,7 +66,7 @@ $('#btn-login').click(function () {
             else {
                 errors = data['data'];
                 if ('username' in errors || 'telephone' in errors) {
-                    $usernameL = $('#usernameL');
+                    $usernameL = $('#usernameLO');
                     if (errors['username'] != null) {
                         user_errors = errors['username']
                     }
@@ -68,17 +76,17 @@ $('#btn-login').click(function () {
                     show_tag_errors($usernameL, user_errors)
                 }
                 else {
-                    $usernameL = $('#usernameL');
+                    $usernameL = $('#usernameLO');
                     clear_one_tag($usernameL);
                 }
 
                 if ('password' in errors) {
-                    $passwordL = $('#passwordL');
+                    $passwordL = $('#passwordLO');
                     pwd_errors = errors['password']
                     show_tag_errors($passwordL, pwd_errors)
                 }
                 else {
-                    $passwordL = $('#passwordL');
+                    $passwordL = $('#passwordLO');
                     clear_one_tag($passwordL);
                 }
             }
@@ -88,7 +96,7 @@ $('#btn-login').click(function () {
     });
 });
 
-$('#btn-register').click(function () {
+$('#btn-register-only').click(function () {
     // 生成csrf令牌
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 
@@ -104,11 +112,11 @@ $('#btn-register').click(function () {
         },
         data: JSON.stringify({
             'data': {
-                'username': $('#usernameR').val(),
-                'telephone': $('#telephoneR').val(),
-                'email': $('#emailR').val(),
-                'password1': $('#passwordR1').val(),
-                'password2': $('#passwordR2').val(),
+                'username': $('#usernameRO').val(),
+                'telephone': $('#telephoneRO').val(),
+                'email': $('#emailRO').val(),
+                'password1': $('#passwordR1O').val(),
+                'password2': $('#passwordR2O').val(),
             },
         }),
         dataType: 'json',
@@ -117,61 +125,60 @@ $('#btn-register').click(function () {
         if (data['status'] == true) {
             $('.login-title').addClass('title-active');
             $('.login-title').siblings().removeClass('title-active');
-            $('#login-form').show();
-            $('#register-form').hide();
-            clear_prev_form();
+            show_login_form();
+            clear_prev_form_only();
             // alert(data['data']['confirm'])
             show_message(data);
         }
         else {
             errors = data['data'];
             if ('username' in errors) {
-                $usernameR = $('#usernameR');
+                $usernameR = $('#usernameRO');
                 err = errors['username']
                 show_tag_errors($usernameR, err)
             }
             else {
-                $usernameR = $('#usernameR');
+                $usernameR = $('#usernameRO');
                 clear_one_tag($usernameR);
             }
 
             if ('telephone' in errors) {
-                $telephoneR = $('#telephoneR');
+                $telephoneR = $('#telephoneRO');
                 err = errors['telephone']
                 show_tag_errors($telephoneR, err)
             }
             else {
-                $telephoneR = $('#telephoneR');
+                $telephoneR = $('#telephoneRO');
                 clear_one_tag($telephoneR);
             }
 
             if ('email' in errors) {
-                $emailR = $('#emailR');
+                $emailR = $('#emailRO');
                 err = errors['email']
                 show_tag_errors($emailR, err)
             }
             else {
-                $emailR = $('#emailR');
+                $emailR = $('#emailRO');
                 clear_one_tag($emailR);
             }
 
             if ('password1' in errors) {
-                $passwordR1 = $('#passwordR1');
+                $passwordR1 = $('#passwordR1O');
                 err = errors['password1']
                 show_tag_errors($passwordR1, err)
             }
             else {
-                $passwordR1 = $('#passwordR1');
+                $passwordR1 = $('#passwordR1O');
                 clear_one_tag($passwordR1);
             }
 
             if ('password2' in errors) {
-                $passwordR2 = $('#passwordR2');
+                $passwordR2 = $('#passwordR2O');
                 err = errors['password2']
                 show_tag_errors($passwordR2, err)
             }
             else {
-                $passwordR2 = $('#passwordR2');
+                $passwordR2 = $('#passwordR2O');
                 clear_one_tag($passwordR2);
             }
         }
@@ -184,12 +191,12 @@ $('#btn-register').click(function () {
 $('body').keydown(function () {
     // enter的键值为13
     if (event.keyCode == '13') {
-        if ($('#login-form').is(':visible')) {
-            $('#btn-login').click();
+        if ($('#login-form-only').is(':visible')) {
+            $('#btn-login-only').click();
         }
 
-        if ($('#register-form').is(':visible')) {
-            $('#btn-register').click();
+        if ($('#register-form-only').is(':visible')) {
+            $('#btn-register-only').click();
         }
     }
 });

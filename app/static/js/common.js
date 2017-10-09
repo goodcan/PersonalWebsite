@@ -46,6 +46,13 @@ function clear_prev_form() {
     clear_prompting();
 }
 
+// 主登录界面 清理前一个表单
+function clear_prev_form_only() {
+    $('#login-form-only .form-control').val('');
+    $('#register-form-only .form-control').val('');
+    clear_prompting();
+}
+
 // 弹框提示信息
 function show_message(data) {
     $('#my-message-Modal').modal('show');

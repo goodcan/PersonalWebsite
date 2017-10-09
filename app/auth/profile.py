@@ -44,29 +44,19 @@ def index_search():
     print class_name, search_content
 
     if project_name == u'文章':
-        if class_name == u'全部':
-            all_articles = Articles.query.all()
-        else:
-            all_articles = Articles.query.filter_by(class_id=CLASSIFICATION[class_name]).all()
+        all_articles = Articles.query.filter(
+            Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%'))
 
         for each in all_articles:
-            if search_content != '':
-                if search_content.lower() in each.title.lower():
-                    re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-            else:
-                re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+            re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
     else:
-        if class_name == u'全部':
-            all_questions = Questions.query.all()
-        else:
-            all_questions = Questions.query.filter_by(class_id=CLASSIFICATION[class_name]).all()
+        all_questions = Questions.query.filter(
+            Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%'))
 
         for each in all_questions:
-            if search_content != '':
-                if search_content.lower() in each.title.lower():
-                    re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-            else:
-                re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+            re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
 
     return jsonify(re)
 
@@ -542,6 +532,7 @@ def user_care_content():
 
     return jsonify(re)
 
+
 @auth.route('/delete_article/<article_id>/')
 @login_required
 def delete_article(article_id):
@@ -568,6 +559,7 @@ def delete_article(article_id):
     response_messages(re, message_title, message_content)
 
     return jsonify(re)
+
 
 @auth.route('/delete_question/<question_id>/')
 @login_required

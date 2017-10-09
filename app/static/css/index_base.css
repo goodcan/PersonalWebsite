@@ -53,21 +53,21 @@ body {
 }
 
 #my-login-Modal .my-modal-dialog {
-    top: 25%;
+    top: 180px;
     width: 350px;
     margin-left: auto;
     margin-right: auto;
 }
 
 #my-register-Modal .my-modal-dialog {
-    top: 15%;
+    top: 80px;
     width: 350px;
     margin-left: auto;
     margin-right: auto;
 }
 
 #my-message-Modal .my-modal-dialog {
-    top: 25%;
+    top: 200px;
     width: 350px;
     margin-left: auto;
     margin-right: auto;

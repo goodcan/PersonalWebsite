@@ -65,8 +65,7 @@ function clear_navbar_active() {
     $('#my-navbar-collapse li').removeClass('active');
 }
 
-// 加载带用户连接的文章和问答
-function load_all_content($object, data) {
+function make_all_load_content(data) {
     var load_html = '<div class="media">' +
         '<div class="media-body">' +
         '<div class="media-heading">' +
@@ -90,11 +89,10 @@ function load_all_content($object, data) {
         '<hr>' +
         '</div>';
 
-    $object.prepend(load_html);
+    return load_html;
 }
 
-// 用户主页加载文章和问答
-function load_content($object, data) {
+function make_load_content(data) {
     var load_html = '<div class="media">' +
         '<div class="media-body">' +
         '<div class="media-heading">' +
@@ -116,11 +114,10 @@ function load_content($object, data) {
         '<hr>' +
         '</div>';
 
-    $object.prepend(load_html);
+    return load_html;
 }
 
-// 加载文章和问答的评论
-function load_comment($object, data) {
+function make_load_comment(data) {
     var load_html = '<div class="media">' +
         '<div class="media-left">' +
         '<a href="' + data['user_portrait_link'] + '">' +
@@ -141,9 +138,44 @@ function load_comment($object, data) {
         '<hr>' +
         '</div>';
 
+    return load_html;
+}
+
+// 所在元素开始处加载带用户连接的文章和问答
+function load_all_content_prepend($object, data) {
+    load_html = make_all_load_content(data);
     $object.prepend(load_html);
 }
 
+// 所在元素结尾处加载带用户连接的文章和问答
+function load_all_content_append($object, data) {
+    load_html = make_all_load_content(data);
+    $object.append(load_html);
+}
+
+// 开始处用户主页加载文章和问答
+function load_content_prepend($object, data) {
+    load_html = make_load_content(data);
+    $object.prepend(load_html);
+}
+
+// 结尾处用户主页加载文章和问答
+function load_content_append($object, data) {
+    load_html = make_load_content(data);
+    $object.append(load_html);
+}
+
+// 开始处加载文章和问答的评论
+function load_comment_prepend($object, data) {
+    load_html = make_load_comment(data);
+    $object.prepend(load_html);
+}
+
+// 结尾处加载文章和问答的评论
+function load_comment_append($object, data) {
+    load_html = make_load_comment(data);
+    $object.append(load_html);
+}
 
 function add_delete_btn() {
     var add_html = '<a class="delete_link" title="删除">' +

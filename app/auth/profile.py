@@ -18,9 +18,10 @@ from ..models import User, Articles, Questions, Classification, ArticleComments,
 def index():
     context = {}
 
-    articles = Articles.query.order_by(Articles.create_time.desc()).all()
-    questions = Questions.query.order_by(Questions.create_time.desc()).all()
-
+    g.A_pagination = Articles.query.order_by(Articles.create_time.desc()).paginate(1, per_page=10)
+    g.Q_pagination = Questions.query.order_by(Questions.create_time.desc()).paginate(1, per_page=10)
+    articles = g.A_pagination.items
+    questions = g.Q_pagination.items
     context = {
         'articles': articles,
         'questions': questions,
@@ -44,18 +45,26 @@ def index_search():
     print class_name, search_content
 
     if project_name == u'文章':
-        all_articles = Articles.query.filter(
+        g.A_pagination = Articles.query.filter(
             Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%'))
+            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+        ).order_by(Articles.create_time.desc()).paginate(1, per_page=10)
+        show_articles = g.A_pagination.items
 
-        for each in all_articles:
+        print g.A_pagination.pages
+
+        for each in show_articles:
             re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
     else:
-        all_questions = Questions.query.filter(
+        g.Q_pagination = Questions.query.filter(
             Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%'))
+            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+        ).order_by(Questions.create_time.desc()).paginate(1, per_page=10)
+        show_questions = g.Q_pagination.items
 
-        for each in all_questions:
+        print g.Q_pagination.pages
+
+        for each in show_questions:
             re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
 
     return jsonify(re)
@@ -586,3 +595,9 @@ def delete_question(question_id):
     response_messages(re, message_title, message_content)
 
     return jsonify(re)
+
+
+@auth.route('/article_pagination/<page_num>')
+def show_article_pagination(page_num):
+
+    pass

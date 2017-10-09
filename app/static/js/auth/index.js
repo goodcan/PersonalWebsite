@@ -11,7 +11,7 @@ $('#btn-search').click(function () {
             load_data = data['data']['load_data'];
             l = load_data.length;
             for (i = 0; i < l; i++) {
-                load_all_content($('#all-articles'), load_data[i]);
+                load_all_content_append($('#all-articles'), load_data[i]);
             }
     });
 });

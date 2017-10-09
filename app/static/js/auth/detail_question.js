@@ -34,7 +34,7 @@ $('#add-question-comment').click(function () {
             load_data = data['load_data'];
             $('#question-comments').html('');
             for (i = 0; i < load_data.length; i++) {
-                load_comment($('#question-comments'), load_data[i]);
+                load_comment_prepend($('#question-comments'), load_data[i]);
             }
             $('#comment_num').text('评论（' + data['comment_num'] + '）');
         }

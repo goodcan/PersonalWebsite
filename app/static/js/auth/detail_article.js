@@ -33,7 +33,7 @@ $('#add-article-comment').click(function () {
             show_message(data);
             load_data = data['load_data'];
             $("#article-comments").html('');
-            for (i = 0; i < load_data.length; i ++ ) {
+            for (i = 0; i < load_data.length; i++) {
                 load_comment($("#article-comments"), load_data[i]);
             }
             $('#comment_num').text('评论（' + data['comment_num'] + '）');
@@ -99,7 +99,9 @@ $("#article-care").click(function () {
 
 $('body').keydown(function () {
     if (event.keyCode == '13') {
-        if ($('#add-article-comment').is(':visible') && $('#btn-login').is(':hidden')) {
+        if ($('#add-article-comment').is(':visible')
+            && $('#btn-login').is(':hidden')
+            && $('#btn-register').is(':hidden')) {
             $('#add-article-comment').click();
         }
     }

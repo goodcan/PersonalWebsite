@@ -8,7 +8,7 @@
 
 .login-container {
     display: block;
-    margin: 10% auto 0 auto;
+    margin: 20% auto 0 auto;
     width: 300px;
     padding: 15px;
     border: 1px solid #337ab7;
@@ -33,11 +33,4 @@
 .title-active {
     color: #337ab7;
     border-bottom: 2px solid #337ab7;
-}
-
-#my-message-Modal .my-modal-dialog{
-    top: 25%;
-    width: 350px;
-    margin-left: auto;
-    margin-right: auto;
 }

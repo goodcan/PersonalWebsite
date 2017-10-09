@@ -23,8 +23,8 @@
     width: 40px !important;
     border: 0.5px solid #a1a1a1;
     -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;.
-    border-radius: 50%;
+    -moz-border-radius: 50%;
+. border-radius: 50 %;
 }
 
 .my-pre {
@@ -39,10 +39,17 @@
     width: 45px;
     border: 0.5px solid #a1a1a1;
     -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;.
+    -moz-border-radius: 50%;
     border-radius: 50%;
 }
 
 .title-time {
     margin-left: 55px;
+}
+
+pre {
+    white-space: pre-wrap;      /* css-3 */
+    word-wrap: break-word;      /* InternetExplorer5.5+ */
+    white-space: -moz-pre-wrap; /* Mozilla,since1999 */
+    white-space: -o-pre-wrap;   /* Opera7 */
 }

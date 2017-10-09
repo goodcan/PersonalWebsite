@@ -42,7 +42,7 @@
             <div class="col-md-6">
                 <div class="thumbnail my-project-thumbnail">
                     <a href="{{ url_for('auth.index') }}">
-                        <img class="img-thumbnail" src="holder.js/100%x200" alt="...">
+                        <img class="img-thumbnail" src="{{ url_for('static', filename='images/project_0.png') }}" alt="...">
                     </a>
                     <div class="caption">
                         <h3>Thumbnail label</h3>
@@ -54,12 +54,13 @@
             </div>
             <div class="col-md-6">
                 <div id="youdao-project" class="thumbnail my-project-thumbnail">
-                    <a href="{{ url_for('trans.youdao_spider') }}"><img class="img-thumbnail" src="holder.js/100%x200"
-                                                                        alt="..."></a>
+                    <a href="{{ url_for('trans.youdao_spider') }}">
+                        <img class="img-thumbnail" src="{{ url_for('static', filename='images/project_1.png') }}" alt="...">
+                    </a>
                     <div class="caption">
                         <h3>我的翻译器</h3>
                         <p>
-                            分析有道翻译网页版的工作原理，编写爬虫模仿有道网页版加密处理需翻译的内容请求有道服务器，并分析有道服务器返回的响应信息获得最终的翻译结果，最后通过网页设计实现自己的翻译器。
+                            分析有道翻译网页版的工作原理，编写爬虫模仿有道网页版加密处理需翻译的内容请求有道服务器，并分析有道服务器返回的响应信息获得最终的翻译结果。
                         </p>
                     </div>
                 </div>
@@ -70,8 +71,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="thumbnail my-project-thumbnail">
-                    <a href="{{ url_for('starwar.index') }}"><img class="img-thumbnail" src="holder.js/100%x200"
-                                                                  alt="..."></a>
+                    <a href="{{ url_for('starwar.index') }}">
+                        <img class="img-thumbnail" src="{{ url_for('static', filename='images/project_2.png') }}" alt="...">
+                    </a>
                     <div class="caption">
                         <h3>Thumbnail label</h3>
                         <p>content of the first show!content of the first show!content of the first show!content of the
@@ -82,8 +84,9 @@
             </div>
             <div class="col-md-6">
                 <div class="thumbnail my-project-thumbnail">
-                    <a href="{{ url_for('weather.index') }}"><img class="img-thumbnail" src="holder.js/100%x200"
-                                                                  alt="..."></a>
+                    <a href="{{ url_for('weather.index') }}">
+                        <img class="img-thumbnail" src="{{ url_for('static', filename='images/project_3.png') }}" alt="...">
+                    </a>
                     <div class="caption">
                         <h3>Thumbnail label</h3>
                         <p>content of the first show!content of the first show!content of the first show!content of the

@@ -129,30 +129,42 @@ function delete_content($object, content) {
     });
 }
 
-function load_page_content(search_data) {
+function load_page_content(url, $object, search_data, fun) {
     var wh = $(window).height();
     var sh = $(window).scrollTop();
-    $('.load-page').each(function () {
+    $object.each(function () {
         $target = $(this);
+        var class_n = $target.attr('class');
         dh = $target.offset().top;
         if ((dh - sh) <= wh) {
-            $target.removeClass('load-page');
+            $target.removeClass(class_n);
             $target.after($target.prop('outerHTML'));
-            search_data['page'] = $target.attr('name'),
-                console.log($target.attr('name'));
-            $.get('/auth/index/search/', search_data, function (data) {
+            search_data['page'] = $target.attr('name');
+            console.log($target.attr('name'));
+            $.get(url, search_data, function (data) {
                 if (data['status']) {
                     load_data = data['data']['load_data'];
                     l = load_data.length;
-                    for (i = 0; i < l; i++) {
-                        load_all_content_append($target, load_data[i]);
+                    if (data['data']['same_user']) {
+                        for (i = 0; i < l; i++) {
+                            fun($target, load_data[i]);
+                            $add_delete = $object.find('.media').last();
+                            console.log(load_data[i]['id']);
+                            $add_delete.attr('role', load_data[i]['id']);
+                            $add_delete.find('.title-link').after(add_delete_btn());
+                        }
+                    }
+                    else {
+                        for (i = 0; i < l; i++) {
+                            fun($target, load_data[i]);
+                        }
                     }
                     $target.next()
                         .attr('name', data['data']['next_page'])
-                        .addClass('load-page');
+                        .addClass(class_n);
 
                     if (data['data']['next_page'] == null) {
-                        $target.next().removeClass('load-page')
+                        $target.next().removeClass(class_n)
                             .css({'text-align': 'center'})
                             .html('<h4>已加载全部内容</h4>');
                     }
@@ -165,7 +177,7 @@ function load_page_content(search_data) {
     });
 }
 
-function index_search($object, search_data) {
+function index_search($object, search_data, load_div) {
     $.get('/auth/index/search/', search_data, function (data) {
         $object.html('');
         if (data['status']) {
@@ -174,7 +186,7 @@ function index_search($object, search_data) {
             for (i = 0; i < l; i++) {
                 load_all_content_append($object, load_data[i]);
             }
-            $object.append(load_base_div);
+            $object.append(load_div);
         }
         else {
             $object.html('<h4 align="center">' + data['data']['message'] + '</h4>');

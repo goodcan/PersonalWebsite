@@ -16,7 +16,7 @@ $('#btn-search').click(function () {
         'class_name': $('#class-search-select').val(),
         'search_content': $('#search-content').val()
     };
-    index_search($('#all-articles'), search_data);
+    index_search($('#all-articles'), search_data, load_base_div);
 });
 
 $('#btn-refresh').click(function () {
@@ -27,9 +27,9 @@ $('#btn-refresh').click(function () {
         'class_name': $('#class-search-select').val(),
         'search_content': ''
     };
-    index_search($('#all-articles'), search_data);
+    index_search($('#all-articles'), search_data, load_base_div);
 });
 
 $(window).scroll(function () {
-    load_page_content(search_data);
+    load_page_content('/auth/index/search/', $('.load-page'), search_data, load_all_content_append);
 });

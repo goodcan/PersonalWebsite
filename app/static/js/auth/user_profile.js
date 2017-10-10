@@ -117,7 +117,7 @@ $('#btn-add-article').click(function () {
             load_data = data['load_data'];
             load_content_prepend($('#user-articles'), load_data);
             $target = $('#user-articles .media:first');
-            $target.attr('role', load_data['article_id']);
+            $target.attr('role', load_data['id']);
             $target.find('.title-link').after(add_delete_btn());
         }
         else {
@@ -157,7 +157,7 @@ $('#btn-add-question').click(function () {
             load_data = data['load_data'];
             load_content_prepend($('#user-questions'), load_data);
             $target = $('#user-questions .media:first');
-            $target.attr('role', load_data['question_id']);
+            $target.attr('role', load_data['id']);
             $target.find('.title-link').after(add_delete_btn());
         }
         else {
@@ -391,4 +391,20 @@ $(document).on('click', '#user-articles .delete_link', function () {
 });
 $(document).on('click', '#user-questions .delete_link', function () {
     delete_content($(this), 'question');
+});
+
+$(window).scroll(function () {
+   if ($('#user-articles').is(':visible')) {
+       var data = {
+           'user_id': $('#user-articles').attr('role')
+       };
+       load_page_content('/auth/user_load_aricle_page/', $('.user-load-A-page'), data, load_content_append);
+   }
+
+   if ($('#user-questions').is(':visible')) {
+       var data = {
+           'user_id': $('#user-articles').attr('role')
+       };
+       load_page_content('/auth/user_load_question_page/', $('.user-load-Q-page'), data, load_content_append);
+   }
 });

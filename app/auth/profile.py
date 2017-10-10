@@ -39,15 +39,9 @@ def index():
 def index_search():
     re = {'status': True, 'data': {'load_data': []}}
 
-    search_page = request.args.get('page')
-    print 'search page:', search_page
-    if search_page is None:
-        re['status'] = False
-        re['data']['message'] = u'已加载全部内容'
-        return jsonify(re)
-    else:
-        page = int(search_page)
+    print 'search page:', request.args.get('page')
 
+    page = int(request.args.get('page'))
     project_name = request.args.get('project_name')
     class_name = request.args.get('class_name')
     search_content = request.args.get('search_content')
@@ -110,8 +104,10 @@ def user_profile(username):
         return redirect(url_for('auth.login'))
 
     user = User.query.filter_by(username=username).first()
-    user_articles = user.user_articles
-    user_questions = user.user_questions
+    user_articles = Articles.query.filter_by(author_id=user.id) \
+        .order_by(Articles.create_time.desc()).paginate(1, 10).items
+    user_questions = Questions.query.filter_by(author_id=user.id) \
+        .order_by(Questions.create_time.desc()).paginate(1, 10).items
 
     context = {
         'user': user,
@@ -139,8 +135,10 @@ def user_index(username):
         view_user = None
 
     user = User.query.filter_by(username=username).first()
-    user_articles = user.user_articles
-    user_questions = user.user_questions
+    user_articles = Articles.query.filter_by(author_id=user.id) \
+        .order_by(Articles.create_time.desc()).paginate(1, 10).items
+    user_questions = Questions.query.filter_by(author_id=user.id) \
+        .order_by(Questions.create_time.desc()).paginate(1, 10).items
 
     if user is None:
         abort(404)
@@ -157,6 +155,81 @@ def user_index(username):
 
     return render_template('auth/user_index.html', **context)
 
+
+@auth.route('/user_load_aricle_page/')
+def user_load_aricle_page():
+    re = {'status': True, 'data': {'load_data': []}}
+
+    user_id = int(request.args.get('user_id'))
+    page = int(request.args.get('page'))
+
+    print 'load_page:' + request.args.get('page')
+
+    if current_user.is_authenticated and current_user.id == user_id:
+        re['data']['same_user'] = True
+    else:
+        re['data']['same_user'] = False
+
+    try:
+        A_pagination = Articles.query.filter_by(author_id=user_id) \
+            .order_by(Articles.create_time.desc()).paginate(page, 10)
+    except:
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
+        return jsonify(re)
+
+    show_articles = A_pagination.items
+    print u'当前页数:', A_pagination.page
+    print u'总页数:', A_pagination.pages
+
+    if not show_articles:
+        re['status'] = False
+        re['data']['message'] = u'没有相关问答'
+        return jsonify(re)
+
+    for each in show_articles:
+        re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
+    re['data']['next_page'] = A_pagination.next_num
+
+    return jsonify(re)
+
+
+@auth.route('/user_load_question_page/')
+def user_load_question_page():
+    re = {'status': True, 'data': {'load_data': []}}
+
+    user_id = int(request.args.get('user_id'))
+    page = int(request.args.get('page'))
+
+    print 'load_page:' + request.args.get('page')
+
+    if current_user.is_authenticated and current_user.id == user_id:
+        re['data']['same_user'] = True
+    else:
+        re['data']['same_user'] = False
+
+    try:
+        Q_pagination = Questions.query.filter_by(author_id=user_id) \
+            .order_by(Questions.create_time.desc()).paginate(page, 10)
+    except:
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
+        return jsonify(re)
+
+    show_articles = Q_pagination.items
+    print u'当前页数:', Q_pagination.page
+    print u'总页数:', Q_pagination.pages
+
+    if not show_articles:
+        re['status'] = False
+        re['data']['message'] = u'没有相关文章'
+        return jsonify(re)
+
+    for each in show_articles:
+        re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
+    re['data']['next_page'] = Q_pagination.next_num
+
+    return jsonify(re)
 
 @auth.route('/user_profile/add_article/', methods=['POST'])
 def add_article():

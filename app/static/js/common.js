@@ -64,3 +64,17 @@ function show_message(data) {
 function clear_navbar_active() {
     $('#my-navbar-collapse li').removeClass('active');
 }
+
+// btn-retop 功能函数
+$(window).scroll(function () {
+    var wh = $(window).height();
+    if ($(window).scrollTop() <= (wh + 100)) {
+        $('.btn-retop').fadeOut();
+    }
+    else {
+        $('.btn-retop').fadeIn();
+    }
+});
+$('.btn-retop').click(function () {
+    $(window).scrollTop(0);
+});

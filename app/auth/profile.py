@@ -18,10 +18,9 @@ from ..models import User, Articles, Questions, Classification, ArticleComments,
 def index():
     context = {}
 
-    g.A_pagination = Articles.query.order_by(Articles.create_time.desc()).paginate(1, per_page=10)
-    g.Q_pagination = Questions.query.order_by(Questions.create_time.desc()).paginate(1, per_page=10)
-    articles = g.A_pagination.items
-    questions = g.Q_pagination.items
+    articles = Articles.query.order_by(Articles.create_time.desc()).paginate(1, per_page=10).items
+    questions = Questions.query.order_by(Questions.create_time.desc()).paginate(1, per_page=10).items
+
     context = {
         'articles': articles,
         'questions': questions,
@@ -57,7 +56,7 @@ def index_search():
 
     if project_name == u'文章':
         try:
-            g.A_pagination = Articles.query.filter(
+            A_pagination = Articles.query.filter(
                 Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
                 Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
             ).order_by(Articles.create_time.desc()).paginate(page, per_page=10)
@@ -66,15 +65,20 @@ def index_search():
             re['data']['message'] = u'已加载全部内容'
             return jsonify(re)
 
-        show_articles = g.A_pagination.items
-        print u'总页数:', g.A_pagination.pages
+        show_articles = A_pagination.items
+        print u'总页数:', A_pagination.pages
+
+        if not show_articles:
+            re['status'] = False
+            re['data']['message'] = u'没有相关文章'
+            return jsonify(re)
 
         for each in show_articles:
             re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-        re['data']['next_page'] = g.A_pagination.next_num
+        re['data']['next_page'] = A_pagination.next_num
     else:
         try:
-            g.Q_pagination = Questions.query.filter(
+            Q_pagination = Questions.query.filter(
                 Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
                 Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
             ).order_by(Questions.create_time.desc()).paginate(page, per_page=10)
@@ -83,12 +87,17 @@ def index_search():
             re['data']['message'] = u'已加载全部内容'
             return jsonify(re)
 
-        show_questions = g.Q_pagination.items
-        print u'总页数:', g.Q_pagination.pages
+        show_questions = Q_pagination.items
+        print u'总页数:', Q_pagination.pages
+
+        if not show_questions:
+            re['status'] = False
+            re['data']['message'] = u'没有相关问答'
+            return jsonify(re)
 
         for each in show_questions:
             re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-        re['data']['next_page'] = g.Q_pagination.next_num
+        re['data']['next_page'] = Q_pagination.next_num
 
     return jsonify(re)
 

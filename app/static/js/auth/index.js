@@ -18,12 +18,19 @@ $('#btn-search').click(function () {
     };
     $.get('/auth/index/search/', search_data, function (data) {
         $('#all-articles').html('');
-        load_data = data['data']['load_data'];
-        l = load_data.length;
-        for (i = 0; i < l; i++) {
-            load_all_content_append($('#all-articles'), load_data[i]);
+        if (data['status']) {
+            load_data = data['data']['load_data'];
+            l = load_data.length;
+            for (i = 0; i < l; i++) {
+                load_all_content_append($('#all-articles'), load_data[i]);
+            }
+            $('#all-articles').append(load_base_div);
         }
-        $('#all-articles').append(load_base_div);
+        else {
+            $('#all-articles').css({'text-align': 'center'})
+                .html('<h4>' + data['data']['message'] + '</h4>');
+        }
+
     });
 });
 $(window).scroll(function () {

@@ -30,14 +30,9 @@ $('#btn-search').click(function () {
 $(window).scroll(function () {
     var wh = $(window).height();
     var sh = $(window).scrollTop();
-    // var dh = $('#all-articles hr:last').offset().top;
     $('.load-page').each(function () {
         $target = $(this);
         dh = $target.offset().top;
-        console.log(sh);
-        console.log(dh);
-        console.log(wh);
-        console.log(dh - sh);
         if ((dh - sh) <= wh) {
             $target.removeClass('load-page');
             $target.after($target.prop('outerHTML'));

@@ -1,4 +1,3 @@
-
 function make_all_load_content(data) {
     var load_html = '<div class="media">' +
         '<div class="media-body">' +
@@ -126,6 +125,43 @@ function delete_content($object, content) {
         if (data['status']) {
             $target.slideUp();
             show_message(data);
+        }
+    });
+}
+
+function load_page_content(search_data) {
+    var wh = $(window).height();
+    var sh = $(window).scrollTop();
+    $('.load-page').each(function () {
+        $target = $(this);
+        dh = $target.offset().top;
+        if ((dh - sh) <= wh) {
+            $target.removeClass('load-page');
+            $target.after($target.prop('outerHTML'));
+            search_data['page'] = $target.attr('name'),
+                console.log($target.attr('name'));
+            $.get('/auth/index/search/', search_data, function (data) {
+                if (data['status']) {
+                    load_data = data['data']['load_data'];
+                    l = load_data.length;
+                    for (i = 0; i < l; i++) {
+                        load_all_content_append($target, load_data[i]);
+                    }
+                    $target.next()
+                        .attr('name', data['data']['next_page'])
+                        .addClass('load-page');
+
+                    if (data['data']['next_page'] == null) {
+                        $target.next().removeClass('load-page')
+                            .css({'text-align': 'center'})
+                            .html('<h4>已加载全部内容</h4>');
+                    }
+                }
+                else {
+                    $target.css({'text-align': 'center'})
+                        .html('<h4>' + data['data']['message'] + '</h4>');
+                }
+            });
         }
     });
 }

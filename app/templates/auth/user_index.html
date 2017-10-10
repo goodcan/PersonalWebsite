@@ -167,5 +167,6 @@
 {% endblock %}
 
 {% block new_js %}
+    <script src="{{ url_for('static', filename='js/auth/common.js') }}"></script>
     <script src="{{ url_for('static', filename='js/auth/user_profile.js') }}"></script>
 {% endblock %}

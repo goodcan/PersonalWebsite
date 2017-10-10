@@ -115,7 +115,9 @@ def user_profile(username):
 
     context = {
         'user': user,
-        'add_delete_btn': True
+        'add_delete_btn': True,
+        'user_articles': user_articles,
+        'user_questions': user_questions
     }
 
     context.update(MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions))
@@ -147,7 +149,9 @@ def user_index(username):
         'status': 0,  # user_navbar 状态标识
         'view_user': view_user,
         'user': user,
-        'add_delete_btn': False
+        'add_delete_btn': False,
+        'user_articles': user_articles,
+        'user_questions': user_questions
     }
     context.update(MakeLoadDate.comments_and_care_num_dict(user_articles, user_questions))
 

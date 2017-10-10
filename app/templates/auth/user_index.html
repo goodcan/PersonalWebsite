@@ -87,7 +87,7 @@
                     </div>
                     <div id="profile-0-content">
                         <div id="user-articles">
-                            {% for each in user.user_articles %}
+                            {% for each in user_articles %}
                                 <div class="media" role="{{ each.id }}">
                                     <div class="media-body">
                                         <div class="media-heading">
@@ -123,7 +123,7 @@
                             {% endfor %}
                         </div>
                         <div id="user-questions" class="hide-tag">
-                            {% for each in user.user_questions %}
+                            {% for each in user_questions %}
                                 <div class="media" role="{{ each.id }}">
                                     <div class="media-body">
                                         <div class="media-heading">

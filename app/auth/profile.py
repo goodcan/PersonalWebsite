@@ -38,34 +38,57 @@ def index():
 
 @auth.route('/index/search/')
 def index_search():
-    re = {'data': {'load_data': []}}
+    re = {'status': True, 'data': {'load_data': []}}
+
+    search_page = request.args.get('page')
+    print 'search page:', search_page
+    if search_page is None:
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
+        return jsonify(re)
+    else:
+        page = int(search_page)
+
     project_name = request.args.get('project_name')
     class_name = request.args.get('class_name')
     search_content = request.args.get('search_content')
-    print class_name, search_content
+
+    print project_name, class_name, search_content
 
     if project_name == u'文章':
-        g.A_pagination = Articles.query.filter(
-            Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-        ).order_by(Articles.create_time.desc()).paginate(1, per_page=10)
-        show_articles = g.A_pagination.items
+        try:
+            g.A_pagination = Articles.query.filter(
+                Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+                Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+            ).order_by(Articles.create_time.desc()).paginate(page, per_page=10)
+        except:
+            re['status'] = False
+            re['data']['message'] = u'已加载全部内容'
+            return jsonify(re)
 
-        print g.A_pagination.pages
+        show_articles = g.A_pagination.items
+        print u'总页数:', g.A_pagination.pages
 
         for each in show_articles:
             re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+        re['data']['next_page'] = g.A_pagination.next_num
     else:
-        g.Q_pagination = Questions.query.filter(
-            Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-        ).order_by(Questions.create_time.desc()).paginate(1, per_page=10)
-        show_questions = g.Q_pagination.items
+        try:
+            g.Q_pagination = Questions.query.filter(
+                Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+                Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+            ).order_by(Questions.create_time.desc()).paginate(page, per_page=10)
+        except:
+            re['status'] = False
+            re['data']['message'] = u'已加载全部内容'
+            return jsonify(re)
 
-        print g.Q_pagination.pages
+        show_questions = g.Q_pagination.items
+        print u'总页数:', g.Q_pagination.pages
 
         for each in show_questions:
             re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+        re['data']['next_page'] = g.Q_pagination.next_num
 
     return jsonify(re)
 
@@ -595,9 +618,3 @@ def delete_question(question_id):
     response_messages(re, message_title, message_content)
 
     return jsonify(re)
-
-
-@auth.route('/article_pagination/<page_num>')
-def show_article_pagination(page_num):
-
-    pass

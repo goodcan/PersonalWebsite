@@ -16,22 +16,7 @@ $('#btn-search').click(function () {
         'class_name': $('#class-search-select').val(),
         'search_content': $('#search-content').val()
     };
-    $.get('/auth/index/search/', search_data, function (data) {
-        $('#all-articles').html('');
-        if (data['status']) {
-            load_data = data['data']['load_data'];
-            l = load_data.length;
-            for (i = 0; i < l; i++) {
-                load_all_content_append($('#all-articles'), load_data[i]);
-            }
-            $('#all-articles').append(load_base_div);
-        }
-        else {
-            $('#all-articles').css({'text-align': 'center'})
-                .html('<h4>' + data['data']['message'] + '</h4>');
-        }
-
-    });
+    index_search($('#all-articles'), search_data);
 });
 
 $('#btn-refresh').click(function () {
@@ -42,22 +27,7 @@ $('#btn-refresh').click(function () {
         'class_name': $('#class-search-select').val(),
         'search_content': ''
     };
-    $.get('/auth/index/search/', search_data, function (data) {
-        $('#all-articles').html('');
-        if (data['status']) {
-            load_data = data['data']['load_data'];
-            l = load_data.length;
-            for (i = 0; i < l; i++) {
-                load_all_content_append($('#all-articles'), load_data[i]);
-            }
-            $('#all-articles').append(load_base_div);
-        }
-        else {
-            $('#all-articles').css({'text-align': 'center'})
-                .html('<h4>' + data['data']['message'] + '</h4>');
-        }
-
-    });
+    index_search($('#all-articles'), search_data);
 });
 
 $(window).scroll(function () {

@@ -158,10 +158,26 @@ function load_page_content(search_data) {
                     }
                 }
                 else {
-                    $target.css({'text-align': 'center'})
-                        .html('<h4>' + data['data']['message'] + '</h4>');
+                    $target.html('<h4 align="center">' + data['data']['message'] + '</h4>');
                 }
             });
+        }
+    });
+}
+
+function index_search($object, search_data) {
+    $.get('/auth/index/search/', search_data, function (data) {
+        $object.html('');
+        if (data['status']) {
+            load_data = data['data']['load_data'];
+            l = load_data.length;
+            for (i = 0; i < l; i++) {
+                load_all_content_append($object, load_data[i]);
+            }
+            $object.append(load_base_div);
+        }
+        else {
+            $object.html('<h4 align="center">' + data['data']['message'] + '</h4>');
         }
     });
 }

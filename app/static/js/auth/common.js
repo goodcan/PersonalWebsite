@@ -177,14 +177,25 @@ function load_page_content(url, $object, search_data, fun) {
     });
 }
 
-function index_search($object, search_data, load_div) {
-    $.get('/auth/index/search/', search_data, function (data) {
+function search(url, $object, search_data, fun, load_div) {
+    $.get(url, search_data, function (data) {
         $object.html('');
         if (data['status']) {
             load_data = data['data']['load_data'];
             l = load_data.length;
-            for (i = 0; i < l; i++) {
-                load_all_content_append($object, load_data[i]);
+            if (data['data']['same_user']) {
+                for (i = 0; i < l; i++) {
+                    fun($object, load_data[i]);
+                    $add_delete = $object.find('.media').last();
+                    console.log(load_data[i]['id']);
+                    $add_delete.attr('role', load_data[i]['id']);
+                    $add_delete.find('.title-link').after(add_delete_btn());
+                }
+            }
+            else {
+                for (i = 0; i < l; i++) {
+                    fun($object, load_data[i]);
+                }
             }
             $object.append(load_div);
         }

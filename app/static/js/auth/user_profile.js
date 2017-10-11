@@ -1,5 +1,15 @@
 // 清除首页active和修改注销的跳转路径
 // $('#my-navbar-collapse li').removeClass('active');
+
+var LOAD_DATA = {
+    'page': '1',
+    'user_id': $('#user-index-list').attr('role'),
+    'class_name': $('#user-index-list .active').text()
+};
+
+var load_A_base_div = $('.user-load-A-page').prop('outerHTML');
+var load_Q_base_div = $('.user-load-Q-page').prop('outerHTML');
+
 clear_navbar_active();
 $('#logout-user-profile').click(function () {
     $.get('/auth/logout/');
@@ -46,26 +56,10 @@ $('#user-index-list .list-group-item').click(function () {
     $('#user-index-list .list-group-item').removeClass('active');
     $click_tag.addClass('active');
     $('#' + $click_tag.attr('name')).show().siblings().hide();
-    $.get('/auth/screening_articles/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
-        function (data) {
-            console.log(data);
-            $('#user-articles').html('');
-            load_data = data['data']['load_data'];
-            l = load_data.length;
-            for (i = 0; i < l; i++) {
-                load_content_prepend($('#user-articles'), load_data[i]);
-            }
-        });
-    $.get('/auth/screening_questions/' + $click_tag.text() + '/' + $('#user-index-list').attr('role') + '/',
-        function (data) {
-            console.log(data);
-            $('#user-questions').html('');
-            load_data = data['data']['load_data'];
-            l = load_data.length;
-            for (i = 0; i < l; i++) {
-                load_content_prepend($('#user-questions'), load_data[i]);
-            }
-        });
+    LOAD_DATA['page'] = '1';
+    LOAD_DATA['class_name'] = $click_tag.text();
+    search('/auth/screening_articles/', $('#user-articles'), LOAD_DATA, load_content_append, load_A_base_div);
+    search('/auth/screening_questions/', $('#user-questions'), LOAD_DATA, load_content_append, load_Q_base_div);
 });
 
 // 用户中心选项卡
@@ -395,16 +389,10 @@ $(document).on('click', '#user-questions .delete_link', function () {
 
 $(window).scroll(function () {
    if ($('#user-articles').is(':visible')) {
-       var data = {
-           'user_id': $('#user-articles').attr('role')
-       };
-       load_page_content('/auth/user_load_aricle_page/', $('.user-load-A-page'), data, load_content_append);
+       load_page_content('/auth/screening_articles/', $('.user-load-A-page'), LOAD_DATA, load_content_append);
    }
 
    if ($('#user-questions').is(':visible')) {
-       var data = {
-           'user_id': $('#user-articles').attr('role')
-       };
-       load_page_content('/auth/user_load_question_page/', $('.user-load-Q-page'), data, load_content_append);
+       load_page_content('/auth/screening_questions/', $('.user-load-Q-page'), LOAD_DATA, load_content_append);
    }
 });

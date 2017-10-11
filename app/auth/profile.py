@@ -111,43 +111,6 @@ def user_load_aricle_page():
     return jsonify(re)
 
 
-@auth.route('/user_load_question_page/')
-def user_load_question_page():
-    re = {'status': True, 'data': {'load_data': []}}
-
-    user_id = int(request.args.get('user_id'))
-    page = int(request.args.get('page'))
-
-    print 'load_page:' + request.args.get('page')
-
-    if current_user.is_authenticated and current_user.id == user_id:
-        re['data']['same_user'] = True
-    else:
-        re['data']['same_user'] = False
-
-    try:
-        Q_pagination = Questions.query.filter_by(author_id=user_id) \
-            .order_by(Questions.create_time.desc()).paginate(page, 10)
-    except:
-        re['status'] = False
-        re['data']['message'] = u'已加载全部内容'
-        return jsonify(re)
-
-    show_articles = Q_pagination.items
-    print u'当前页数:', Q_pagination.page
-    print u'总页数:', Q_pagination.pages
-
-    if not show_articles:
-        re['status'] = False
-        re['data']['message'] = u'没有相关文章'
-        return jsonify(re)
-
-    for each in show_articles:
-        re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
-    re['data']['next_page'] = Q_pagination.next_num
-
-    return jsonify(re)
-
 @auth.route('/user_profile/add_article/', methods=['POST'])
 def add_article():
     data = loads(request.get_data(), encoding='utf-8')
@@ -392,38 +355,86 @@ def add_question_comment(question_id):
     return jsonify(re)
 
 
-@auth.route('/screening_articles/<class_name>/<user_id>/')
-def screening_articles(class_name, user_id):
-    author_id = int(user_id)
+@auth.route('/screening_articles/')
+def screening_articles():
     re = {'status': True, 'data': {'load_data': []}}
 
-    if class_name == u'全部':
-        articles = Articles.query.filter_by(author_id=user_id)
-        for each in articles:
-            re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
+    print 'search page:', request.args.get('page')
+
+    page = int(request.args.get('page'))
+    class_name = request.args.get('class_name')
+    user_id = request.args.get('user_id')
+
+    print class_name, user_id
+
+    if current_user.is_authenticated and current_user.id == int(user_id):
+        re['data']['same_user'] = True
     else:
-        articles = Classification.query.filter_by(class_name=class_name).first().class_articles
-        for each in articles:
-            if each.author.id == author_id:
-                re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
+        re['data']['same_user'] = False
+
+    try:
+        A_pagination = Articles.query.filter(
+            Articles.author_id.like('%' + user_id + '%'),
+            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+        ).order_by(Articles.create_time.desc()).paginate(page, per_page=10)
+    except:
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
+        return jsonify(re)
+
+    show_articles = A_pagination.items
+    print u'总页数:', A_pagination.pages
+
+    if not show_articles:
+        re['status'] = False
+        re['data']['message'] = u'没有相关文章'
+        return jsonify(re)
+
+    for each in show_articles:
+        re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+    re['data']['next_page'] = A_pagination.next_num
 
     return jsonify(re)
 
 
-@auth.route('/screening_questions/<class_name>/<user_id>/')
-def screening_questions(class_name, user_id):
-    author_id = int(user_id)
+@auth.route('/screening_questions/')
+def screening_questions():
     re = {'status': True, 'data': {'load_data': []}}
 
-    if class_name == u'全部':
-        questions = Questions.query.filter_by(author_id=user_id)
-        for each in questions:
-            re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
+    print 'search page:', request.args.get('page')
+
+    page = int(request.args.get('page'))
+    class_name = request.args.get('class_name')
+    user_id = request.args.get('user_id')
+
+    print class_name, user_id
+
+    if current_user.is_authenticated and current_user.id == int(user_id):
+        re['data']['same_user'] = True
     else:
-        questions = Classification.query.filter_by(class_name=class_name).first().class_questions
-        for each in questions:
-            if each.author.id == author_id:
-                re['data']['load_data'].append(MakeLoadDate.some_question_data(each))
+        re['data']['same_user'] = False
+
+    try:
+        Q_pagination = Questions.query.filter(
+            Questions.author_id.like('%' + user_id + '%'),
+            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
+        ).order_by(Questions.create_time.desc()).paginate(page, per_page=10)
+    except:
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
+        return jsonify(re)
+
+    show_questions = Q_pagination.items
+    print u'总页数:', Q_pagination.pages
+
+    if not show_questions:
+        re['status'] = False
+        re['data']['message'] = u'没有相关文章'
+        return jsonify(re)
+
+    for each in show_questions:
+        re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+    re['data']['next_page'] = Q_pagination.next_num
 
     return jsonify(re)
 

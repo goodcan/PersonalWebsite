@@ -18,7 +18,7 @@ sys.setdefaultencoding('utf-8')
 BASE_PWD = os.path.abspath(os.path.dirname('__file__'))
 CLASSIFICATION = {
     u'全部': '',
-    u'科技': '1',
+    u'技术': '1',
     u'生活': '2'
 }
 

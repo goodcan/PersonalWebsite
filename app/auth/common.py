@@ -3,7 +3,46 @@
 
 from flask import url_for
 from flask_login import current_user
+from .. import db
+from ..common import response_messages
 
+
+class DeleteContent(object):
+    def make_response_data(self):
+        re = {'status': True, 'data': {}}
+        message_title = u'消息'
+        message_content = u'删除成功！'
+        response_messages(re, message_title, message_content)
+
+        return re
+
+    def delete_article(self, obj):
+        about_comments = obj.comments
+        if len(about_comments) != 0:
+            for each in about_comments:
+                db.session.delete(each)
+        about_care = obj.care_article_users
+        if len(about_care) != 0:
+            for each in about_care:
+                db.session.delete(each)
+        db.session.delete(obj)
+        db.session.commit()
+
+        return self.make_response_data()
+
+    def delete_question(self, obj):
+        about_comments = obj.comments
+        if len(about_comments) != 0:
+            for each in about_comments:
+                db.session.delete(each)
+        about_care = obj.care_question_users
+        if len(about_care) != 0:
+            for each in about_care:
+                db.session.delete(each)
+        db.session.delete(obj)
+        db.session.commit()
+
+        return self.make_response_data()
 
 class MakeLoadDate:
     @staticmethod

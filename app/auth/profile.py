@@ -8,12 +8,11 @@ from datetime import datetime
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
-from .common import MakeLoadDate, LoadPage
+from .common import MakeLoadDate
+from .globalVariable import LOADPAGE, DELETE
 from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
-
-LP = LoadPage()
 
 
 @auth.route('/user_profile/<username>/')
@@ -330,7 +329,7 @@ def screening_articles():
 
     print class_name, user_id
 
-    re = LP.user_screening(page=page,
+    re = LOADPAGE.user_screening(page=page,
                            db_obj=Articles,
                            user_id=user_id,
                            class_id=CLASSIFICATION[class_name])
@@ -350,7 +349,7 @@ def screening_questions():
 
     print class_name, user_id
 
-    re = LP.user_screening(page=page,
+    re = LOADPAGE.user_screening(page=page,
                            db_obj=Questions,
                            user_id=user_id,
                            class_id=CLASSIFICATION[class_name])
@@ -506,22 +505,7 @@ def delete_article(article_id):
     if not article:
         abort(400)
 
-    about_comments = article.comments
-    if len(about_comments) != 0:
-        for each in about_comments:
-            db.session.delete(each)
-    about_care = article.care_article_users
-    if len(about_care) != 0:
-        for each in about_care:
-            db.session.delete(each)
-    db.session.delete(article)
-
-    db.session.commit()
-
-    re = {'status': True, 'data': {}}
-    message_title = u'消息'
-    message_content = u'文章删除成功！'
-    response_messages(re, message_title, message_content)
+    re = DELETE.delete_article(article)
 
     return jsonify(re)
 
@@ -534,20 +518,6 @@ def delete_question(question_id):
     if not question:
         return abort(400)
 
-    about_comments = question.comments
-    if len(about_comments) != 0:
-        for each in about_comments:
-            db.session.delete(each)
-    about_care = question.care_question_users
-    if len(about_care) != 0:
-        for each in about_care:
-            db.session.delete(each)
-    db.session.delete(question)
-    db.session.commit()
-
-    re = {'status': True, 'data': {}}
-    message_title = u'消息'
-    message_content = u'问题删除成功！'
-    response_messages(re, message_title, message_content)
+    re = DELETE.delete_question(question)
 
     return jsonify(re)

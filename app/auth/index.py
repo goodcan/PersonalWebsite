@@ -5,9 +5,8 @@ from flask import jsonify, request, render_template, abort
 from flask_login import current_user
 from . import auth
 from .common import MakeLoadDate, LoadPage
+from .globalVariable import LOADPAGE
 from ..models import Articles, Questions, CLASSIFICATION
-
-LP = LoadPage()
 
 
 @auth.route('/index/')
@@ -43,13 +42,13 @@ def index_search():
     print project_name, class_name, search_content
 
     if project_name == u'文章':
-        re = LP.index_search(page=page,
+        re = LOADPAGE.index_search(page=page,
                              db_obj=Articles,
                              search_content=search_content,
                              class_id=CLASSIFICATION[class_name])
 
     else:
-        re = LP.index_search(page=page,
+        re = LOADPAGE.index_search(page=page,
                              db_obj=Questions,
                              search_content=search_content,
                              class_id=CLASSIFICATION[class_name])

@@ -8,12 +8,11 @@ from datetime import datetime
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
-from .common import MakeLoadDate, LoadPage
+from .common import MakeLoadDate
+from .globalVariable import LP
 from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
-
-LP = LoadPage()
 
 
 @auth.route('/user_profile/<username>/')

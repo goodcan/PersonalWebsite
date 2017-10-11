@@ -8,10 +8,12 @@ from datetime import datetime
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
-from .common import MakeLoadDate
+from .common import MakeLoadDate, LoadPage
 from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
+
+LP = LoadPage()
 
 
 @auth.route('/user_profile/<username>/')
@@ -320,8 +322,6 @@ def add_question_comment(question_id):
 
 @auth.route('/screening_articles/')
 def screening_articles():
-    re = {'status': True, 'data': {'load_data': []}}
-
     print 'search page:', request.args.get('page')
 
     page = int(request.args.get('page'))
@@ -330,32 +330,10 @@ def screening_articles():
 
     print class_name, user_id
 
-    if current_user.is_authenticated and current_user.id == int(user_id):
-        re['data']['same_user'] = True
-    else:
-        re['data']['same_user'] = False
-
-    try:
-        A_pagination = Articles.query.filter(
-            Articles.author_id.like('%' + user_id + '%'),
-            Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-        ).order_by(Articles.create_time.desc()).paginate(page, per_page=10)
-    except:
-        re['status'] = False
-        re['data']['message'] = u'已加载全部内容'
-        return jsonify(re)
-
-    show_articles = A_pagination.items
-    print u'总页数:', A_pagination.pages
-
-    if not show_articles:
-        re['status'] = False
-        re['data']['message'] = u'没有相关文章'
-        return jsonify(re)
-
-    for each in show_articles:
-        re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-    re['data']['next_page'] = A_pagination.next_num
+    re = LP.user_screening(page=page,
+                           db_obj=Articles,
+                           user_id=user_id,
+                           class_id=CLASSIFICATION[class_name])
 
     return jsonify(re)
 
@@ -372,32 +350,10 @@ def screening_questions():
 
     print class_name, user_id
 
-    if current_user.is_authenticated and current_user.id == int(user_id):
-        re['data']['same_user'] = True
-    else:
-        re['data']['same_user'] = False
-
-    try:
-        Q_pagination = Questions.query.filter(
-            Questions.author_id.like('%' + user_id + '%'),
-            Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-        ).order_by(Questions.create_time.desc()).paginate(page, per_page=10)
-    except:
-        re['status'] = False
-        re['data']['message'] = u'已加载全部内容'
-        return jsonify(re)
-
-    show_questions = Q_pagination.items
-    print u'总页数:', Q_pagination.pages
-
-    if not show_questions:
-        re['status'] = False
-        re['data']['message'] = u'没有相关问答'
-        return jsonify(re)
-
-    for each in show_questions:
-        re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-    re['data']['next_page'] = Q_pagination.next_num
+    re = LP.user_screening(page=page,
+                           db_obj=Questions,
+                           user_id=user_id,
+                           class_id=CLASSIFICATION[class_name])
 
     return jsonify(re)
 

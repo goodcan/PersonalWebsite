@@ -141,7 +141,7 @@ class MakeLoadDate:
         return data
 
 
-class LoadPage(object):
+class LoadPagination(object):
     def __init__(self):
         self.pagination = None
 

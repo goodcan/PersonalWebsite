@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from .common import LoadPage, DeleteContent
+from .common import LoadPagination, DeleteContent
 
 DELETE = DeleteContent()
-LOADPAGE = LoadPage()
+LOADPAGINATION = LoadPagination()

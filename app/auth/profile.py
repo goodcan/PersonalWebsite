@@ -9,7 +9,7 @@ from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
 from .common import MakeLoadDate
-from .globalVariable import LOADPAGE, DELETE
+from .globalVariable import LOADPAGINATION, DELETE
 from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
@@ -331,7 +331,7 @@ def screening_articles():
 
     print class_name, user_id
 
-    re = LOADPAGE.user_screening(page=page,
+    re = LOADPAGINATION.user_screening(page=page,
                            db_obj=Articles,
                            user_id=user_id,
                            class_id=CLASSIFICATION[class_name])
@@ -349,7 +349,7 @@ def screening_questions():
 
     print class_name, user_id
 
-    re = LOADPAGE.user_screening(page=page,
+    re = LOADPAGINATION.user_screening(page=page,
                            db_obj=Questions,
                            user_id=user_id,
                            class_id=CLASSIFICATION[class_name])

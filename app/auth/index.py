@@ -1,11 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import jsonify, request, render_template
+from flask import jsonify, request, render_template, abort
 from flask_login import current_user
 from . import auth
-from .common import MakeLoadDate
+from .common import MakeLoadDate, LoadPage
 from ..models import Articles, Questions, CLASSIFICATION
+
+LP = LoadPage()
+
 
 @auth.route('/index/')
 def index():
@@ -30,8 +33,6 @@ def index():
 
 @auth.route('/index/search/')
 def index_search():
-    re = {'status': True, 'data': {'load_data': []}}
-
     print 'search page:', request.args.get('page')
 
     page = int(request.args.get('page'))
@@ -42,48 +43,15 @@ def index_search():
     print project_name, class_name, search_content
 
     if project_name == u'文章':
-        try:
-            A_pagination = Articles.query.filter(
-                Articles.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-                Articles.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-            ).order_by(Articles.create_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
-            return jsonify(re)
+        re = LP.index_search(page=page,
+                             db_obj=Articles,
+                             search_content=search_content,
+                             class_id=CLASSIFICATION[class_name])
 
-        show_articles = A_pagination.items
-        print u'总页数:', A_pagination.pages
-
-        if not show_articles:
-            re['status'] = False
-            re['data']['message'] = u'没有相关文章'
-            return jsonify(re)
-
-        for each in show_articles:
-            re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-        re['data']['next_page'] = A_pagination.next_num
     else:
-        try:
-            Q_pagination = Questions.query.filter(
-                Questions.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-                Questions.class_id.like('%' + CLASSIFICATION[class_name] + '%')
-            ).order_by(Questions.create_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
-            return jsonify(re)
-
-        show_questions = Q_pagination.items
-        print u'总页数:', Q_pagination.pages
-
-        if not show_questions:
-            re['status'] = False
-            re['data']['message'] = u'没有相关问答'
-            return jsonify(re)
-
-        for each in show_questions:
-            re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-        re['data']['next_page'] = Q_pagination.next_num
+        re = LP.index_search(page=page,
+                             db_obj=Questions,
+                             search_content=search_content,
+                             class_id=CLASSIFICATION[class_name])
 
     return jsonify(re)

@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*
 
-from flask import url_for
+from flask import url_for, jsonify
+
 
 class MakeLoadDate:
     @staticmethod
@@ -98,3 +99,50 @@ class MakeLoadDate:
         }
 
         return data
+
+
+class LoadPage(object):
+    def __init__(self):
+        self.pagination = None
+
+    def make_index_pagination(self, page, re, db_obj, search_content, class_id):
+        try:
+            self.pagination = db_obj.query.filter(
+                db_obj.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+                db_obj.class_id.like('%' + class_id + '%')
+            ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+        except:
+            re['status'] = False
+            re['data']['message'] = u'已加载全部内容'
+
+    def check_content(self, re, content):
+        if not content:
+            re['status'] = False
+            re['data']['message'] = u'没有相关问答'
+
+    def make_article_data(self, re, content, pagination_obj):
+        for each in content:
+            re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+        re['data']['next_page'] = pagination_obj.next_num
+
+    def make_question_data(self, re, content, pagination_obj):
+        for each in content:
+            re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+        re['data']['next_page'] = pagination_obj.next_num
+
+    def index_search(self, page, db_obj, search_content, class_id):
+        re = {'status': True, 'data': {'load_data': []}}
+        self.make_index_pagination(page, re, db_obj, search_content, class_id)
+
+        content = self.pagination.items
+        print u'总页数:', self.pagination.pages
+
+        self.check_content(re, content)
+
+        if re['status']:
+            if db_obj.__name__ == 'Articles':
+                self.make_article_data(re, content, self.pagination)
+            else:
+                self.make_question_data(re, content, self.pagination)
+
+        return re

@@ -4,9 +4,10 @@
 from flask import jsonify, request, render_template, abort
 from flask_login import current_user
 from . import auth
-from .common import MakeLoadDate
-from .globalVariable import LP
+from .common import MakeLoadDate, LoadPage
 from ..models import Articles, Questions, CLASSIFICATION
+
+LP = LoadPage()
 
 
 @auth.route('/index/')

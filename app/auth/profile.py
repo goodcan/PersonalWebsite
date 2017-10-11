@@ -475,24 +475,44 @@ def update_question_care(question_id):
     return jsonify(re)
 
 
-@auth.route('/user_care_content/')
-def user_care_content():
+@auth.route('/user_care_articles/')
+@login_required
+def user_care_articles():
+    re = {'status': True, 'data': {}}
+
+    page = int(request.args.get('page'))
+
     load_artilces = []
-    articles_id = current_user.care_articles
-    for each_id in articles_id:
+    # articles_id = current_user.care_articles
+    article_ids = ArticlesCareTable.query.filter_by(care_user_id=current_user.id)\
+        .order_by(ArticlesCareTable.care_time.desc()).paginate(page, 10).items
+    for each_id in article_ids:
         each = Articles.query.filter_by(id=each_id.care_article_id).first()
         load_artilces.append(MakeLoadDate.all_article_data(each))
 
+
+    re['data']['load_data'] = load_artilces
+
+    re['data']['message'] = u'失败'
+
+    return jsonify(re)
+
+@auth.route('/user_care_questions/')
+@login_required
+def user_care_questions():
+    re = {'status': True, 'data': {}}
+
+    page = int(request.args.get('page'))
+
     load_questions = []
-    questions_id = current_user.care_questions
-    for each_id in questions_id:
+    # questions_id = current_user.care_questions
+    question_ids = QuestionsCareTable.query.filter_by(care_user_id=current_user.id) \
+        .order_by(QuestionsCareTable.care_time.desc()).paginate(page, 10).items
+    for each_id in question_ids:
         each = Questions.query.filter_by(id=each_id.care_question_id).first()
         load_questions.append(MakeLoadDate.all_question_data(each))
 
-    re = {'load_data': {
-        'load_articles': load_artilces,
-        'load_questions': load_questions
-    }}
+    re['data']['load_data'] = load_questions
 
     return jsonify(re)
 

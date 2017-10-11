@@ -9,6 +9,8 @@ var LOAD_DATA = {
 
 var load_A_base_div = $('.user-load-A-page').prop('outerHTML');
 var load_Q_base_div = $('.user-load-Q-page').prop('outerHTML');
+var care_A_base_div = $('.user-care-A-page').prop('outerHTML');
+var care_Q_base_div = $('.user-care-Q-page').prop('outerHTML');
 
 clear_navbar_active();
 $('#logout-user-profile').click(function () {
@@ -322,25 +324,8 @@ $('#btn-set-information').click(function () {
 });
 
 $('#user-content-list [name=my-care]').click(function () {
-   $.get('/auth/user_care_content/', function (data) {
-       console.log(data);
-       load_articles = data['load_data']['load_articles'];
-       l = load_articles.length;
-       if (l != 0) {
-           $("#my-care-articles").html('');
-           for (i = 0; i < l; i ++) {
-               load_all_content_prepend($("#my-care-articles"), load_articles[i]);
-           }
-       }
-       load_questions = data['load_data']['load_questions'];
-       l = load_questions.length;
-        if (l != 0) {
-            $("#my-care-questions").html('');
-            for (i = 0; i < l; i ++) {
-                load_all_content_prepend($("#my-care-questions"), load_questions[i]);
-            }
-       }
-   });
+    search('/auth/user_care_articles/', $("#my-care-articles"), LOAD_DATA, load_all_content_append, care_A_base_div);
+    search('/auth/user_care_questions/', $("#my-care-questions"), LOAD_DATA, load_all_content_append, care_Q_base_div);
 });
 
 // 监听键盘
@@ -370,7 +355,6 @@ $('.btn-cancel').click(function () {
 });
 
 
-
 $('#user-articles .delete_link').click(function () {
     delete_content($(this), 'article');
 });
@@ -388,11 +372,16 @@ $(document).on('click', '#user-questions .delete_link', function () {
 });
 
 $(window).scroll(function () {
-   if ($('#user-articles').is(':visible')) {
-       load_page_content('/auth/screening_articles/', $('.user-load-A-page'), LOAD_DATA, load_content_append);
-   }
-
-   if ($('#user-questions').is(':visible')) {
-       load_page_content('/auth/screening_questions/', $('.user-load-Q-page'), LOAD_DATA, load_content_append);
-   }
+    if ($('#user-articles').is(':visible')) {
+        load_page_content('/auth/screening_articles/', $('.user-load-A-page'), LOAD_DATA, load_content_append);
+    }
+    else if ($('#user-questions').is(':visible')) {
+        load_page_content('/auth/screening_questions/', $('.user-load-Q-page'), LOAD_DATA, load_content_append);
+    }
+    else if ($('#my-care-articles').is(':visible')) {
+        load_page_content('/auth/user_care_articles/', $('.user-care-A-page'), LOAD_DATA, load_all_content_append);
+    }
+    else if ($('#my-care-questionss').is(':visible')) {
+        load_page_content('/auth/user_care_questions/', $('.user-care-Q-page'), LOAD_DATA, load_all_content_append);
+    }
 });

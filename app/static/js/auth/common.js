@@ -140,7 +140,7 @@ function load_page_content(url, $object, search_data, fun) {
             $target.removeClass(class_n);
             $target.after($target.prop('outerHTML'));
             search_data['page'] = $target.attr('name');
-            console.log($target.attr('name'));
+            // console.log($target.attr('name'));
             $.get(url, search_data, function (data) {
                 if (data['status']) {
                     load_data = data['data']['load_data'];
@@ -179,6 +179,7 @@ function load_page_content(url, $object, search_data, fun) {
 
 function search(url, $object, search_data, fun, load_div) {
     $.get(url, search_data, function (data) {
+        console.log(data);
         $object.html('');
         if (data['status']) {
             load_data = data['data']['load_data'];

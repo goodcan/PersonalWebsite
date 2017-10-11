@@ -158,9 +158,18 @@ class LoadPagination(object):
     def make_user_pagination(self, page, re, db_obj, user_id, class_id):
         try:
             self.pagination = db_obj.query.filter(
-                db_obj.author_id.like('%' + user_id + '%'),
+                db_obj.author_id == int(user_id),
                 db_obj.class_id.like('%' + class_id + '%')
             ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+        except:
+            re['status'] = False
+            re['data']['message'] = u'已加载全部内容'
+
+    def make_user_care_pagination(self, page, re, db_obj, user_id):
+        try:
+            self.pagination = db_obj.query.filter(
+                db_obj.care_user_id == user_id
+            ).order_by(db_obj.care_time.desc()).paginate(page, 10)
         except:
             re['status'] = False
             re['data']['message'] = u'已加载全部内容'
@@ -181,6 +190,8 @@ class LoadPagination(object):
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
                 re['data']['next_page'] = pagination_obj.next_num
 
+        self.check_content(re, content)
+
     def check_user(self, re, user_id):
         if current_user.is_authenticated and current_user.id == int(user_id):
             re['data']['same_user'] = True
@@ -194,8 +205,6 @@ class LoadPagination(object):
         content = self.pagination.items
         print u'总页数:', self.pagination.pages
 
-        self.check_content(re, content)
-
         self.make_data(db_obj, re, content, self.pagination)
 
         return re
@@ -208,8 +217,9 @@ class LoadPagination(object):
         content = self.pagination.items
         print u'总页数:', self.pagination.pages
 
-        self.check_content(re, content)
-
         self.make_data(db_obj, re, content, self.pagination)
 
         return re
+
+    def user_care(self, page, db_obj, user_id):
+        pass

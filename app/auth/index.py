@@ -4,7 +4,7 @@
 from flask import jsonify, request, render_template
 from flask_login import current_user
 from . import auth
-from ..common import MakeLoadDate
+from .common import MakeLoadDate
 from ..models import Articles, Questions, CLASSIFICATION
 
 @auth.route('/index/')

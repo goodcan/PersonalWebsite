@@ -8,7 +8,8 @@ from datetime import datetime
 from . import auth
 from .forms import ArticleForm, QuestionForm
 from .. import db
-from ..common import response_messages, MakeLoadDate
+from .common import MakeLoadDate
+from ..common import response_messages
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
 
@@ -429,7 +430,7 @@ def screening_questions():
 
     if not show_questions:
         re['status'] = False
-        re['data']['message'] = u'没有相关文章'
+        re['data']['message'] = u'没有相关问答'
         return jsonify(re)
 
     for each in show_questions:

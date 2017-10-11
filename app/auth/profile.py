@@ -74,44 +74,6 @@ def user_index(username):
     return render_template('auth/user_index.html', **context)
 
 
-@auth.route('/user_load_aricle_page/')
-def user_load_aricle_page():
-    re = {'status': True, 'data': {'load_data': []}}
-
-    user_id = int(request.args.get('user_id'))
-    page = int(request.args.get('page'))
-
-    print 'load_page:' + request.args.get('page')
-
-    if current_user.is_authenticated and current_user.id == user_id:
-        re['data']['same_user'] = True
-    else:
-        re['data']['same_user'] = False
-
-    try:
-        A_pagination = Articles.query.filter_by(author_id=user_id) \
-            .order_by(Articles.create_time.desc()).paginate(page, 10)
-    except:
-        re['status'] = False
-        re['data']['message'] = u'已加载全部内容'
-        return jsonify(re)
-
-    show_articles = A_pagination.items
-    print u'当前页数:', A_pagination.page
-    print u'总页数:', A_pagination.pages
-
-    if not show_articles:
-        re['status'] = False
-        re['data']['message'] = u'没有相关问答'
-        return jsonify(re)
-
-    for each in show_articles:
-        re['data']['load_data'].append(MakeLoadDate.some_article_data(each))
-    re['data']['next_page'] = A_pagination.next_num
-
-    return jsonify(re)
-
-
 @auth.route('/user_profile/add_article/', methods=['POST'])
 def add_article():
     data = loads(request.get_data(), encoding='utf-8')

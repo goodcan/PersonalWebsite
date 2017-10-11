@@ -227,13 +227,13 @@ def detail_question(question_id):
 
 @auth.route('/add_article_comment/<article_id>', methods=['POST'])
 def add_article_comment(article_id):
-    g.re = {'status': True, 'data': {}}
+    re = {'status': True, 'data': {}}
 
     if not current_user.is_authenticated:
-        g.re['status'] = False
-        g.re['data']['url'] = url_for('auth.login') + \
+        re['status'] = False
+        re['data']['url'] = url_for('auth.login') + \
                               '?next=%2Fauth%2Fdetail_article%2F' + article_id + '%2F'
-        print g.re['data']['url']
+        print re['data']['url']
         return jsonify(g.re)
 
     data = loads(request.get_data(), encoding='utf-8')
@@ -242,13 +242,13 @@ def add_article_comment(article_id):
     body = data['data']['body']
 
     if body == '':
-        g.re['status'] = False
+        re['status'] = False
 
         message_title = u'评论失败'
         message_content = u'评论内容不能为空！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(re, message_title, message_content)
 
-        return jsonify(g.re)
+        return jsonify(re)
 
     article_comment = ArticleComments(body=body,
                                       create_time=datetime.now(),
@@ -258,30 +258,31 @@ def add_article_comment(article_id):
     db.session.add(article_comment)
     db.session.commit()
 
-    re = g.re
     message_title = u'消息'
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
     all_comments = Articles.query.filter_by(id=article_id).first().comments
-    re['comment_num'] = len(all_comments)
-    re['load_data'] = []
+    load_data = []
     for each in all_comments:
-        re['load_data'].append(MakeLoadDate.comment(each))
+        load_data.append(MakeLoadDate.comment(each))
+
+    re.update({'comment_num': len(all_comments),
+               'load_data': load_data})
 
     return jsonify(re)
 
 
 @auth.route('/add_question_comment/<question_id>', methods=['POST'])
 def add_question_comment(question_id):
-    g.re = {'status': True, 'data': {}}
+    re = {'status': True, 'data': {}}
 
     if not current_user.is_authenticated:
-        g.re['status'] = False
-        g.re['data']['url'] = url_for('auth.login') + \
+        re['status'] = False
+        re['data']['url'] = url_for('auth.login') + \
                               '?next=%2Fauth%2Fdetail_question%2F' + question_id + '%2F'
-        print g.re['data']['url']
-        return jsonify(g.re)
+        print re['data']['url']
+        return jsonify(re)
 
     data = loads(request.get_data(), encoding='utf-8')
     print data
@@ -289,13 +290,13 @@ def add_question_comment(question_id):
     body = data['data']['body']
 
     if body == '':
-        g.re['status'] = False
+        re['status'] = False
 
         message_title = u'评论失败'
         message_content = u'评论内容不能为空！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(re, message_title, message_content)
 
-        return jsonify(g.re)
+        return jsonify(re)
 
     question_comment = QuestionComments(body=body,
                                         create_time=datetime.now(),
@@ -305,16 +306,17 @@ def add_question_comment(question_id):
     db.session.add(question_comment)
     db.session.commit()
 
-    re = g.re
     message_title = u'消息'
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
     all_comments = Questions.query.filter_by(id=question_id).first().comments
-    re['comment_num'] = len(all_comments)
-    re['load_data'] = []
+    load_data = []
     for each in all_comments:
-        re['load_data'].append(MakeLoadDate.comment(each))
+        load_data.append(MakeLoadDate.comment(each))
+
+    re.update({'comment_num': len(all_comments),
+               'load_data': load_data})
 
     return jsonify(re)
 
@@ -339,8 +341,6 @@ def screening_articles():
 
 @auth.route('/screening_questions/')
 def screening_questions():
-    re = {'status': True, 'data': {'load_data': []}}
-
     print 'search page:', request.args.get('page')
 
     page = int(request.args.get('page'))
@@ -457,7 +457,7 @@ def update_article_care(article_id):
     if article:
         num = len(article.care_article_users)
     else:
-        abort(404)
+        return abort(404)
 
     re = {'num': num}
     return jsonify(re)
@@ -469,7 +469,7 @@ def update_question_care(question_id):
     if question:
         num = len(question.care_question_users)
     else:
-        abort(404)
+        return abort(404)
 
     re = {'num': num}
     return jsonify(re)

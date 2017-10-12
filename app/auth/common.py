@@ -184,11 +184,24 @@ class LoadPagination(object):
             if db_obj.__name__ == 'Articles':
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-                re['data']['next_page'] = pagination_obj.next_num
             elif db_obj.__name__ == 'Questions':
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-                re['data']['next_page'] = pagination_obj.next_num
+            re['data']['next_page'] = pagination_obj.next_num
+
+        self.check_content(re, content)
+
+    def make_care_data(self, load_db_obj, re, content, pagination_obj):
+        if re['status']:
+            if load_db_obj.__name__ == 'Articles':
+                for each_id in content:
+                    each = load_db_obj.query.filter_by(id=each_id.care_article_id).first()
+                    re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+            elif load_db_obj.__name__ == 'Questions':
+                for each_id in content:
+                    each = load_db_obj.query.filter_by(id=each_id.care_question_id).first()
+                    re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+            re['data']['next_page'] = pagination_obj.next_num
 
         self.check_content(re, content)
 
@@ -221,5 +234,13 @@ class LoadPagination(object):
 
         return re
 
-    def user_care(self, page, db_obj, user_id):
-        pass
+    def user_care_search(self, page, db_obj, load_db_obj, user_id):
+        re = {'status': True, 'data': {'load_data': []}}
+        self.make_user_care_pagination(page, re, db_obj, user_id)
+
+        content = self.pagination.items
+        print u'总页数:', self.pagination.pages
+
+        self.make_care_data(load_db_obj, re, content ,self.pagination)
+
+        return re

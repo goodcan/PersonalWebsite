@@ -324,6 +324,7 @@ $('#btn-set-information').click(function () {
 });
 
 $('#user-content-list [name=my-care]').click(function () {
+    LOAD_DATA['page'] = '1';
     search('/auth/user_care_articles/', $("#my-care-articles"), LOAD_DATA, load_all_content_append, care_A_base_div);
     search('/auth/user_care_questions/', $("#my-care-questions"), LOAD_DATA, load_all_content_append, care_Q_base_div);
 });
@@ -381,7 +382,7 @@ $(window).scroll(function () {
     else if ($('#my-care-articles').is(':visible')) {
         load_page_content('/auth/user_care_articles/', $('.user-care-A-page'), LOAD_DATA, load_all_content_append);
     }
-    else if ($('#my-care-questionss').is(':visible')) {
+    else if ($('#my-care-questions').is(':visible')) {
         load_page_content('/auth/user_care_questions/', $('.user-care-Q-page'), LOAD_DATA, load_all_content_append);
     }
 });

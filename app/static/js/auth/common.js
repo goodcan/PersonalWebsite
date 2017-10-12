@@ -149,7 +149,7 @@ function load_page_content(url, $object, search_data, fun) {
                         for (i = 0; i < l; i++) {
                             fun($target, load_data[i]);
                             $add_delete = $object.find('.media').last();
-                            console.log(load_data[i]['id']);
+                            // console.log(load_data[i]['id']);
                             $add_delete.attr('role', load_data[i]['id']);
                             $add_delete.find('.title-link').after(add_delete_btn());
                         }
@@ -179,7 +179,7 @@ function load_page_content(url, $object, search_data, fun) {
 
 function search(url, $object, search_data, fun, load_div) {
     $.get(url, search_data, function (data) {
-        console.log(data);
+        // console.log(data);
         $object.html('');
         if (data['status']) {
             load_data = data['data']['load_data'];

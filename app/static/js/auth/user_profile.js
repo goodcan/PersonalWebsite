@@ -115,6 +115,10 @@ $('#btn-add-article').click(function () {
             $target = $('#user-articles .media:first');
             $target.attr('role', load_data['id']);
             $target.find('.title-link').after(add_delete_btn());
+            if ($('.no-article')) {
+                $('.no-article').remove();
+                $('#user-articles').append(load_A_base_div);
+            }
         }
         else {
             show_message(data);
@@ -155,6 +159,10 @@ $('#btn-add-question').click(function () {
             $target = $('#user-questions .media:first');
             $target.attr('role', load_data['id']);
             $target.find('.title-link').after(add_delete_btn());
+            if ($('.no-question')) {
+                $('.no-question').remove();
+                $('#user-questions').append(load_Q_base_div);
+            }
         }
         else {
             show_message(data);

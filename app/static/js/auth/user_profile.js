@@ -7,10 +7,10 @@ var LOAD_DATA = {
     'class_name': $('#user-index-list .active').text()
 };
 
-var load_A_base_div = $('.user-load-A-page').prop('outerHTML');
-var load_Q_base_div = $('.user-load-Q-page').prop('outerHTML');
-var care_A_base_div = $('.user-care-A-page').prop('outerHTML');
-var care_Q_base_div = $('.user-care-Q-page').prop('outerHTML');
+var load_A_base_div = '<div class="user-load-A-page" name="2"></div>';
+var load_Q_base_div = '<div class="user-load-Q-page" name="2"></div>';
+var care_A_base_div = '<div class="user-care-A-page" name="2"></div>';
+var care_Q_base_div = '<div class="user-care-Q-page" name="2"></div>';
 
 clear_navbar_active();
 $('#logout-user-profile').click(function () {

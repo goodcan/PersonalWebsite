@@ -195,7 +195,7 @@ class LoadPagination(object):
             re['status'] = False
             re['data']['message'] = message
 
-    def make_index_data(self, db_obj, re, pagination_obj):
+    def make_data(self, db_obj, re, pagination_obj):
         content = pagination_obj.items
         if db_obj.__name__ == 'Articles' or db_obj.__name__ == 'ArticleComments':
             self.check_content(re, content, u'没有相关文章')
@@ -246,7 +246,7 @@ class LoadPagination(object):
         re = {'status': True, 'data': {'load_data': []}}
         self.make_index_pagination(page, re, db_obj, search_content, class_id)
         print u'总页数:', self.pagination.pages
-        self.make_index_data(db_obj, re, self.pagination)
+        self.make_data(db_obj, re, self.pagination)
 
         return re
 

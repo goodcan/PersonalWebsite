@@ -7,7 +7,7 @@ var search_data = {
     'search_content': $('#search-content').val()
 };
 
-var load_base_div = $('.load-page').prop('outerHTML');
+var load_base_div = '<div class="load-page" name="2"></div>';
 
 $('#btn-search').click(function () {
     search_data = {

@@ -76,7 +76,7 @@
                     </div>
                     <div id="profile-0-content">
                         <div id="user-articles" role="{{ user.id }}">
-                            {% if user_articles != [] %}
+                            {% if user_articles %}
                                 {% for each in user_articles %}
                                     <div class="media" role="{{ each.id }}">
                                         <div class="media-body">
@@ -118,7 +118,7 @@
                             {% endif %}
                         </div>
                         <div id="user-questions" class="hide-tag">
-                            {% if user_questions != [] %}
+                            {% if user_questions %}
                                 {% for each in user_questions %}
                                     <div class="media" role="{{ each.id }}">
                                         <div class="media-body">

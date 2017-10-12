@@ -2,10 +2,10 @@ clear_navbar_active();
 
 var LOAD_DATA = {
     'page': '1',
-    'article_id': $('#question-comments').attr('role')
+    'question_id': $('#question-comments').attr('role')
 };
 
-var load_Q_comment_div = $('.load-Q-comment').prop('outerHTML');
+var load_Q_comment_div = '<div class="load-Q-comment" name="2"></div>';
 
 function update_care() {
     $.get('/auth/update_question_care/' + $('#question-title').attr('role') + '/',
@@ -133,5 +133,5 @@ $('#my-login-Modal').on('hidden.bs.modal', function (e) {
 });
 
 $(window).scroll(function () {
-    load_page_content('/auth/load_question_comment_page/', $('.load-A-comment'), LOAD_DATA, load_comment_append);
+    load_page_content('/auth/load_question_comment_page/', $('.load-Q-comment'), LOAD_DATA, load_comment_append);
 });

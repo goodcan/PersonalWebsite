@@ -202,7 +202,8 @@ def detail_article(article_id):
 @auth.route('/detail_question/<question_id>/')
 def detail_question(question_id):
     question = Questions.query.filter_by(id=question_id).first()
-    question_comments = QuestionComments.query.filter_by(question_id=question_id).order_by('-create_time')
+    question_comments = QuestionComments.query.filter_by(question_id=question_id)\
+        .order_by('-create_time').paginate(1, 10).items
 
     care = False
     if current_user.is_authenticated:
@@ -344,7 +345,7 @@ def load_question_comment_page():
     print 'search page:', request.args.get('page')
 
     page = int(request.args.get('page'))
-    question_id = request.args.get('article_id')
+    question_id = request.args.get('question_id')
 
     re = LOADPAGINATION.comment_search(page=page,
                                        db_obj=QuestionComments,

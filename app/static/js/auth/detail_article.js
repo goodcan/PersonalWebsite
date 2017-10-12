@@ -5,7 +5,7 @@ var LOAD_DATA = {
     'article_id': $('#article-comments').attr('role')
 };
 
-var load_A_comment_div = $('.load-A-comment').prop('outerHTML');
+var load_A_comment_div = '<div class="load-A-comment" name="2"></div>';
 
 function update_care() {
     $.get('/auth/update_article_care/' + $('#article-title').attr('role') + '/',

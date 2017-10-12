@@ -1,5 +1,12 @@
 clear_navbar_active();
 
+var LOAD_DATA = {
+    'page': '1',
+    'article_id': $('#article-comments').attr('role')
+};
+
+var load_A_comment_div = $('.load-A-comment').prop('outerHTML');
+
 function update_care() {
     $.get('/auth/update_article_care/' + $('#article-title').attr('role') + '/',
         function (data) {
@@ -11,7 +18,7 @@ $('#add-article-comment').click(function () {
     var csrftoken = $('meta[name=csrf-token]').attr('content');
 
     $.ajax({
-        url: '/auth/add_article_comment/' + $('#article_id').val(),
+        url: '/auth/add_article_comment/',
         type: 'POST',
         contentType: "application/json; charset=UTF-8",
         beforeSend: function (xhr, settings) {
@@ -21,6 +28,7 @@ $('#add-article-comment').click(function () {
         },
         data: JSON.stringify({
             'data': {
+                'article_id': $('#article_id').val(),
                 'body': $('#comment_body').val()
             }
         }),
@@ -34,8 +42,9 @@ $('#add-article-comment').click(function () {
             load_data = data['load_data'];
             $("#article-comments").html('');
             for (i = 0; i < load_data.length; i++) {
-                load_comment_prepend($("#article-comments"), load_data[i]);
+                load_comment_append($("#article-comments"), load_data[i]);
             }
+            $("#article-comments").append(load_A_comment_div);
             $('#comment_num').text('评论（' + data['comment_num'] + '）');
         }
         else {
@@ -122,4 +131,8 @@ $('#my-login-Modal').on('hidden.bs.modal', function (e) {
                     .attr('role', 'add');
             }
         });
+});
+
+$(window).scroll(function () {
+    load_page_content('/auth/screening_articles/', $('.load-A-comment'), LOAD_DATA, load_all_content_append);
 });

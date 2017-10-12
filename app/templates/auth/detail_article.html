@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="container comments" id="article-comments">
+    <div class="container comments" id="article-comments" role="{{ article.id }}">
         {% if article_comments %}
             {% for each in article_comments %}
                 <div class="media">
@@ -74,6 +74,7 @@
                     <hr>
                 </div>
             {% endfor %}
+            <div class="load-A-comment" name="'2"></div>
         {% else %}
             <img src="holder.js/100%x200" alt="">
         {% endif %}

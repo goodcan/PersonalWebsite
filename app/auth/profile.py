@@ -174,7 +174,8 @@ def add_question():
 @auth.route('/detail_article/<article_id>/')
 def detail_article(article_id):
     article = Articles.query.filter_by(id=article_id).first()
-    article_comments = ArticleComments.query.filter_by(article_id=article_id).order_by('-create_time')
+    article_comments = ArticleComments.query.filter_by(article_id=article_id) \
+        .order_by('-create_time').paginate(1, 10).items
 
     care = False
     if current_user.is_authenticated:
@@ -225,21 +226,22 @@ def detail_question(question_id):
     return render_template('auth/detail_question.html', **context)
 
 
-@auth.route('/add_article_comment/<article_id>', methods=['POST'])
-def add_article_comment(article_id):
+@auth.route('/add_article_comment/', methods=['POST'])
+def add_article_comment():
     re = {'status': True, 'data': {}}
-
-    if not current_user.is_authenticated:
-        re['status'] = False
-        re['data']['url'] = url_for('auth.login') + \
-                              '?next=%2Fauth%2Fdetail_article%2F' + article_id + '%2F'
-        print re['data']['url']
-        return jsonify(g.re)
 
     data = loads(request.get_data(), encoding='utf-8')
     print data
 
+    article_id = data['data']['article_id']
     body = data['data']['body']
+
+    if not current_user.is_authenticated:
+        re['status'] = False
+        re['data']['url'] = url_for('auth.login') + \
+                            '?next=%2Fauth%2Fdetail_article%2F' + article_id + '%2F'
+        print re['data']['url']
+        return jsonify(re)
 
     if body == '':
         re['status'] = False
@@ -262,7 +264,9 @@ def add_article_comment(article_id):
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
-    all_comments = Articles.query.filter_by(id=article_id).first().comments
+    # all_comments = Articles.query.filter_by(id=article_id).first().comments
+    all_comments = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
+        .order_by(ArticleComments.create_time.desc()).paginate(1, 10).items
     load_data = []
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
@@ -280,7 +284,7 @@ def add_question_comment(question_id):
     if not current_user.is_authenticated:
         re['status'] = False
         re['data']['url'] = url_for('auth.login') + \
-                              '?next=%2Fauth%2Fdetail_question%2F' + question_id + '%2F'
+                            '?next=%2Fauth%2Fdetail_question%2F' + question_id + '%2F'
         print re['data']['url']
         return jsonify(re)
 
@@ -310,7 +314,9 @@ def add_question_comment(question_id):
     message_content = u'评论成功！'
     response_messages(re, message_title, message_content)
 
-    all_comments = Questions.query.filter_by(id=question_id).first().comments
+    # all_comments = Questions.query.filter_by(id=question_id).first().comments
+    all_comments = QuestionComments.query.filter(QuestionComments.question_id == question_id) \
+        .order_by(QuestionComments.create_time.desc()).paginate(1, 10).items
     load_data = []
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
@@ -319,6 +325,13 @@ def add_question_comment(question_id):
                'load_data': load_data})
 
     return jsonify(re)
+
+
+@auth.route('/load_comment_page/')
+def load_comment_page():
+    page = int(request.args.get('page'))
+
+    pass
 
 
 @auth.route('/screening_articles/')
@@ -332,9 +345,9 @@ def screening_articles():
     print class_name, user_id
 
     re = LOADPAGINATION.user_screening(page=page,
-                           db_obj=Articles,
-                           user_id=user_id,
-                           class_id=CLASSIFICATION[class_name])
+                                       db_obj=Articles,
+                                       user_id=user_id,
+                                       class_id=CLASSIFICATION[class_name])
 
     return jsonify(re)
 
@@ -350,9 +363,9 @@ def screening_questions():
     print class_name, user_id
 
     re = LOADPAGINATION.user_screening(page=page,
-                           db_obj=Questions,
-                           user_id=user_id,
-                           class_id=CLASSIFICATION[class_name])
+                                       db_obj=Questions,
+                                       user_id=user_id,
+                                       class_id=CLASSIFICATION[class_name])
 
     return jsonify(re)
 
@@ -484,6 +497,7 @@ def user_care_articles():
                                          user_id=current_user.id,
                                          load_db_obj=Articles)
     return jsonify(re)
+
 
 @auth.route('/user_care_questions/')
 @login_required

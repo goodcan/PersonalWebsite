@@ -87,78 +87,88 @@
                     </div>
                     <div id="profile-0-content">
                         <div id="user-articles" role="{{ user.id }}">
-                            {% for each in user_articles %}
-                                <div class="media" role="{{ each.id }}">
-                                    <div class="media-body">
-                                        <div class="media-heading">
-                                            <img class="media-object pull-left user-little-portrait"
-                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                                                 alt="">
-                                            <div class="title-time">
-                                                <a class="title-link"
-                                                   href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
-                                                {% if add_delete_btn %}
-                                                    <a class="delete_link" title="删除">
-                                                        <span class="glyphicon glyphicon-trash"></span>
-                                                    </a>
-                                                {% endif %}
-                                                <h6 class="media-heading">{{ each.show_create_time }}</h6>
+                            {% if user_articles != [] %}
+                                {% for each in user_articles %}
+                                    <div class="media" role="{{ each.id }}">
+                                        <div class="media-body">
+                                            <div class="media-heading">
+                                                <img class="media-object pull-left user-little-portrait"
+                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                     alt="">
+                                                <div class="title-time">
+                                                    <a class="title-link"
+                                                       href="{{ url_for('auth.detail_article', article_id=each.id) }}">{{ each.title }}</a>
+                                                    {% if add_delete_btn %}
+                                                        <a class="delete_link" title="删除">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                        </a>
+                                                    {% endif %}
+                                                    <h6 class="media-heading">{{ each.show_create_time }}</h6>
+                                                </div>
+                                            </div>
+                                            <pre class="my-pre">{{ each.body }}</pre>
+                                            <div class="btn-group btn-group-justified">
+                                                <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                                                   class="btn btn-default btn-no-border">评论
+                                                    <span id="comment-badge"
+                                                          class="badge">{{ article_comments[each] }}</span>
+                                                </a>
+                                                <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
+                                                   class="btn btn-default btn-no-border">关注
+                                                    <span id="care-badge"
+                                                          class="badge">{{ article_care_num[each] }}</span>
+                                                </a>
                                             </div>
                                         </div>
-                                        <pre class="my-pre">{{ each.body }}</pre>
-                                        <div class="btn-group btn-group-justified">
-                                            <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
-                                               class="btn btn-default btn-no-border">评论
-                                                <span id="comment-badge"
-                                                      class="badge">{{ article_comments[each] }}</span>
-                                            </a>
-                                            <a href="{{ url_for('auth.detail_article', article_id=each.id) }}"
-                                               class="btn btn-default btn-no-border">关注
-                                                <span id="care-badge" class="badge">{{ article_care_num[each] }}</span>
-                                            </a>
-                                        </div>
+                                        <hr>
                                     </div>
-                                    <hr>
-                                </div>
-                            {% endfor %}
-                            <div class="user-load-A-page" name="2"></div>
+                                {% endfor %}
+                                <div class="user-load-A-page" name="2"></div>
+                            {% else %}
+                                <div><h4 align="center">没有相关文章</h4></div>
+                            {% endif %}
                         </div>
                         <div id="user-questions" class="hide-tag">
-                            {% for each in user_questions %}
-                                <div class="media" role="{{ each.id }}">
-                                    <div class="media-body">
-                                        <div class="media-heading">
-                                            <img class="media-object user-little-portrait pull-left"
-                                                 src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
-                                                 alt="">
-                                            <div class="title-time">
-                                                <a class="title-link"
-                                                   href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
-                                                {% if add_delete_btn %}
-                                                    <a class="delete_link" title="删除">
-                                                        <span class="glyphicon glyphicon-trash"></span>
-                                                    </a>
-                                                {% endif %}
-                                                <h6 class="media-heading">{{ each.show_create_time }}</h6>
+                            {% if user_questions != [] %}
+                                {% for each in user_questions %}
+                                    <div class="media" role="{{ each.id }}">
+                                        <div class="media-body">
+                                            <div class="media-heading">
+                                                <img class="media-object user-little-portrait pull-left"
+                                                     src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
+                                                     alt="">
+                                                <div class="title-time">
+                                                    <a class="title-link"
+                                                       href="{{ url_for('auth.detail_question', question_id=each.id) }}">{{ each.title }}</a>
+                                                    {% if add_delete_btn %}
+                                                        <a class="delete_link" title="删除">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                        </a>
+                                                    {% endif %}
+                                                    <h6 class="media-heading">{{ each.show_create_time }}</h6>
+                                                </div>
+                                            </div>
+                                            <pre class="my-pre">{{ each.body }}</pre>
+                                            <div class="btn-group btn-group-justified">
+                                                <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
+                                                   class="btn btn-default btn-no-border">评论
+                                                    <span id="comment-badge"
+                                                          class="badge">{{ question_comments[each] }}</span>
+                                                </a>
+                                                <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
+                                                   class="btn btn-default btn-no-border">关注
+                                                    <span id="care-badge"
+                                                          class="badge">{{ question_care_num[each] }}</span>
+                                                </a>
                                             </div>
                                         </div>
-                                        <pre class="my-pre">{{ each.body }}</pre>
-                                        <div class="btn-group btn-group-justified">
-                                            <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
-                                               class="btn btn-default btn-no-border">评论
-                                                <span id="comment-badge"
-                                                      class="badge">{{ question_comments[each] }}</span>
-                                            </a>
-                                            <a href="{{ url_for('auth.detail_question', question_id=each.id) }}"
-                                               class="btn btn-default btn-no-border">关注
-                                                <span id="care-badge" class="badge">{{ question_care_num[each] }}</span>
-                                            </a>
-                                        </div>
+                                        <hr>
                                     </div>
-                                    <hr>
-                                </div>
-                            {% endfor %}
-                            <div class="user-load-Q-page" name="2"></div>
+                                {% endfor %}
+                                <div class="user-load-Q-page" name="2"></div>
+                            {% else %}
+                                <div><h4 align="center">没有相关问答</h4></div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

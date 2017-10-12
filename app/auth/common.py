@@ -229,7 +229,7 @@ class LoadPagination(object):
 
     def make_comment_data(self, re, pagination_obj):
         content = pagination_obj.items
-        self.check_content(re, content, u'没有相关评论')
+        self.check_content(re, content, u'暂无评论')
         if re['status']:
             for each in content:
                 re['data']['load_data'].append(MakeLoadDate.comment(each))

@@ -1,5 +1,12 @@
 clear_navbar_active();
 
+var LOAD_DATA = {
+    'page': '1',
+    'article_id': $('#question-comments').attr('role')
+};
+
+var load_Q_comment_div = $('.load-Q-comment').prop('outerHTML');
+
 function update_care() {
     $.get('/auth/update_question_care/' + $('#question-title').attr('role') + '/',
         function (data) {
@@ -36,6 +43,7 @@ $('#add-question-comment').click(function () {
             for (i = 0; i < load_data.length; i++) {
                 load_comment_append($('#question-comments'), load_data[i]);
             }
+            $("#question-comments").append(load_Q_comment_div);
             $('#comment_num').text('评论（' + data['comment_num'] + '）');
         }
         else {
@@ -122,4 +130,8 @@ $('#my-login-Modal').on('hidden.bs.modal', function (e) {
                     .attr('role', 'add');
             }
         });
+});
+
+$(window).scroll(function () {
+    load_page_content('/auth/load_question_comment_page/', $('.load-A-comment'), LOAD_DATA, load_comment_append);
 });

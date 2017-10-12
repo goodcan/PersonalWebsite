@@ -134,5 +134,5 @@ $('#my-login-Modal').on('hidden.bs.modal', function (e) {
 });
 
 $(window).scroll(function () {
-    load_page_content('/auth/screening_articles/', $('.load-A-comment'), LOAD_DATA, load_all_content_append);
+    load_page_content('/auth/load_article_comment_page/', $('.load-A-comment'), LOAD_DATA, load_comment_append);
 });

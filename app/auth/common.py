@@ -176,51 +176,65 @@ class LoadPagination(object):
             re['data']['message'] = u'已加载全部内容'
 
     def make_user_comment_pagination(self, page, re, db_obj, obj_id):
-            try:
-                if db_obj.__name__ == 'ArticlesCareTable':
-                    self.pagination = db_obj.query.filter(
-                        db_obj.article_id == id
-                    ).order_by(db_obj.care_time.desc()).paginate(page, per_page=10)
-                elif db_obj.__name__ == 'QuestionsCareTable':
-                    self.pagination = db_obj.query.filter(
-                        db_obj.question_id == id
-                    ).order_by(db_obj.care_time.desc()).paginate(page, per_page=10)
-            except:
-                re['status'] = False
-                re['data']['message'] = u'已加载全部内容'
+        try:
+            if db_obj.__name__ == 'ArticleComments':
+                print '*' * 40
+                self.pagination = db_obj.query.filter(
+                    db_obj.article_id == obj_id
+                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+            elif db_obj.__name__ == 'QuestionComments':
+                self.pagination = db_obj.query.filter(
+                    db_obj.question_id == obj_id
+                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+        except:
+            re['status'] = False
+            re['data']['message'] = u'已加载全部内容'
 
     def check_content(self, re, content, message):
         if not content:
             re['status'] = False
-            re['data']['message'] = u'没有相关文章'
+            re['data']['message'] = message
 
-    def make_data(self, db_obj, re, pagination_obj):
+    def make_index_data(self, db_obj, re, pagination_obj):
         content = pagination_obj.items
-        if re['status']:
-            if db_obj.__name__ == 'Articles':
+        if db_obj.__name__ == 'Articles' or db_obj.__name__ == 'ArticleComments':
+            self.check_content(re, content, u'没有相关文章')
+            if re['status']:
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-                self.check_content(re, content, u'没有相关文章')
-            elif db_obj.__name__ == 'Questions':
+        elif db_obj.__name__ == 'Questions' or db_obj.__name__ == 'QuestionComments':
+            self.check_content(re, content, u'没有相关问答')
+            if re['status']:
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-                self.check_content(re, content, u'没有相关问答')
-            re['data']['next_page'] = pagination_obj.next_num
+
+        re['data']['next_page'] = pagination_obj.next_num
 
     def make_care_data(self, load_db_obj, re, pagination_obj):
         content = pagination_obj.items
-        if re['status']:
-            if load_db_obj.__name__ == 'Articles':
+        if load_db_obj.__name__ == 'Articles':
+            self.check_content(re, content, u'没有相关文章')
+            if re['status']:
                 for each_id in content:
                     each = load_db_obj.query.filter_by(id=each_id.care_article_id).first()
                     re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
-                self.check_content(re, content, u'没有相关文章')
-            elif load_db_obj.__name__ == 'Questions':
+        elif load_db_obj.__name__ == 'Questions':
+            self.check_content(re, content, u'没有相关问答')
+            if re['status']:
                 for each_id in content:
                     each = load_db_obj.query.filter_by(id=each_id.care_question_id).first()
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
-                self.check_content(re, content, u'没有相关问答')
-            re['data']['next_page'] = pagination_obj.next_num
+
+        re['data']['next_page'] = pagination_obj.next_num
+
+    def make_comment_data(self, re, pagination_obj):
+        content = pagination_obj.items
+        self.check_content(re, content, u'没有相关评论')
+        if re['status']:
+            for each in content:
+                re['data']['load_data'].append(MakeLoadDate.comment(each))
+
+        re['data']['next_page'] = pagination_obj.next_num
 
     def check_user(self, re, user_id):
         if current_user.is_authenticated and current_user.id == int(user_id):
@@ -232,7 +246,7 @@ class LoadPagination(object):
         re = {'status': True, 'data': {'load_data': []}}
         self.make_index_pagination(page, re, db_obj, search_content, class_id)
         print u'总页数:', self.pagination.pages
-        self.make_data(db_obj, re, self.pagination)
+        self.make_index_data(db_obj, re, self.pagination)
 
         return re
 
@@ -253,10 +267,10 @@ class LoadPagination(object):
 
         return re
 
-    def comment_search(self, page, db_obj, load_db_obj, obj_id):
+    def comment_search(self, page, db_obj, obj_id):
         re = {'status': True, 'data': {'load_data': []}}
         self.make_user_comment_pagination(page, re, db_obj, obj_id)
         print u'总页数:', self.pagination.pages
-        self.make_data(load_db_obj, re, self.pagination)
+        self.make_comment_data(re, self.pagination)
 
         return re

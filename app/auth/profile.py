@@ -327,11 +327,29 @@ def add_question_comment(question_id):
     return jsonify(re)
 
 
-@auth.route('/load_comment_page/')
-def load_comment_page():
-    page = int(request.args.get('page'))
+@auth.route('/load_article_comment_page/')
+def load_article_comment_page():
+    print 'search page:', request.args.get('page')
 
-    pass
+    page = int(request.args.get('page'))
+    article_id = request.args.get('article_id')
+
+    re = LOADPAGINATION.comment_search(page=page,
+                                       db_obj=ArticleComments,
+                                       obj_id=article_id)
+    return jsonify(re)
+
+@auth.route('/load_question_comment_page/')
+def load_question_comment_page():
+    print 'search page:', request.args.get('page')
+
+    page = int(request.args.get('page'))
+    question_id = request.args.get('article_id')
+
+    re = LOADPAGINATION.comment_search(page=page,
+                                       db_obj=QuestionComments,
+                                       obj_id=question_id)
+    return jsonify(re)
 
 
 @auth.route('/screening_articles/')

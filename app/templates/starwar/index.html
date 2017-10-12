@@ -1,11 +1,12 @@
 {% extends 'index_base.html' %}
+{% import '_macros.html' as macros %}
 
 {% block title %}
     Star wars
 {% endblock %}
 
 {% block user_navbar %}
-    {% include '_user_navbar.html' %}
+    {{ macros.add_user_navbar(user) }}
 {% endblock %}
 
 {% block new_css %}

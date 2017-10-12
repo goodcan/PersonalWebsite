@@ -1,11 +1,12 @@
 {% extends 'index_base.html' %}
+{% import '_macros.html' as macros %}
 
 {% block title %}
     用户交流平台
 {% endblock %}
 
 {% block user_navbar %}
-    {% include '_user_navbar.html' %}
+    {{ macros.add_user_navbar(user) }}
 {% endblock %}
 
 {% block new_css %}

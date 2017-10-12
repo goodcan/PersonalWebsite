@@ -1,4 +1,5 @@
 {% extends 'index_base.html' %}
+{% import '_macros.html' as macros %}
 
 {% block title %}
     {{ user.username }} 的主页
@@ -10,19 +11,7 @@
 
 {% block user_navbar %}
     {% if status == 0 %}
-        {% if view_user == None %}
-            <li><a id="login-user" href="#">登录</a></li>
-            <li><a id="register-user" href="#">注册</a></li>
-            <li><a id="context-user" href="#" style="display: none"><img src="" alt=""></a></li>
-            <li><a id="logout-user" href="#" style="display: none">注销</a></li>
-        {% else %}
-            <li><a id="login-user" href="#" style="display: none">登录</a></li>
-            <li><a id="register-user" href="#" style="display: none">注册</a></li>
-            <li><a id="context-user" href="{{ url_for('auth.user_profile', username=view_user.username) }}">
-                <img src="{{ url_for('static', filename='images/user_portrait/' + view_user.username + '.png') }}">
-            </a></li>
-            <li><a id="logout-user" href="#">注销</a></li>
-        {% endif %}
+        {{ macros.add_user_navbar(view_user) }}
     {% else %}
         <li><a id="context-user" href="#">
             <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">

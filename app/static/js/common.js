@@ -68,7 +68,7 @@ function clear_navbar_active() {
 // btn-retop 功能函数
 $(window).scroll(function () {
     var wh = $(window).height();
-    if ($(window).scrollTop() <= (wh + 100)) {
+    if ($(window).scrollTop() <= (wh + 400)) {
         $('.btn-retop').fadeOut();
     }
     else {

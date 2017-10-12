@@ -44,6 +44,7 @@ class DeleteContent(object):
 
         return self.make_response_data()
 
+
 class MakeLoadDate:
     @staticmethod
     def some_article_data(obj):
@@ -174,7 +175,12 @@ class LoadPagination(object):
             re['status'] = False
             re['data']['message'] = u'已加载全部内容'
 
-    def check_content(self, re, content):
+    def check_article_content(self, re, content):
+        if not content:
+            re['status'] = False
+            re['data']['message'] = u'没有相关文章'
+
+    def check_question_content(self, re, content):
         if not content:
             re['status'] = False
             re['data']['message'] = u'没有相关问答'
@@ -184,12 +190,12 @@ class LoadPagination(object):
             if db_obj.__name__ == 'Articles':
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+                self.check_article_content(re, content)
             elif db_obj.__name__ == 'Questions':
                 for each in content:
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+                self.check_question_content(re, content)
             re['data']['next_page'] = pagination_obj.next_num
-
-        self.check_content(re, content)
 
     def make_care_data(self, load_db_obj, re, content, pagination_obj):
         if re['status']:
@@ -197,13 +203,13 @@ class LoadPagination(object):
                 for each_id in content:
                     each = load_db_obj.query.filter_by(id=each_id.care_article_id).first()
                     re['data']['load_data'].append(MakeLoadDate.all_article_data(each))
+                self.check_article_content(re, content)
             elif load_db_obj.__name__ == 'Questions':
                 for each_id in content:
                     each = load_db_obj.query.filter_by(id=each_id.care_question_id).first()
                     re['data']['load_data'].append(MakeLoadDate.all_question_data(each))
+                self.check_question_content(re, content)
             re['data']['next_page'] = pagination_obj.next_num
-
-        self.check_content(re, content)
 
     def check_user(self, re, user_id):
         if current_user.is_authenticated and current_user.id == int(user_id):
@@ -241,6 +247,6 @@ class LoadPagination(object):
         content = self.pagination.items
         print u'总页数:', self.pagination.pages
 
-        self.make_care_data(load_db_obj, re, content ,self.pagination)
+        self.make_care_data(load_db_obj, re, content, self.pagination)
 
         return re

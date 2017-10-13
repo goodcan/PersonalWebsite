@@ -129,9 +129,7 @@ def register():
                 token = user.generate_confirmation_token()
                 send_email(user.email, u'请验证你的账户', 'auth/email/confirm',
                            user=user, token=token)
-                title = u'邮箱验证！'
-                content = u'请查收验证邮件并及时完成验证！'
-                response_messages(g.re, title, content)
+                response_messages(g.re, title=u'邮箱验证！', content=u'请查收验证邮件并及时完成验证！')
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -202,9 +200,7 @@ def reset_password_request():
     """
     验证输入并发送修改密码的邮箱验证
     """
-    # if not current_user.is_anonymous:
-    #     print current_user.is_anonymous
-    #     return redirect(url_for('main.index'))
+
     if request.method == 'GET':
         return render_template('auth/reset_password.html')
     if request.method == 'POST':
@@ -228,9 +224,7 @@ def reset_password_request():
                 token = user.generate_resetpwd_token(password1)
                 send_email(user.email, u'请验证您的账户并完成密码修改', 'auth/email/resetpwd_confirm',
                            user=user, token=token)
-                title = u'邮箱验证'
-                content = u'请查收验证邮件并及时完成验证！'
-                response_messages(g.re, title, content)
+                response_messages(g.re, title=u'邮箱验证', content=u'请查收验证邮件并及时完成验证！')
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -267,9 +261,6 @@ def reset_email_request():
     """
     验证输入并发送修改邮箱的邮箱验证
     """
-    # if not current_user.is_anonymous:
-    #     print current_user.is_anonymous
-    #     return redirect(url_for('main.index'))
 
     if request.method == 'POST':
         g.re = {'status': True, 'data': {}}
@@ -290,9 +281,7 @@ def reset_email_request():
                 token = user.generate_resetemail_token(newEmail)
                 send_email(newEmail, u'请验证您的新邮箱', 'auth/email/resetemail_confirm',
                            user=user, token=token)
-                title = u'邮箱验证'
-                content = u'请查收验证邮件并及时完成验证！'
-                response_messages(g.re, title, content)
+                response_messages(g.re, title=u'邮箱验证', content=u'请查收验证邮件并及时完成验证！')
                 return jsonify(g.re)
             else:
                 return jsonify(g.re)
@@ -329,7 +318,7 @@ def set_information():
     """
     设置用户个人信息
     """
-    g.re = {'status': True, 'data': {}}
+    re = {'status': True, 'data': {}}
 
     user = current_user
     data = loads(request.get_data(), encoding='utf-8')
@@ -353,9 +342,6 @@ def set_information():
     db.session.add(user)
     db.session.commit()
 
-    title = u'消息'
-    content = u'个人信息设置成功！'
+    response_messages(re, title=u'消息', content=u'个人信息设置成功！')
 
-    response_messages(g.re, title, content)
-
-    return jsonify(g.re)
+    return jsonify(re)

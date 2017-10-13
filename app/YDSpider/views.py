@@ -4,7 +4,7 @@
 from flask import render_template, request, jsonify
 from YoudaoSpider import MyTranslation
 from . import trans
-from ..common import check_login
+from ..common import check_login, response_messages
 from json import loads
 
 @trans.route('/youdao_spider/', methods=['GET', 'POST'])
@@ -24,9 +24,7 @@ def youdao_spider():
         print 'question:' + question
         if question == '':
             re['status'] = False
-            re['data']['message-title'] = u'输入有误'
-            re['data']['message-content'] = u'需要翻译的内容不能为空哦！'
-
+            response_messages(re, title=u'输入有误', content=u'需要翻译的内容不能为空哦！')
             return jsonify(re)
         else:
             re['data']['answer'] = MyTranslation(question).GetAns()

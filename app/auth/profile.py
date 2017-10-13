@@ -98,9 +98,8 @@ def add_article():
         db.session.commit()
 
         re = g.re
-        message_title = u'消息'
-        message_content = u'文章发布成功！'
-        response_messages(re, message_title, message_content)
+
+        response_messages(re, title=u'消息', content=u'文章发布成功！')
 
         re['load_data'] = MakeLoadDate.some_article_data(article)
 
@@ -146,9 +145,8 @@ def add_question():
         db.session.commit()
 
         re = g.re
-        message_title = u'消息'
-        message_content = u'提问成功！'
-        response_messages(re, message_title, message_content)
+
+        response_messages(re, title=u'消息', content=u'提问成功！')
 
         re['load_data'] = MakeLoadDate.some_question_data(question)
 
@@ -234,9 +232,7 @@ def add_article_comment():
     if body == '':
         re['status'] = False
 
-        message_title = u'评论失败'
-        message_content = u'评论内容不能为空！'
-        response_messages(re, message_title, message_content)
+        response_messages(re, title=u'评论失败', content=u'评论内容不能为空！')
 
         return jsonify(re)
 
@@ -248,9 +244,7 @@ def add_article_comment():
     db.session.add(article_comment)
     db.session.commit()
 
-    message_title = u'消息'
-    message_content = u'评论成功！'
-    response_messages(re, message_title, message_content)
+    response_messages(re, title=u'消息', content=u'评论成功！')
 
     # all_comments = Articles.query.filter_by(id=article_id).first().comments
     all_comments = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
@@ -298,9 +292,7 @@ def add_question_comment(question_id):
     db.session.add(question_comment)
     db.session.commit()
 
-    message_title = u'消息'
-    message_content = u'评论成功！'
-    response_messages(re, message_title, message_content)
+    response_messages(re, title=u'消息', content=u'评论成功！')
 
     # all_comments = Questions.query.filter_by(id=question_id).first().comments
     all_comments = QuestionComments.query.filter(QuestionComments.question_id == question_id) \
@@ -394,9 +386,7 @@ def care_article(operation, article_id):
         db.session.add(article)
         db.session.commit()
 
-        message_title = u'消息'
-        message_content = u'关注成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(g.re, title=u'消息', content=u'关注成功！')
 
     if operation == 'del':
         article = ArticlesCareTable.query.filter_by(care_user_id=current_user.id,
@@ -404,9 +394,7 @@ def care_article(operation, article_id):
         db.session.delete(article)
         db.session.commit()
 
-        message_title = u'消息'
-        message_content = u'取消关注成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(g.re, title=u'消息', content=u'取消关注成功！')
 
     return jsonify(g.re)
 
@@ -429,9 +417,7 @@ def care_question(operation, question_id):
         db.session.add(question)
         db.session.commit()
 
-        message_title = u'消息'
-        message_content = u'关注成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(g.re, title=u'消息', content=u'关注成功！')
 
     if operation == 'del':
         question = QuestionsCareTable.query.filter_by(care_user_id=current_user.id,
@@ -439,9 +425,7 @@ def care_question(operation, question_id):
         db.session.delete(question)
         db.session.commit()
 
-        message_title = u'消息'
-        message_content = u'取消关注成功！'
-        response_messages(g.re, message_title, message_content)
+        response_messages(g.re, title=u'消息', content=u'取消关注成功！')
 
     return jsonify(g.re)
 

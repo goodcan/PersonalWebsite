@@ -5,6 +5,7 @@ from flask import jsonify, request, render_template, abort
 from flask_login import current_user
 from . import auth
 from .common import MakeLoadDate
+from ..common import check_login
 from .globalVariable import LOADPAGINATION
 from ..models import Articles, Questions, CLASSIFICATION
 
@@ -17,15 +18,11 @@ def index():
     questions = Questions.query.order_by(Questions.create_time.desc()).paginate(1, per_page=10).items
 
     context = {
+        'user': check_login(),
         'articles': articles,
         'questions': questions,
     }
     context.update(MakeLoadDate.comments_and_care_num_dict(articles, questions))
-
-    if current_user.is_authenticated:
-        context['user'] = current_user
-    else:
-        context['user'] = None
 
     return render_template('auth/index.html', **context)
 

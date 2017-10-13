@@ -143,51 +143,21 @@ class MakeLoadDate:
 
 
 class LoadPagination(object):
-    def __init__(self):
+    """
+    功能：生成需要传给前端的分页数据
+    场景：
+        1.index_search      主页文章或问答搜索
+        2.user_screening    用户也文章或问答的帅选
+        3.user_care_search  用户关注的文章或问答
+        4.comment_search    文章或问答的评论
+    """
+    def init_re(self):
+        return {'status': True, 'data': {'load_data': []}}
+
+    def deal_except(self, re):
         self.pagination = None
-
-    def make_index_pagination(self, page, re, db_obj, search_content, class_id):
-        try:
-            self.pagination = db_obj.query.filter(
-                db_obj.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
-                db_obj.class_id.like('%' + class_id + '%')
-            ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
-
-    def make_user_pagination(self, page, re, db_obj, user_id, class_id):
-        try:
-            self.pagination = db_obj.query.filter(
-                db_obj.author_id == int(user_id),
-                db_obj.class_id.like('%' + class_id + '%')
-            ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
-
-    def make_user_care_pagination(self, page, re, db_obj, user_id):
-        try:
-            self.pagination = db_obj.query.filter(
-                db_obj.care_user_id == user_id
-            ).order_by(db_obj.care_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
-
-    def make_user_comment_pagination(self, page, re, db_obj, obj_id):
-        try:
-            if db_obj.__name__ == 'ArticleComments':
-                self.pagination = db_obj.query.filter(
-                    db_obj.article_id == obj_id
-                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
-            elif db_obj.__name__ == 'QuestionComments':
-                self.pagination = db_obj.query.filter(
-                    db_obj.question_id == obj_id
-                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
-        except:
-            re['status'] = False
-            re['data']['message'] = u'已加载全部内容'
+        re['status'] = False
+        re['data']['message'] = u'已加载全部内容'
 
     def check_content(self, re, content, message):
         if not content:
@@ -242,34 +212,65 @@ class LoadPagination(object):
             re['data']['same_user'] = False
 
     def index_search(self, page, db_obj, search_content, class_id):
-        re = {'status': True, 'data': {'load_data': []}}
-        self.make_index_pagination(page, re, db_obj, search_content, class_id)
-        print u'总页数:', self.pagination.pages
-        self.make_data(db_obj, re, self.pagination)
+        """获得搜索后所有用户文章或问答的分页"""
+        re = self.init_re()
+        try:
+            self.pagination = db_obj.query.filter(
+                db_obj.title.like('%' + search_content.lower() + '%') if search_content is not None else '',
+                db_obj.class_id.like('%' + class_id + '%')
+            ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+            print u'总页数:', self.pagination.pages
+            self.make_data(db_obj, re, self.pagination)
+        except:
+            self.deal_except(re)
 
         return re
 
     def user_screening(self, page, db_obj, user_id, class_id):
-        re = {'status': True, 'data': {'load_data': []}}
+        """获得用户筛选后的文章或问答的分页"""
+        re = self.init_re()
         self.check_user(re, user_id)
-        self.make_user_pagination(page, re, db_obj, user_id, class_id)
-        print u'总页数:', self.pagination.pages
-        self.make_data(db_obj, re, self.pagination)
+        try:
+            self.pagination = db_obj.query.filter(
+                db_obj.author_id == int(user_id),
+                db_obj.class_id.like('%' + class_id + '%')
+            ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+            print u'总页数:', self.pagination.pages
+            self.make_data(db_obj, re, self.pagination)
+        except:
+            self.deal_except(re)
 
         return re
 
     def user_care_search(self, page, db_obj, load_db_obj, user_id):
-        re = {'status': True, 'data': {'load_data': []}}
-        self.make_user_care_pagination(page, re, db_obj, user_id)
-        print u'总页数:', self.pagination.pages
-        self.make_care_data(load_db_obj, re, self.pagination)
+        """获得用户关心的文章或问答的分页"""
+        re = self.init_re()
+        try:
+            self.pagination = db_obj.query.filter(
+                db_obj.care_user_id == user_id
+            ).order_by(db_obj.care_time.desc()).paginate(page, per_page=10)
+            print u'总页数:', self.pagination.pages
+            self.make_care_data(load_db_obj, re, self.pagination)
+        except:
+            self.deal_except(re)
 
         return re
 
     def comment_search(self, page, db_obj, obj_id):
-        re = {'status': True, 'data': {'load_data': []}}
-        self.make_user_comment_pagination(page, re, db_obj, obj_id)
-        print u'总页数:', self.pagination.pages
-        self.make_comment_data(re, self.pagination)
+        """获得文章或问答的分页"""
+        re = self.init_re()
+        try:
+            if db_obj.__name__ == 'ArticleComments':
+                self.pagination = db_obj.query.filter(
+                    db_obj.article_id == obj_id
+                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+            elif db_obj.__name__ == 'QuestionComments':
+                self.pagination = db_obj.query.filter(
+                    db_obj.question_id == obj_id
+                ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)
+            print u'总页数:', self.pagination.pages
+            self.make_comment_data(re, self.pagination)
+        except:
+            self.deal_except(re)
 
         return re

@@ -178,7 +178,6 @@ class LoadPagination(object):
     def make_user_comment_pagination(self, page, re, db_obj, obj_id):
         try:
             if db_obj.__name__ == 'ArticleComments':
-                print '*' * 40
                 self.pagination = db_obj.query.filter(
                     db_obj.article_id == obj_id
                 ).order_by(db_obj.create_time.desc()).paginate(page, per_page=10)

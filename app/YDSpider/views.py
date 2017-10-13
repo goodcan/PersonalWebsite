@@ -2,24 +2,23 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, request, jsonify
-from flask_login import current_user
-from . import trans
 from YoudaoSpider import MyTranslation
-import json
+from . import trans
+from ..common import check_login
+from json import loads
 
 @trans.route('/youdao_spider/', methods=['GET', 'POST'])
 def youdao_spider():
     if request.method == 'GET':
-        context = {}
-        if current_user.is_authenticated:
-            context['user'] = current_user
-        else:
-            context['user'] = None
+        context = {
+            'user': check_login()
+        }
+
         return render_template('YDSpider/index.html', **context)
 
     if request.method == 'POST':
         re = {'status': True, 'data': {}}
-        data = json.loads(request.get_data(), encoding='utf-8')
+        data = loads(request.get_data(), encoding='utf-8')
 
         question = data['data']['question']
         print 'question:' + question

@@ -4,12 +4,12 @@
 from flask import render_template
 from flask_login import current_user
 from . import starwar
+from ..common import check_login
 
 @starwar.route('/index/')
 def index():
-    context = {}
-    if current_user.is_authenticated:
-        context['user'] = current_user
-    else:
-        context['user'] = None
+    context = {
+        'user': check_login()
+    }
+
     return render_template('starwar/index.html', **context)

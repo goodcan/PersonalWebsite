@@ -10,7 +10,7 @@ from .forms import ArticleForm, QuestionForm
 from .. import db
 from .common import MakeLoadDate
 from .globalVariable import LOADPAGINATION, DELETE
-from ..common import response_messages
+from ..common import response_messages, check_login
 from ..models import User, Articles, Questions, Classification, ArticleComments, QuestionComments, ArticlesCareTable, \
     QuestionsCareTable, CLASSIFICATION
 
@@ -48,11 +48,6 @@ def user_index(username):
     except:
         pass
 
-    if current_user.is_authenticated:
-        view_user = current_user
-    else:
-        view_user = None
-
     user = User.query.filter_by(username=username).first()
     user_articles = Articles.query.filter_by(author_id=user.id) \
         .order_by(Articles.create_time.desc()).paginate(1, 10).items
@@ -64,7 +59,7 @@ def user_index(username):
 
     context = {
         'status': 0,  # user_navbar 状态标识
-        'view_user': view_user,
+        'view_user': check_login(),
         'user': user,
         'add_delete_btn': False,
         'user_articles': user_articles,
@@ -184,17 +179,13 @@ def detail_article(article_id):
             care = True
 
     context = {
+        'user': check_login(),
         'article': article,
         'article_comments': article_comments,
         'comment_num': len(article.comments),
         'care_num': len(article.care_article_users),
         'care': care
     }
-
-    if current_user.is_authenticated:
-        context['user'] = current_user
-    else:
-        context['user'] = None
 
     return render_template('auth/detail_article.html', **context)
 
@@ -212,17 +203,13 @@ def detail_question(question_id):
             care = True
 
     context = {
+        'user': check_login(),
         'question': question,
         'question_comments': question_comments,
         'comment_num': len(question.comments),
         'care_num': len(question.care_question_users),
         'care': care
     }
-
-    if current_user.is_authenticated:
-        context['user'] = current_user
-    else:
-        context['user'] = None
 
     return render_template('auth/detail_question.html', **context)
 

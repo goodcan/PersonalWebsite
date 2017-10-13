@@ -3,17 +3,16 @@
 
 from flask import render_template, jsonify
 from makeData import MakeData
-from flask_login import current_user
 import json, os
 from . import weather
+from ..common import check_login
 
 @weather.route('/')
 def index():
-    context = {}
-    if current_user.is_authenticated:
-        context['user'] = current_user
-    else:
-        context['user'] = None
+    context = {
+        'user': check_login()
+    }
+
     return render_template('weather/index.html', **context)
 
 @weather.route('/data.json/')

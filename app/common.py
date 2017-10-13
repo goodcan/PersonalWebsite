@@ -1,7 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from flask_login import current_user
 from datetime import datetime
+
+def check_login():
+    """检测是否有用户登入"""
+    if current_user.is_authenticated:
+        obj = current_user._get_current_object()
+    else:
+        obj = None
+
+    return obj
 
 def response_messages(response, title, content):
     """

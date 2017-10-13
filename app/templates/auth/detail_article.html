@@ -9,7 +9,6 @@
    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/detail_article.css') }}">
 {% endblock %}
 
-
 {% block user_navbar %}
     {{ macros.add_user_navbar(user) }}
 {% endblock %}
@@ -76,7 +75,7 @@
             {% endfor %}
             <div class="load-A-comment" name="2"></div>
         {% else %}
-            <div><h4 align="center">没有相关评论</h4></div>
+            <div><h4 align="center">暂无评论</h4></div>
         {% endif %}
     </div>
     {% include '_retop.html' %}

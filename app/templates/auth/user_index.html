@@ -36,16 +36,16 @@
                     {% else %}
                         <h2><strong>{{ user.name }}</strong></h2>
                     {% endif %}
-                    <h5 style="opacity: 0.5">ID:{{ user.username }}</h5>
+                    <h5 id="username" style="opacity: 0.5">ID:{{ user.username }}</h5>
                     {% if user.about_me == None %}
                         <p></p>
                     {% else %}
                         <p>“{{ user.about_me }}”</p>
                     {% endif %}
                     {% if user.location == None %}
-                        <h5 class="label label-info"></h5>
+                        <h5 id="user-location" class="label label-info"></h5>
                     {% else %}
-                        <h5 class="label label-info">{{ user.location }}</h5>
+                        <h5 id="user-location" class="label label-info">{{ user.location }}</h5>
                     {% endif %}
                     <div id="user-AQ-num">
                         <span class="label label-danger">文章 <span id="user-articles-num">{{ user_articles_num }}</span></span>

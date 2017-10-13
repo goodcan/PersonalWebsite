@@ -13,7 +13,7 @@
     {% if status == 0 %}
         {{ macros.add_user_navbar(view_user) }}
     {% else %}
-        <li><a id="context-user" href="#">
+        <li><a id="context-user">
             <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}">
         </a></li>
         <li><a id="logout-user-profile" href="#">注销</a></li>

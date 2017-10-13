@@ -10,13 +10,13 @@
     margin: 15px;
 }
 
-#user-AQ-content {
+#user-AQ-num {
      margin-top: 10px;
 }
 
-#user-AQ-content span{
-    margin-right: 3px;
-}
+/*#user-AQ-num span{*/
+    /*margin-right: 3px;*/
+/*}*/
 
 #user-portrait {
     margin: 0 15px;

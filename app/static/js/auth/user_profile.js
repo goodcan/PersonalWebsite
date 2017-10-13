@@ -4,7 +4,7 @@
 var LOAD_DATA = {
     'page': '1',
     'user_id': $('#user-index-list').attr('role'),
-    'class_name': $('#user-index-list .active').text()
+    'class_name': $('#user-index-list .active').text(),
 };
 
 var load_A_base_div = '<div class="user-load-A-page" name="2"></div>';
@@ -100,7 +100,9 @@ $('#btn-add-article').click(function () {
             'data': {
                 'title': $('#article-title-p').val(),
                 'class_name': $('#article-classes').val(),
-                'body': $('#article-body-p').val()
+                'screening_class': $('#user-index-list .active').text(),
+                'body': $('#article-body-p').val(),
+                'articles_num': $('#user-articles-num').text()
             }
         }),
         dataType: 'json'
@@ -108,17 +110,11 @@ $('#btn-add-article').click(function () {
         console.log(data);
 
         if (data['status'] == true) {
+            LOAD_DATA['page'] = '1';   // 全局页码归1
             clear_messages();
             show_message(data);
-            load_data = data['load_data'];
-            load_content_prepend($('#user-articles'), load_data);
-            $target = $('#user-articles .media:first');
-            $target.attr('role', load_data['id']);
-            $target.find('.title-link').after(add_delete_btn());
-            if ($('.no-article')) {
-                $('.no-article').remove();
-                $('#user-articles').append(load_A_base_div);
-            }
+            add_search($('#user-articles'), data, load_content_append, load_A_base_div)
+            $('#user-articles-num').text(data['data']['articles_num']);
         }
         else {
             show_message(data);
@@ -144,7 +140,9 @@ $('#btn-add-question').click(function () {
             'data': {
                 'title': $('#question-title-p').val(),
                 'class_name': $('#question-classes').val(),
-                'body': $('#question-body-p').val()
+                'screening_class': $('#user-index-list .active').text(),
+                'body': $('#question-body-p').val(),
+                'questions_num': $('#user-questions-num').text()
             }
         }),
         dataType: 'json'
@@ -152,17 +150,11 @@ $('#btn-add-question').click(function () {
         console.log(data);
 
         if (data['status'] == true) {
+            LOAD_DATA['page'] = '1';   // 全局页码归1
             clear_messages();
             show_message(data);
-            load_data = data['load_data'];
-            load_content_prepend($('#user-questions'), load_data);
-            $target = $('#user-questions .media:first');
-            $target.attr('role', load_data['id']);
-            $target.find('.title-link').after(add_delete_btn());
-            if ($('.no-question')) {
-                $('.no-question').remove();
-                $('#user-questions').append(load_Q_base_div);
-            }
+            add_search($('#user-questions'), data, load_content_append, load_Q_base_div)
+            $('#user-questions-num').text(data['questions_num']);
         }
         else {
             show_message(data);
@@ -364,20 +356,12 @@ $('.btn-cancel').click(function () {
 });
 
 
-$('#user-articles .delete_link').click(function () {
-    delete_content($(this), 'article');
-});
-
-$('#user-questions .delete_link').click(function () {
-    delete_content($(this), 'question');
-});
-
 // 为动态加载的删除按钮添加click事件
 $(document).on('click', '#user-articles .delete_link', function () {
-    delete_content($(this), 'article');
+    delete_content($(this), 'article', $('#user-articles-num'));
 });
 $(document).on('click', '#user-questions .delete_link', function () {
-    delete_content($(this), 'question');
+    delete_content($(this), 'question', $('#user-questions-num'));
 });
 
 $(window).scroll(function () {

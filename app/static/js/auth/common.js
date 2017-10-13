@@ -118,13 +118,17 @@ function add_delete_btn() {
     return add_html;
 }
 
-function delete_content($object, content) {
+function delete_content($object, content, $num) {
     $target = $object.closest('.media');
-    article_id = $target.attr('role');
-    $.get('/auth/delete_' + content + '/' + article_id + '/', function (data) {
+    data = {
+        'id': $target.attr('role'),
+        'num':$num.text()
+    };
+    $.get('/auth/delete_' + content + '/', data, function (data) {
         if (data['status']) {
             $target.slideUp();
             show_message(data);
+            $num.text(data['num']);
         }
     });
 }
@@ -177,10 +181,8 @@ function load_page_content(url, $object, search_data, fun) {
     });
 }
 
-function search(url, $object, search_data, fun, load_div) {
-    $.get(url, search_data, function (data) {
-        // console.log(data);
-        $object.html('');
+function add_search($object, data, fun, load_div) {
+    $object.html('');
         if (data['status']) {
             load_data = data['data']['load_data'];
             l = load_data.length;
@@ -203,5 +205,11 @@ function search(url, $object, search_data, fun, load_div) {
         else {
             $object.html('<h4 align="center">' + data['data']['message'] + '</h4>');
         }
+}
+
+function search(url, $object, search_data, fun, load_div) {
+    $.get(url, search_data, function (data) {
+        // console.log(data);
+        add_search($object, data, fun, load_div);
     });
 }

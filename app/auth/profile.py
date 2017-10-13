@@ -75,6 +75,7 @@ def user_index(username):
 
 
 @auth.route('/user_profile/add_article/', methods=['POST'])
+@login_required
 def add_article():
     data = loads(request.get_data(), encoding='utf-8')
     print data
@@ -103,9 +104,15 @@ def add_article():
 
         re = g.re
 
-        response_messages(re, title=u'消息', content=u'文章发布成功！')
+        # re['load_data'] = MakeLoadDate.some_article_data(article)
 
-        re['load_data'] = MakeLoadDate.some_article_data(article)
+        re = LOADPAGINATION.user_screening(page=1,
+                                           db_obj=Articles,
+                                           user_id=current_user.id,
+                                           class_id=CLASSIFICATION[article_data['screening_class']])
+
+        re['data']['articles_num'] = int(article_data['articles_num']) + 1
+        response_messages(re, title=u'消息', content=u'文章发布成功！')
 
         return jsonify(re)
     else:
@@ -122,6 +129,7 @@ def add_article():
 
 
 @auth.route('/user_profile/add_question/', methods=['POST'])
+@login_required
 def add_question():
     data = loads(request.get_data(), encoding='utf-8')
     print data
@@ -150,9 +158,12 @@ def add_question():
 
         re = g.re
 
+        re = LOADPAGINATION.user_screening(page=1,
+                                           db_obj=Questions,
+                                           user_id=current_user.id,
+                                           class_id=CLASSIFICATION[question_data['screening_class']])
+        re['questions_num'] = int(question_data['questions_num']) + 1
         response_messages(re, title=u'消息', content=u'提问成功！')
-
-        re['load_data'] = MakeLoadDate.some_question_data(question)
 
         return jsonify(re)
     else:
@@ -504,27 +515,31 @@ def user_care_questions():
     return jsonify(re)
 
 
-@auth.route('/delete_article/<article_id>/')
+@auth.route('/delete_article/')
 @login_required
-def delete_article(article_id):
-    article = Articles.query.filter_by(id=article_id, author_id=current_user.id).first()
+def delete_article():
+    id = int(request.args.get('id'))
+    article = Articles.query.filter_by(id=id, author_id=current_user.id).first()
 
     if not article:
         abort(400)
 
     re = DELETE.delete_article(article)
+    re['num'] = int(request.args.get('num')) - 1
 
     return jsonify(re)
 
 
-@auth.route('/delete_question/<question_id>/')
+@auth.route('/delete_question/')
 @login_required
-def delete_question(question_id):
-    question = Questions.query.filter_by(id=question_id, author_id=current_user.id).first()
+def delete_question():
+    id = int(request.args.get('id'))
+    question = Questions.query.filter_by(id=id, author_id=current_user.id).first()
 
     if not question:
         return abort(400)
 
     re = DELETE.delete_question(question)
+    re['num'] = int(request.args.get('num')) - 1
 
     return jsonify(re)

@@ -47,11 +47,13 @@
                     {% else %}
                         <h5 class="label label-info">{{ user.location }}</h5>
                     {% endif %}
-                    <div id="user-AQ-content">
-                        <span class="label label-danger">文章 {{ user_articles_num }}</span>
-                        <span class="label label-success">问答 {{ user_questions_num }}</span>
+                    <div id="user-AQ-num">
+                        <span class="label label-danger">文章 <span id="user-articles-num">{{ user_articles_num }}</span></span>
+                        <span class="label label-success">问答 <span
+                                id="user-questions-num">{{ user_questions_num }}</span></span>
                     </div>
                 </div>
+                <hr>
             </div>
         </div>
         <div class="row">

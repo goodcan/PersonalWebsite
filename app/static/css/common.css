@@ -48,7 +48,8 @@
 }
 
 #my-message-Modal .my-modal-dialog {
-    top: 200px;
+    top: 25%;
+    /*top: 200px;*/
     width: 350px;
     margin-left: auto;
     margin-right: auto;

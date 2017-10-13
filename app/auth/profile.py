@@ -31,6 +31,8 @@ def user_profile(username):
     context = {
         'user': user,
         'add_delete_btn': True,
+        'user_articles_num': len(user.user_articles),
+        'user_questions_num': len(user.user_questions),
         'user_articles': user_articles,
         'user_questions': user_questions
     }
@@ -61,6 +63,8 @@ def user_index(username):
         'status': 0,  # user_navbar 状态标识
         'view_user': check_login(),
         'user': user,
+        'user_articles_num': len(user.user_articles),
+        'user_questions_num': len(user.user_questions),
         'add_delete_btn': False,
         'user_articles': user_articles,
         'user_questions': user_questions

@@ -28,25 +28,34 @@
                     <img src="{{ url_for('static', filename='images/user_portrait/' + user.username + '.png') }}"
                          alt="">
                 </div>
+            </div>
+            <div class="col-sm-9">
                 <div id="user-content">
                     {% if user.name == None %}
                         <h2><strong></strong></h2>
                     {% else %}
                         <h2><strong>{{ user.name }}</strong></h2>
                     {% endif %}
-                    <h4 style="opacity: 0.5">{{ user.username }}</h4>
-                    {% if user.location == None %}
-                        <h5 style="font-weight: 600"></h5>
-                    {% else %}
-                        <h5 style="font-weight: 600">{{ user.location }}</h5>
-                    {% endif %}
+                    <h5 style="opacity: 0.5">ID:{{ user.username }}</h5>
                     {% if user.about_me == None %}
                         <p></p>
                     {% else %}
                         <p>“{{ user.about_me }}”</p>
                     {% endif %}
-
+                    {% if user.location == None %}
+                        <h5 class="label label-info"></h5>
+                    {% else %}
+                        <h5 class="label label-info">{{ user.location }}</h5>
+                    {% endif %}
+                    <div id="user-AQ-content">
+                        <span class="label label-danger">文章 {{ user_articles_num }}</span>
+                        <span class="label label-success">问答 {{ user_questions_num }}</span>
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
                 <div class="text-center" id="user-profile">
                     <div class="panel-group">
                         <div class="panel panel-info">
@@ -66,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9" style="top: 100px">
+            <div class="col-sm-9">
                 <div id="profile-0" class="user-index">
                     <div id="profile-0-nav">
                         <ul class="nav nav-tabs nav-justified">

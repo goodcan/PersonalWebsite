@@ -22,7 +22,7 @@
         <div class="panel-body">
             <ul id="setting-btn-list" class="list-group">
                 <a id="setting-0" class="list-group-item active">编辑详情</a>
-                <a classificationid="setting-1" class="list-group-item">修改密码</a>
+                <a id="setting-1" class="list-group-item">修改密码</a>
                 <a id="setting-2" class="list-group-item">修改电子邮箱</a>
             </ul>
         </div>
@@ -133,7 +133,7 @@
             <h3 class="text-center">编辑详情</h3><br>
             <form class="form-horizontal" method="post">
                 <label class="col-md-2 control-label">昵称：</label>
-                <div class="col-md-4">
+                <div class="col-md-10">
                     <div class="form-group">
                         {% if user.name == None %}
                             <input id="set-name" type="text" class="form-control" placeholder="请填写您的姓名">
@@ -146,7 +146,7 @@
                     </div>
                 </div>
                 <label class="col-md-2 control-label">地区：</label>
-                <div class="col-md-4">
+                <div class="col-md-10">
                     <div class="form-group">
                         {% if user.location == None %}
                             <input id="set-location" type="text" class="form-control"

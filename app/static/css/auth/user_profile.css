@@ -10,6 +10,14 @@
     margin: 15px;
 }
 
+#user-AQ-content {
+     margin-top: 10px;
+}
+
+#user-AQ-content span{
+    margin-right: 3px;
+}
+
 #user-portrait {
     margin: 0 15px;
     margin-bottom: 30px;
@@ -56,13 +64,6 @@
 
 .hide-tag {
     display: none;
-}
-
-#my-message-Modal .my-modal-dialog {
-    top: 25%;
-    width: 350px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #profile-0-nav, #my-care-nav {

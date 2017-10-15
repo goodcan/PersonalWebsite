@@ -10,3 +10,4 @@ bootstrap*.*
 migrations
 *.ini
 echarts*.js
+dark.js

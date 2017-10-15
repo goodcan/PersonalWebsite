@@ -1,7 +1,7 @@
 clear_navbar_active();
 
 // 初始化echarts示例mapChart
-var mapChart = echarts.init(document.getElementById('main'));
+var myChart = echarts.init(document.getElementById('main'), 'dark');
 
 //渲染的数据
 // var myData = [
@@ -15,6 +15,7 @@ var mapChart = echarts.init(document.getElementById('main'));
 
 var myData;
 
+myChart.showLoading();
 $.get("/weather/data.json/", function (data, status) {
     myData = data;
     // mapChart的配置
@@ -22,7 +23,7 @@ $.get("/weather/data.json/", function (data, status) {
 
         title: {
             text: '全国主要城市温度',
-            // subtext: 'data from PM25.in',
+            subtext: 'data from PM25.in',
             // sublink: 'http://www.pm25.in',
             x: 'center',
             textStyle: {
@@ -86,6 +87,7 @@ $.get("/weather/data.json/", function (data, status) {
         }
 
     };
-    mapChart.setOption(option);
+    myChart.hideLoading();
+    myChart.setOption(option);
     // console.log(myData);
 });

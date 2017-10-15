@@ -111,9 +111,9 @@ class ChinaWeatherData(object):
 
     def ReturnData(self):
         for each_url in self.DISTRICT_LIST:
-            # print '*' * 40
-            # print each_url
-            # print '*' * 40
+            print '*' * 40
+            print each_url
+            print '*' * 40
 
             self.GetData(each_url, self.HEARDERS)
             # sleep(0.1)

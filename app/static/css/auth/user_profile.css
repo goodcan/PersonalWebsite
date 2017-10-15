@@ -23,7 +23,11 @@ body {
 
 #profile-container {
     margin-top: 50px;
-    margin-bottom: 15px;
+}
+
+#profile-container .col-sm-3,
+#profile-container .col-sm-9 {
+    margin-bottom: 30px;
 }
 
 #user-profile {

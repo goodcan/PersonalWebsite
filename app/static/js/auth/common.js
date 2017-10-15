@@ -68,7 +68,7 @@ function make_load_comment(data) {
         '</div>' +
         '<p>' + data['body'] + '</p>' +
         '</div>' +
-        '<hr>' +
+        // '<hr>' +
         '</div>';
 
     return load_html;

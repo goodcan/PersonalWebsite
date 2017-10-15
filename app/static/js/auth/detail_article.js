@@ -49,10 +49,13 @@ $('#add-article-comment').click(function () {
         }
         else {
             if ('url' in data['data']) {
-                console.log(data['data']['url']);
-                window.location.href = data['data']['url'];
+                // console.log(data['data']['url']);
+                // window.location.href = data['data']['url'];
+                $('#my-login-Modal').modal('show');
             }
-            show_message(data);
+            else {
+                show_message(data);
+            }
         }
     }).fail(function () {
         alert('请求失败！');
@@ -96,10 +99,13 @@ $("#article-care").click(function () {
         }
         else {
             if ('url' in data['data']) {
-                console.log(data['data']['url']);
-                window.location.href = data['data']['url'];
+                // console.log(data['data']['url']);
+                // window.location.href = data['data']['url'];
+                $('#my-login-Modal').modal('show');
             }
-            show_message(data);
+            else {
+                show_message(data);
+            }
         }
     }).fail(function () {
         alert('请求失败！');

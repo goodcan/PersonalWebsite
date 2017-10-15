@@ -31,7 +31,7 @@
 
 {% block new_profile %}
     <div id="profile-1" class="user-contents hide-tag">
-        <div id="posted-article">
+        <div id="posted-article" class="posted-content">
             <h3 class="text-center">发布文章</h3><br>
             <form class="form-horizontal" method="post">
                 <label class="col-md-2 control-label">标题：</label>
@@ -71,7 +71,7 @@
                 </div>
             </form>
         </div>
-        <div id="posted-question" class="hide-tag">
+        <div id="posted-question" class="posted-content hide-tag">
             <h3 class="text-center">提个问题</h3><br>
             <form class="form-horizontal" method="post">
                 <label class="col-md-2 control-label">标题：</label>
@@ -113,7 +113,7 @@
         </div>
         <div id="my-care" class="hide-tag">
             <div id="my-care-nav">
-                <ul class="nav nav-tabs nav-justified">
+                <ul class="nav nav-pills nav-justified">
                     <li class="active" name="articles"><a>文章</a></li>
                     <li name="questions"><a>问答</a></li>
                 </ul>

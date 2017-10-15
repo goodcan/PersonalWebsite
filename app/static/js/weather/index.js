@@ -53,22 +53,22 @@ $.get("/weather/data.json/", function (data, status) {
         },
         backgroundColor: '#404a59',  		// 图表背景色
 
-        // //绘制散点图
-        // series: [
-        //     {
-        //         name: '销量', // series名称
-        //         type: 'scatter', // series图表类型
-        //         coordinateSystem: 'geo', // series坐标系类型
-        //         data: myData, // series数据内容
-        //
-        //         itemStyle: {
-        //             emphasis: {
-        //                 borderColor: '#fff',
-        //                 borderWidth: 1
-        //             }
-        //         }
-        //     }
-        // ],
+        //绘制散点图
+        series: [
+            {
+                name: '销量', // series名称
+                type: 'scatter', // series图表类型
+                coordinateSystem: 'geo', // series坐标系类型
+                data: myData, // series数据内容
+
+                itemStyle: {
+                    emphasis: {
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }
+                }
+            }
+        ],
 
         //添加视觉映射组件
         visualMap: {

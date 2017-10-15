@@ -1,3 +1,7 @@
+body {
+    background-color: #e8e8e8;
+}
+
 #cou-index {
     margin-top: 80px;
 }
@@ -23,4 +27,11 @@
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+}
+
+.media {
+    margin: 0 0 15px 0;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 15px;
 }

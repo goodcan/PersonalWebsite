@@ -19,7 +19,7 @@ function make_all_load_content(data) {
         '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
         '</div>' +
         '</div>' +
-        '<hr>' +
+        // '<hr>' +
         '</div>';
 
     return load_html;
@@ -44,7 +44,7 @@ function make_load_content(data) {
         '<span id="comment-badge" class="badge">' + data['care_num'] + '</span></a>' +
         '</div>' +
         '</div>' +
-        '<hr>' +
+        // '<hr>' +
         '</div>';
 
     return load_html;

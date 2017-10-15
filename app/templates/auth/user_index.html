@@ -29,7 +29,7 @@
                          alt="">
                 </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9" id="user-content-col">
                 <div id="user-content">
                     {% if user.name == None %}
                         <h2><strong></strong></h2>
@@ -53,7 +53,6 @@
                                 id="user-questions-num">{{ user_questions_num }}</span></span>
                     </div>
                 </div>
-                <hr>
             </div>
         </div>
         <div class="row">
@@ -77,10 +76,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9" style="padding: 0;">
                 <div id="profile-0" class="user-index">
                     <div id="profile-0-nav">
-                        <ul class="nav nav-tabs nav-justified">
+                        <ul class="nav nav-pills nav-justified">
                             <li class="active" name="articles"><a>我的文章</a></li>
                             <li name="questions"><a>我的问答</a></li>
                         </ul>
@@ -120,7 +119,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <hr>
+{#                                        <hr>#}
                                     </div>
                                 {% endfor %}
                                 <div class="user-load-A-page" name="2"></div>
@@ -162,7 +161,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        <hr>
+{#                                        <hr>#}
                                     </div>
                                 {% endfor %}
                                 <div class="user-load-Q-page" name="2"></div>

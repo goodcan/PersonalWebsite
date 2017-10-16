@@ -23,7 +23,7 @@ $.get("/weather/data.json/", function (data, status) {
 
         title: {
             text: '全国主要城市温度',
-            subtext: 'data from PM25.in',
+            subtext: '刷新网页可以更新数据',
             // sublink: 'http://www.pm25.in',
             x: 'center',
             textStyle: {
@@ -57,7 +57,7 @@ $.get("/weather/data.json/", function (data, status) {
         //绘制散点图
         series: [
             {
-                name: '销量', // series名称
+                // name: '销量', // series名称
                 type: 'scatter', // series图表类型
                 coordinateSystem: 'geo', // series坐标系类型
                 data: myData, // series数据内容
@@ -74,7 +74,7 @@ $.get("/weather/data.json/", function (data, status) {
         //添加视觉映射组件
         visualMap: {
             type: 'continuous', // 连续型
-            min: -10,       		// 值域最小值，必须参数
+            min: -10,       	// 值域最小值，必须参数
             max: 40,			// 值域最大值，必须参数
             calculable: true,	// 是否启用值域漫游
             inRange: {

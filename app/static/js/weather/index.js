@@ -40,19 +40,19 @@ $.get("/weather/data.json/", function (data, status) {
 
         //绘制地图
         geo: {
-            map: 'china',
+            map: 'china'
 
-            itemStyle: {					// 定义样式
-                normal: {					// 普通状态下的样式
-                    areaColor: '#323c48',
-                    borderColor: '#bbb'
-                },
-                emphasis: {					// 高亮状态下的样式
-                    areaColor: '#2a333d'
-                }
-            }
+            // itemStyle: {					// 定义样式
+            //     normal: {					// 普通状态下的样式
+            //         areaColor: '#323c48',
+            //         borderColor: '#bbb'
+            //     },
+            //     emphasis: {					// 高亮状态下的样式
+            //         areaColor: '#2a333d'
+            //     }
+            // }
         },
-        backgroundColor: '#404a59',  		// 图表背景色
+        // backgroundColor: '#404a59',  		// 图表背景色
 
         //绘制散点图
         series: [
@@ -90,4 +90,8 @@ $.get("/weather/data.json/", function (data, status) {
     myChart.hideLoading();
     myChart.setOption(option);
     // console.log(myData);
+});
+
+$(window).resize(function () {
+    myChart.setOption(option);
 });

@@ -4,6 +4,7 @@
 from bs4 import BeautifulSoup
 from time import sleep
 import requests, json, os
+from random import randint
 
 import sys
 reload(sys)
@@ -13,13 +14,17 @@ sys.setdefaultencoding('utf-8')
 class ChinaWeatherData(object):
     def __init__(self):
         self.DISTRICT_LIST = ['hb', 'db', 'hd', 'hz', 'hn', 'xb', 'xn', 'gat']
+        self.USER_AGENT = [
+            'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3153.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0'
+        ]
         self.DATA_DICT = {}
         self.HEARDERS = {
             'Host': 'www.weather.com.cn',
             'Pragma': 'no-cache',
-            'Referer': 'http://www.weather.com.cn/textFC/db.shtml',
+            # 'Referer': 'http://www.weather.com.cn/textFC/db.shtml',
             'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3153.0 Safari/537.36'
+            # 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3153.0 Safari/537.36'
         }
 
 
@@ -114,7 +119,7 @@ class ChinaWeatherData(object):
             print '*' * 40
             print each_url
             print '*' * 40
-
+            self.HEARDERS['User-Agent'] = self.USER_AGENT[randint(0, 1)]
             self.GetData(each_url, self.HEARDERS)
             # sleep(0.1)
 
@@ -156,7 +161,7 @@ class MakeData(object):
         city_t_l = TEMPEROTURE['data']
 
         basedir = os.path.abspath(os.path.dirname(__file__))
-        with open(basedir + '/data/city_coordinate.json', 'r') as fr:
+        with open(basedir + '/data/geocoding.json', 'r') as fr:
             city_c = json.load(fr)
 
         city_c_d = city_c['geoCoord']
@@ -165,6 +170,8 @@ class MakeData(object):
         for each in city_t_l:
             try:
                 DATA_DICT = {}
+                if city_c_d[each['name']] is None:
+                    continue
                 DATA_DICT['name'] = each['name'].encode('utf-8')
                 DATA_DICT['value'] = city_c_d[each['name']]
                 DATA_DICT['value'].append(each['value'])

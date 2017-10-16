@@ -2,6 +2,7 @@
 venv
 fonts
 logs
+theme
 *log.txt
 *.pyc
 docs*.js
@@ -10,4 +11,3 @@ bootstrap*.*
 migrations
 *.ini
 echarts*.js
-dark.js

@@ -34,7 +34,7 @@ for value in spider_city.values():
 city_t_l = TEMPEROTURE['data']
 
 
-with open('../data/city_coordinate.json', 'r') as fr:
+with open('../data/geocoding.json', 'r') as fr:
     city_c = json.load(fr)
 
 city_c_d = city_c['geoCoord']

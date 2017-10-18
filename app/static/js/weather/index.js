@@ -83,7 +83,9 @@ $.get("/weather/data.json/", function (data, status) {
             },
             textStyle: {
                 color: '#fff'	// 值域控件的文本颜色
-            }
+            },
+            left: '10%',
+            bottom: '14%'
         }
 
     };

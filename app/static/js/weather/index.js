@@ -34,7 +34,7 @@ $.get("/weather/data.json/", function (data, status) {
         tooltip: {
             trigger: 'item',
             formatter: function (params) {
-                return params.name + ' : ' + params.value[2];
+                return params.name + ' : ' + params.value[2] + ' &#8451';
             }
         },
 

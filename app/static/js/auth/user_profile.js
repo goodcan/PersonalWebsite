@@ -23,7 +23,7 @@ function show_user_picture() {
     $character_portrait = $('#user-portrait');
     $character_portrait.css({'height': $character_portrait.width()});
     $('#user-content-col').css({'height': $character_portrait.width()});
-    $('#user-content').css({'margin-top': ($character_portrait.width() - $('#user-content').height()) / 2 - 5});
+    // $('#user-content').css({'margin-top': ($character_portrait.width() - $('#user-content').height()) / 2 - 5});
 }
 
 show_user_picture();

@@ -183,7 +183,7 @@ class MakeData(object):
         # print count
         # print DATA
 
-        # with open('data/mydata.json', 'w') as fw:
+        # with open(basedir + '/data/mydata.json', 'w') as fw:
         #     fw.write(json.dumps(DATA, ensure_ascii=False).encode('utf-8'))
 
         return DATA

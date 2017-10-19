@@ -23,7 +23,7 @@ $('.my-navbar-dropdown').hover(
 $('#btn-login').click(function () {
     // 生成csrf令牌
     var csrftoken = $('meta[name=csrf-token]').attr('content');
-    console.log(csrftoken);
+    // console.log(csrftoken);
 
     // 发起ajax请求
     $.ajax({
@@ -44,7 +44,7 @@ $('#btn-login').click(function () {
         }),
         dataType: 'json',
     }).done(function (data, textStatus) {
-        console.log(data);
+        // console.log(data);
         if (data['status'] == true) {
             if (data['data']['confirmed']) {
                 var username = data['data']['login_user'];
@@ -117,7 +117,7 @@ $('#btn-register').click(function () {
         }),
         dataType: 'json',
     }).done(function (data, textStatus) {
-        console.log(data);
+        // console.log(data);
         if (data['status'] == true) {
             $('#my-register-Modal').modal('hide');
             show_message(data);

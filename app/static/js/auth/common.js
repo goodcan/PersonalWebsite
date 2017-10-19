@@ -190,7 +190,7 @@ function add_search($object, data, fun, load_div) {
                 for (i = 0; i < l; i++) {
                     fun($object, load_data[i]);
                     $add_delete = $object.find('.media').last();
-                    console.log(load_data[i]['id']);
+                    // console.log(load_data[i]['id']);
                     $add_delete.attr('role', load_data[i]['id']);
                     $add_delete.find('.title-link').after(add_delete_btn());
                 }

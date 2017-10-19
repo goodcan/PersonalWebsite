@@ -58,7 +58,7 @@ $('#btn-login-only').click(function () {
         }),
         dataType: 'json'
     }).done(function (data, textStatus) {
-            console.log(data);
+            // console.log(data);
 
             if (data['status'] == true) {
                 location.href = data['data']['redirect'];
@@ -121,7 +121,7 @@ $('#btn-register-only').click(function () {
         }),
         dataType: 'json',
     }).done(function (data, textStatus) {
-        console.log(data);
+        // console.log(data);
         if (data['status'] == true) {
             $('.login-title').addClass('title-active');
             $('.login-title').siblings().removeClass('title-active');

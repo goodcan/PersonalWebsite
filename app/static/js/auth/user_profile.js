@@ -109,7 +109,7 @@ $('#btn-add-article').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             LOAD_DATA['page'] = '1';   // 全局页码归1
@@ -149,7 +149,7 @@ $('#btn-add-question').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             LOAD_DATA['page'] = '1';   // 全局页码归1
@@ -187,7 +187,7 @@ $('#btn-resetpwd').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -250,7 +250,7 @@ $('#btn-resetemail').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -304,7 +304,7 @@ $('#btn-set-information').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             $('#user-content h2 strong').html($('#set-name').val());

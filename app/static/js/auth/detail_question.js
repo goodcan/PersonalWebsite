@@ -33,7 +33,7 @@ $('#add-question-comment').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -74,7 +74,7 @@ $("#question-care").click(function () {
             }
         },
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -124,7 +124,7 @@ $('body').keydown(function () {
 $('#my-login-Modal').on('hidden.bs.modal', function (e) {
     $.get('/auth/check_question_care/' + $('#question-title').attr('role') + '/',
         function (data) {
-            console.log(data['care']);
+            // console.log(data['care']);
             if (data['care']) {
                 $('#question-care').attr('class', 'btn btn-warning')
                     .text('取消关注')

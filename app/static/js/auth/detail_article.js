@@ -34,7 +34,7 @@ $('#add-article-comment').click(function () {
         }),
         dataType: 'json'
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -75,7 +75,7 @@ $("#article-care").click(function () {
             }
         },
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data['status'] == true) {
             clear_messages();
@@ -125,7 +125,7 @@ $('body').keydown(function () {
 $('#my-login-Modal').on('hidden.bs.modal', function (e) {
     $.get('/auth/check_article_care/' + $('#article-title').attr('role') + '/',
         function (data) {
-            console.log(data['care']);
+            // console.log(data['care']);
             if (data['care']) {
                 $('#article-care').attr('class', 'btn btn-warning')
                     .text('取消关注')

@@ -262,13 +262,15 @@ def add_article_comment():
     response_messages(re, title=u'消息', content=u'评论成功！')
 
     # all_comments = Articles.query.filter_by(id=article_id).first().comments
-    all_comments = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
-        .order_by(ArticleComments.create_time.desc()).paginate(1, 10).items
+    pagination = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
+        .order_by(ArticleComments.create_time.desc()).paginate(1, 10)
     load_data = []
+    all_comments = pagination.items
+    print pagination.total
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
 
-    re.update({'comment_num': len(Articles.query.filter_by(id=article_id).first().comments),
+    re.update({'comment_num': pagination.total,
                'load_data': load_data})
 
     return jsonify(re)
@@ -310,13 +312,15 @@ def add_question_comment(question_id):
     response_messages(re, title=u'消息', content=u'评论成功！')
 
     # all_comments = Questions.query.filter_by(id=question_id).first().comments
-    all_comments = QuestionComments.query.filter(QuestionComments.question_id == question_id) \
-        .order_by(QuestionComments.create_time.desc()).paginate(1, 10).items
+    pagination = QuestionComments.query.filter(QuestionComments.question_id == question_id) \
+        .order_by(QuestionComments.create_time.desc()).paginate(1, 10)
     load_data = []
+    all_comments = pagination.items
+    print pagination.total
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
 
-    re.update({'comment_num': len(Questions.query.filter_by(id=question_id).first().comments),
+    re.update({'comment_num': pagination.total,
                'load_data': load_data})
 
     return jsonify(re)

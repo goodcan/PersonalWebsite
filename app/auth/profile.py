@@ -263,7 +263,7 @@ def add_article_comment():
 
     # all_comments = Articles.query.filter_by(id=article_id).first().comments
     all_comments = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
-        .order_by(ArticleComments.create_time.desc()).paginate(1, 10)
+        .order_by(ArticleComments.create_time.desc()).paginate(1, 10).items
     load_data = []
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))

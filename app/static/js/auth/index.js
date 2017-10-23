@@ -33,3 +33,12 @@ $('#btn-refresh').click(function () {
 $(window).scroll(function () {
     load_page_content('/auth/index/search/', $('.load-page'), search_data, load_all_content_append);
 });
+
+$('body').keydown(function () {
+    if (event.keyCode == '13'
+        && $('#search-content').val() != ''
+        && $("#btn-login").is(':hidden')
+        && $('#btn-register').is(':hidden')) {
+        $('#btn-search').click();
+    }
+});

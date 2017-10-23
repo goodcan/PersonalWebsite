@@ -263,12 +263,12 @@ def add_article_comment():
 
     # all_comments = Articles.query.filter_by(id=article_id).first().comments
     all_comments = ArticleComments.query.filter(ArticleComments.article_id == article_id) \
-        .order_by(ArticleComments.create_time.desc()).paginate(1, 10).items
+        .order_by(ArticleComments.create_time.desc()).paginate(1, 10)
     load_data = []
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
 
-    re.update({'comment_num': len(all_comments),
+    re.update({'comment_num': len(Articles.query.filter_by(id=article_id).first().comments),
                'load_data': load_data})
 
     return jsonify(re)
@@ -316,7 +316,7 @@ def add_question_comment(question_id):
     for each in all_comments:
         load_data.append(MakeLoadDate.comment(each))
 
-    re.update({'comment_num': len(all_comments),
+    re.update({'comment_num': len(Questions.query.filter_by(id=question_id).first().comments),
                'load_data': load_data})
 
     return jsonify(re)

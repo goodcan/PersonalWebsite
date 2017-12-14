@@ -74,7 +74,7 @@ $.get("/weather/data.json/", function (data, status) {
         //添加视觉映射组件
         visualMap: {
             type: 'continuous', // 连续型
-            min: -15,       	// 值域最小值，必须参数
+            min: -35,       	// 值域最小值，必须参数
             max: 35,			// 值域最大值，必须参数
             calculable: true,	// 是否启用值域漫游
             inRange: {
